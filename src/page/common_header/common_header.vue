@@ -6,18 +6,31 @@
         <span>网易云音乐</span>
       </div>
       <div class="search">
-        <div class="back_left"></div>
-        <div class="back_right"></div>
+        <div class="back_button">
+          <base-tool-button type="icon" clType="icon_button" iconClass="ios-arrow-back" height="21px"></base-tool-button>
+          <base-tool-button type="icon" clType="icon_button" iconClass="ios-arrow-forward" height="21px"></base-tool-button>
+        </div>
         <div class="search_input_box">
           <cl-input :data="search_input"></cl-input>
         </div>
       </div>
     </div>
     <div class="header_right">
-      <div class="login"></div>
-      <div class="skin"></div>
-      <div class="email"></div>
-      <div class="setting"></div>
+      <div class="login_box">
+        <div class="header_img">
+          <img src="../../../static/img/person.png" alt="">
+        </div>
+        <base-tool-button type="aftericon" iconClass="md-arrow-dropdown" backgroundColor="rgba(0,0,0,0)" color="#eec1c1" font-size="12px">未登录</base-tool-button>
+      </div>
+      <div class="skin">
+        <base-tool-button type="icon" :iconType="true" iconClass="icon-icon_skin" backgroundColor="rgba(0,0,0,0)" color="#eec1c1" font-size="20px"></base-tool-button>
+      </div>
+      <div class="email">
+        <base-tool-button type="icon" :iconType="true" iconClass="icon-email" backgroundColor="rgba(0,0,0,0)" color="#eec1c1" font-size="20px"></base-tool-button>
+      </div>
+      <div class="setting">
+        <base-tool-button type="icon" :iconType="true" iconClass="icon-setting" backgroundColor="rgba(0,0,0,0)" color="#eec1c1" font-size="20px"></base-tool-button>
+      </div>
     </div>
   </div>
 </template>
@@ -29,6 +42,7 @@
       return {
         search_input: {
           icon: 'ios-search-outline',
+          placeholder: '搜索音乐，视频，歌词，电台'
         }
       }
     },
@@ -47,7 +61,7 @@
   background: #c62f2f;
   width: 100%;
   height: 50px;
-  padding: 0 10px;
+  padding: 0 18px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -56,34 +70,144 @@
     display: flex;
     align-items: center;
     .logo{
+      width: 175px;
       color: #fff;
       display: flex;
       align-items: center;
-      font-size: 16px;
+      font-size: 17px;
       img{
         width: 18px;
         margin-right: 3px;
       }
     }
+    .search{
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      .back_button{
+        display: flex;
+        align-items: center;
+        margin-right: 10px;
+        &>div:nth-of-type(1){
+          .icon_button{
+
+          }
+
+        }
+        &>div:nth-of-type(2){
+          border-top-right-radius: 5px;
+          border-bottom-right-radius: 5px;
+        }
+      }
+      .search_input_box{
+
+      }
+    }
   }
   .header_right{
     width: 50%;
+    height: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    &>div{
+      cursor: pointer;
+    }
+
+    .login_box{
+      display: flex;
+      align-items: center;
+      .header_img{
+        background: #e1e3e4;
+        border-radius: 50%;
+        overflow: hidden;
+        width: 24px;
+        height: 24px;
+        text-align: center;
+        vertical-align: middle;
+        margin-right: 5px;
+        img{
+          width: 24px;
+          height: 24px;
+        }
+      }
+    }
+    .skin{
+      height: 100%;
+      margin-left: 20px;
+    }
+    .email{
+      margin-left: 20px;
+    }
+    .setting{
+      margin-left: 20px;
+    }
   }
 }
 </style>
 <style lang="less">
   .cl_common_header{
 
+    .back_button{
+      .tool_button:nth-of-type(1){
+        .icon_button{
+          border-top-left-radius: 3px;
+          border-bottom-left-radius: 3px;
+          border-right: none!important;
+        }
+      }
+      .tool_button:nth-of-type(2){
+        .icon_button{
+          border-top-right-radius: 3px;
+          border-bottom-right-radius: 3px;
+        }
+      }
+    }
+
+    .login_box{
+      .button_wrap{
+        line-height: 20px;
+        margin-top: 2px;
+      }
+      i{
+        font-size: 18px;
+        margin-top: -2px;
+      }
+    }
+    .header_right{
+      &>div:hover{
+        *{
+          color: #fff!important;
+        }
+        i{
+          color: #fff!important;
+        }
+      }
+    }
+
+
+
     .ivu-input{
       border: none;
-      background: rgba(0,0,0,0.3);
-      height: 20px;
+      background: rgba(0,0,0,0.1);
+      width: 220px;
+      height: 23px;
       border-radius: 20px;
+      color: #fff;
+      padding-left: 10px;
+    }
+    input::-webkit-input-placeholder {
+      /* placeholder颜色  */
+      color: #c77373;
+      /* placeholder字体大小  */
+      font-size: 12px;
+      /* placeholder位置  */
+      text-align: left;
     }
     .ivu-input-icon{
       width: 20px;
-      height: 20px;
-      line-height: 20px;
+      height: 23px;
+      line-height: 23px;
       position: absolute;
       right: 5px;
       cursor: pointer;

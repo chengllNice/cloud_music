@@ -13,6 +13,7 @@ import toolComponents from './components/tool_components/index.js'
 import toolFunction from './assets/js/toolFunction.js'
 //基础css
 import './assets/css/main_base.less'
+import '../static/iconfont/iconfont.css'
 
 Vue.use(iView);
 Vue.use(toolComponents);

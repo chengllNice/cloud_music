@@ -1,11 +1,12 @@
 import Vue from 'vue';
-import { baseButton } from './button/button.js'
+import { baseButton, baseToolButton } from './button/button.js'
 import { clForm, clInput } from './form/cl_form.js'
 
 const components = [
   baseButton,
   clForm,
-  clInput
+  clInput,
+  baseToolButton
 ];
 
 
@@ -22,5 +23,6 @@ export default {
   version: '0.0.1',
   baseButton,
   clForm,
-  clInput
+  clInput,
+  baseToolButton
 }
