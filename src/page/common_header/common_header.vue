@@ -71,3 +71,26 @@
   }
 }
 </style>
+<style lang="less">
+  .cl_common_header{
+
+    .ivu-input{
+      border: none;
+      background: rgba(0,0,0,0.3);
+      height: 20px;
+      border-radius: 20px;
+    }
+    .ivu-input-icon{
+      width: 20px;
+      height: 20px;
+      line-height: 20px;
+      position: absolute;
+      right: 5px;
+      cursor: pointer;
+      color: #cf8989;
+      &:hover{
+        color: #fff;
+      }
+    }
+  }
+</style>
