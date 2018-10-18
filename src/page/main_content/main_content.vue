@@ -12,9 +12,9 @@
 </template>
 
 <script>
-  import commonHeader from '../common_header/common_header'
-  import commonFooter from '../common_footer/common_footer'
-  import leftNav from '../left_nav/left_nav'
+  import commonHeader from '../components/common_header/common_header'
+  import commonFooter from '../components/common_footer/common_footer'
+  import leftNav from '../components/left_nav/left_nav'
   export default {
     name: "main_content",
     data() {

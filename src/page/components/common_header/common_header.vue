@@ -2,7 +2,7 @@
   <div class="cl_common_header">
     <div class="header_left">
       <div class="logo">
-        <img src="../../../static/img/logo.svg" alt="网易云音乐">
+        <img src="../../../../static/img/logo.svg" alt="网易云音乐">
         <span>网易云音乐</span>
       </div>
       <div class="search">
@@ -18,18 +18,18 @@
     <div class="header_right">
       <div class="login_box">
         <div class="header_img">
-          <img src="../../../static/img/person.png" alt="">
+          <img src="../../../../static/img/person.png" alt="">
         </div>
-        <base-tool-button type="aftericon" iconClass="icon-arrow_down" backgroundColor="rgba(0,0,0,0)" color="#eec1c1" font-size="12px"><span>未登录</span></base-tool-button>
+        <base-tool-button type="aftericon" iconClass="icon-arrow_down" backgroundColor="rgba(0,0,0,0)" fontColor="#eec1c1" font-size="12px"><span>未登录</span></base-tool-button>
       </div>
       <div class="skin">
-        <base-tool-button type="icon" iconClass="icon-skin" backgroundColor="rgba(0,0,0,0)" color="#eec1c1" font-size="18px"></base-tool-button>
+        <base-tool-button type="icon" iconClass="icon-skin" backgroundColor="rgba(0,0,0,0)" fontColor="#eec1c1" font-size="18px"></base-tool-button>
       </div>
       <div class="email">
-        <base-tool-button type="icon" iconClass="icon-email" backgroundColor="rgba(0,0,0,0)" color="#eec1c1" font-size="22px"></base-tool-button>
+        <base-tool-button type="icon" iconClass="icon-email" backgroundColor="rgba(0,0,0,0)" fontColor="#eec1c1" font-size="22px"></base-tool-button>
       </div>
       <div class="setting">
-        <base-tool-button type="icon" iconClass="icon-setting" backgroundColor="rgba(0,0,0,0)" color="#eec1c1" font-size="22px"></base-tool-button>
+        <base-tool-button type="icon" iconClass="icon-setting" backgroundColor="rgba(0,0,0,0)" fontColor="#eec1c1" font-size="22px"></base-tool-button>
       </div>
     </div>
   </div>
