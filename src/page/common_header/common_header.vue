@@ -2,13 +2,13 @@
   <div class="cl_common_header">
     <div class="header_left">
       <div class="logo">
-        <img src="../../../static/img/logo.svg" alt="">
+        <img src="../../../static/img/logo.svg" alt="网易云音乐">
         <span>网易云音乐</span>
       </div>
       <div class="search">
         <div class="back_button">
-          <base-tool-button type="icon" clType="icon_button" iconClass="ios-arrow-back" height="21px"></base-tool-button>
-          <base-tool-button type="icon" clType="icon_button" iconClass="ios-arrow-forward" height="21px"></base-tool-button>
+          <base-tool-button type="icon" clType="icon_button" :icon-type="false" iconClass="ios-arrow-back" height="21px"></base-tool-button>
+          <base-tool-button type="icon" clType="icon_button" :icon-type="false" iconClass="ios-arrow-forward" height="21px"></base-tool-button>
         </div>
         <div class="search_input_box">
           <cl-input :data="search_input"></cl-input>
@@ -20,16 +20,16 @@
         <div class="header_img">
           <img src="../../../static/img/person.png" alt="">
         </div>
-        <base-tool-button type="aftericon" iconClass="md-arrow-dropdown" backgroundColor="rgba(0,0,0,0)" color="#eec1c1" font-size="12px">未登录</base-tool-button>
+        <base-tool-button type="aftericon" iconClass="icon-arrow_down" backgroundColor="rgba(0,0,0,0)" color="#eec1c1" font-size="12px"><span>未登录</span></base-tool-button>
       </div>
       <div class="skin">
-        <base-tool-button type="icon" :iconType="true" iconClass="icon-icon_skin" backgroundColor="rgba(0,0,0,0)" color="#eec1c1" font-size="20px"></base-tool-button>
+        <base-tool-button type="icon" iconClass="icon-skin" backgroundColor="rgba(0,0,0,0)" color="#eec1c1" font-size="18px"></base-tool-button>
       </div>
       <div class="email">
-        <base-tool-button type="icon" :iconType="true" iconClass="icon-email" backgroundColor="rgba(0,0,0,0)" color="#eec1c1" font-size="20px"></base-tool-button>
+        <base-tool-button type="icon" iconClass="icon-email" backgroundColor="rgba(0,0,0,0)" color="#eec1c1" font-size="22px"></base-tool-button>
       </div>
       <div class="setting">
-        <base-tool-button type="icon" :iconType="true" iconClass="icon-setting" backgroundColor="rgba(0,0,0,0)" color="#eec1c1" font-size="20px"></base-tool-button>
+        <base-tool-button type="icon" iconClass="icon-setting" backgroundColor="rgba(0,0,0,0)" color="#eec1c1" font-size="22px"></base-tool-button>
       </div>
     </div>
   </div>
@@ -131,6 +131,9 @@
           height: 24px;
         }
       }
+      span{
+        margin-right: 8px;
+      }
     }
     .skin{
       height: 100%;
@@ -182,6 +185,12 @@
         i{
           color: #fff!important;
         }
+      }
+    }
+
+    .email{
+      i{
+        line-height: 21px;
       }
     }
 

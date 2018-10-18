@@ -1,21 +1,17 @@
 <template>
-  <div class="home">
-    <sub-header-nav></sub-header-nav>
-    <router-view></router-view>
+  <div class="common_footer">
+
   </div>
 </template>
 
 <script>
-  import subHeaderNav from './sub_header_nav/sub_header_nav'
   export default {
-    name: "home",
+    name: "common_footer",
     data() {
       return {}
     },
     computed: {},
-    components: {
-      subHeaderNav
-    },
+    components: {},
     created() {
     },
     mounted() {
@@ -25,5 +21,11 @@
 </script>
 
 <style lang="less" scoped>
-
+.common_footer{
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 50px;
+  border-top: 1px solid #e2e2e3;
+}
 </style>

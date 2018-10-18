@@ -10,7 +10,7 @@
              'border-width': borderWidth,
             'border-style': borderStyle,
             'border-color': borderColor,
-            'color': color,
+            'color': fontColor,
             'font-size': fontSize,
             'background-color': backgroundColor}">
         <div class="" v-if="type == 'icon'">
@@ -43,7 +43,7 @@
       },
       iconType: {
         type: Boolean,
-        default: false
+        default: true
       },
       clType: {
         type: String,
@@ -65,7 +65,7 @@
         type: String,
         default: '#c62f2f'
       },
-      color: {
+      fontColor: {
         type: String,
         default: '#c62f2f'
       },
@@ -115,6 +115,9 @@
     overflow: hidden;
     &>div{
       height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
   }
   .icon_button{
