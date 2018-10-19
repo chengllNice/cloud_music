@@ -1,39 +1,184 @@
 <template>
   <div class="banner">
-    <div class=""></div>
+    <div class="list_box">
+      <div class="list_img_box">
+        <transition v-for="(item, index) in banner_data" :key="index">
+          <div class="item_img"
+               :class="{ 'item_active' : index == item_active,
+                'item_active_pre' : index == item_active_pre,
+                'item_active_next' : index == item_active_next }">
+            <img :src="item.url" alt="">
+            <div class="item_cover" v-if="index != item_active"></div>
+          </div>
+        </transition>
+      </div>
+      <div class="list_opare_box">
+        <div :class="{'opare_active' : index == item_active-1}" v-for="(item, index) in banner_data" :key="index"></div>
+      </div>
+    </div>
+    <button @click="play">button</button>
   </div>
 </template>
 
 <script>
-  import { banner_data} from "./banner_data";
 
   export default {
     name: "banner",
+    props: {
+      listData: {
+        type: Array,
+        default: []
+      }
+    },
     data(){
       return {
-        list_data: []
+        item_active: 1,
+        // item_active_pre: 0,
+        // item_active_next: 2
       }
     },
     computed: {
-
+      banner_data(){
+        // let first = this.listData[0];
+        // let end = this.listData[this.listData.length-1];
+        // let result = [end, ...this.listData, first]
+        return this.listData;
+      },
+      item_active_pre(){
+        let result = 0;
+        if(this.item_active == 0){
+          result = this.banner_data.length-1;
+        }else{
+          result = this.item_active - 1;
+        }
+        return result;
+      },
+      item_active_next(){
+        let result = 2;
+        if(this.item_active == this.banner_data.length-1){
+          result = 0;
+        }else{
+          result = this.item_active + 1;
+        }
+        return result;
+      }
     },
     components: {
 
     },
     created(){
-      this.list_data = this.$deepClone(banner_data);
+
     },
     mounted(){
-
+      this.init();
+      let vue = this;
+      window.onresize = ()=>{
+        // vue.get_init();
+      }
     },
     methods: {
-
+      init(){
+        let vue = this;
+        // this.get_init();
+        setInterval(function () {
+          vue.play();
+          // vue.get_init();
+        },2000)
+      },
+      get_init(){
+        let h = ($('.list_img_box').width() - 408) / 2;
+        $('.item_active_pre').css({
+          transform: `translateX(${-h}px)`
+        });
+        $('.item_active_next').css({
+          transform: `translateX(${h}px)`
+        })
+      },
+      play(){
+        this.item_active++;
+        console.log(this.item_active, this.item_active_next, this.item_active_pre)
+        if(this.item_active >= this.banner_data.length){
+          this.item_active = 0;
+        }
+      }
     }
   }
 </script>
 
 <style lang="less" scoped>
 .banner{
-
+  width: 100%;
+  margin-top: 20px;
+  .list_box{
+    position: relative;
+    min-width: 764px;
+    max-width: 1018px;
+    margin: auto;
+    padding-bottom: 15px;
+    .list_img_box{
+      height: 200px;
+      position: relative;
+      .item_img{
+        width: 408px;
+        height: 192px;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        margin: auto;
+        /*transform: translateX(0px);*/
+        transition: transform 0.3s ease-in, width 0.3s ease-in, height 0.3s ease-in, z-index 0.25s ease-out;
+        /*transition-property: transform,width,height;*/
+        img{
+          width: 100%;
+          height: 100%;
+        }
+        .item_cover{
+          color: #fff;
+          font-size: 50px;
+          width: 100%;
+          height: 100%;
+          position: absolute;
+          left: 0;
+          top: 0;
+          background: rgba(0,0,0,0.7);
+        }
+      }
+      .item_active{
+        width: 540px;
+        height: 200px;
+        z-index: 10;
+        transform: translateX(0px);
+      }
+      .item_active_pre{
+        z-index: 9;
+        transform: translateX(-200px) !important;
+      }
+      .item_active_next{
+        z-index: 9;
+        /*transform: translateX(calc(50%)) !important;*/
+        transform: translateX(200px) !important;
+      }
+    }
+    .list_opare_box{
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      margin: auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      &>div{
+        width: 16px;
+        height: 2.2px;
+        background: #c8c8c8;
+        margin: 0 3px;
+      }
+      .opare_active{
+        background: #c62f2f;
+      }
+    }
+  }
 }
 </style>

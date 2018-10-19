@@ -1,12 +1,14 @@
 import Vue from 'vue';
 import { baseButton, baseToolButton } from './button/button.js'
 import { clForm, clInput } from './form/cl_form.js'
+import { baseSingList } from './base_list/base_list.js'
 
 const components = [
   baseButton,
   clForm,
   clInput,
-  baseToolButton
+  baseToolButton,
+  baseSingList
 ];
 
 
@@ -24,5 +26,6 @@ export default {
   baseButton,
   clForm,
   clInput,
-  baseToolButton
+  baseToolButton,
+  baseSingList
 }

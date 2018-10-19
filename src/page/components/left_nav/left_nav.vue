@@ -104,6 +104,7 @@
   position: relative;
   border-right: 1px solid #e2e2e3;
   overflow: hidden;
+  z-index: 20;
   .list_box{
     height: 100%;
     /*overflow: hidden;*/

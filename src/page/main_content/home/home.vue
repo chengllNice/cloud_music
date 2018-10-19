@@ -25,5 +25,9 @@
 </script>
 
 <style lang="less" scoped>
-
+.home{
+  height: 100%;
+  padding: 0 30px;
+  background: #f5f5f7;
+}
 </style>
