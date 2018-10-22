@@ -2,7 +2,10 @@
   <div class="tool_button">
     <base-button>
       <div class="button_wrap"
-           :class="clType"
+           :class="classes"
+           ref="buttonWrap"
+           @mouseover="mouse_over"
+           @mouseout="mouse_out"
            :style="{
              'width': width,
              'height': height,
@@ -91,18 +94,44 @@
       padding: {
         type: String,
         default: ''
+      },
+      hoverColor: {
+        type: String,
+        default: ''
       }
     },
     data() {
-      return {}
+      return {
+        baseButton: 'base-button'
+      }
     },
-    computed: {},
+    computed: {
+      classes(){
+        return [
+          `${this.clType}`,
+          // {
+          //   [`${this.baseButton}-hover`]: this.hoverColor
+          // }
+        ]
+      }
+    },
     components: {},
     created() {
     },
     mounted() {
     },
-    methods: {}
+    methods: {
+      mouse_over(){
+        if(this.hoverColor){
+          $(this.$refs.buttonWrap).css({
+            'color': this.hoverColor
+          })
+        }
+      },
+      mouse_out(){
+
+      }
+    }
   }
 </script>
 

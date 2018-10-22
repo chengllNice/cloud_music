@@ -3,12 +3,9 @@
 
     <div class="header_tab_box">
       <div class="top_tab_box">
-        <ButtonGroup size="small">
-          <Button class="tab_active">新歌速递</Button>
-          <Button>新碟上架</Button>
-        </ButtonGroup>
+        <header-tab :data="top_tab_data" tab-type="iview_tab" @tabClick="tabOneClick"></header-tab>
       </div>
-      <header-tab :data="header_tab_data" type="left" cl-type="three_tab">
+      <header-tab class="bottom_tab" @tabClick="tabTwoClick" :data="header_tab_data" type="left" cl-type="three_tab">
         <template>
           <div class="tab_right tab_right_active">推荐</div>
           <div class="ver_line"></div>
@@ -17,15 +14,20 @@
       </header-tab>
     </div>
 
-    <base-table :data="table_data.data" :config="table_data.config" stripe="stripe">
+    <base-table v-if="router_type.one_tab == 'new_music'" :data="table_data.data" :config="table_data.config" stripe="stripe">
       <template slot="header" slot-scope="data">
         <div class="table_header">
           <div class="play_all">
-            <base-tool-button type="beforeicon"
+            <!--<base-tool-button type="icon"
                               icon-class="icon-music_play"
                               border-width="0"
                               font-color="#cd2929"
-                              font-size="12px"></base-tool-button>
+                              font-size="12px"></base-tool-button>-->
+            <base-tool-button type="icon"
+                              icon-class="icon-music_play1"
+                              border-width="0"
+                              font-color="#cd2929"
+                              font-size="24px"></base-tool-button>
             <span>播放全部</span>
           </div>
           <base-tool-button type="beforeicon"
@@ -58,12 +60,15 @@
         </div>
       </template>
     </base-table>
+
+    <base-sing-list v-else class="" :list-data="new_album_data" :cols-num="new_album_data.colsNum"></base-sing-list>
   </div>
 </template>
 
 <script>
   import {
     header_tab_data,
+    new_album_data,
     new_music_data} from "./new_music_data";
 
   export default {
@@ -71,18 +76,70 @@
     data() {
       return {
         table_data: {},
-        header_tab_data: []
+        header_tab_data: [],
+        new_album_data: {},
+        router_type: {
+          one_tab: 'new_music',
+          two_tab: 'all'
+        },
+        top_tab_data: [
+          {
+            id: 'new_music',
+            name: '新歌速递',
+            path: '/home/new_music'
+          },
+          {
+            id: 'new_album',
+            name: '新碟上架',
+            path: '/home/new_music'
+          }
+        ]
       }
     },
-    computed: {},
+    computed: {
+     /* header_tab_data(){
+        let result = [];
+        this.route_params = this.$route.params;
+        if(this.route_params.id == 'music'){
+          result =  this.$deepClone(header_tab_data);
+        }else if(this.route_params.id == 'album'){
+          result =  this.$deepClone(header_tab_data_album);
+        }
+        return result;
+      }*/
+    },
     components: {},
     created() {
       this.table_data = this.$deepClone(new_music_data);
       this.header_tab_data = this.$deepClone(header_tab_data);
+      this.new_album_data = this.$deepClone(new_album_data);
     },
     mounted() {
+
     },
-    methods: {}
+    methods: {
+      tabTwoClick(data){
+        this.router_type.two_tab = data.id;
+        this.$router.push({
+          path: this.$route.path,
+          query: this.router_type
+        });
+        console.log(data,'111222')
+      },
+      tabOneClick(data){
+        this.router_type.one_tab = data.id;
+        this.$router.push({
+          path: this.$route.path,
+          query: this.router_type
+        });
+        console.log(data,'111222')
+      }
+    },
+    watch: {
+      '$route': function (to, from) {
+        this.route_params = to.params;
+      }
+    }
   }
 </script>
 
@@ -94,28 +151,10 @@
     text-align: center;
     margin-top: 30px;
     .top_tab_box{
-      .ivu-btn{
-        padding: 3px 30px;
-        background: #ffffff;
-        color: rgba(136,136,136,1);
-        border-color: rgba(229,229,229,1);
-        &:nth-of-type(1){
-          border-right: none;
-        }
-        &:nth-of-type(2){
-          border-left: none;
-        }
-        &:hover{
-          background: #f5f5f7;
-          color: rgba(102,102,102,1);
-          border-color: rgba(220,220,221,1);
-        }
-        &.tab_active{
-          background: rgba(124,125,133,1);
-          color: rgba(226,226,228,1);
-          border-color: rgba(124,125,133,1);
-        }
-      }
+
+    }
+    .bottom_tab{
+      height: 28px;
     }
   }
 
@@ -203,7 +242,9 @@
     }
     .sub_header_nav{
       margin-bottom: 10px;
-      border-bottom: 1px solid rgba(225,225,226,1);
+      .list{
+
+      }
     }
     .ivu-table-title{
       height: 35px;
@@ -224,14 +265,14 @@
       }
     }
     .play_all{
-      .button_wrap{
+      /*.button_wrap{
         border: 1px solid #cd2929!important;
         border-radius: 50%;
         padding: 2px;
         i{
           transform: scale(0.85);
         }
-      }
+      }*/
     }
   }
 </style>

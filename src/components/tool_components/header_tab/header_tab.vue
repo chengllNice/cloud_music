@@ -1,6 +1,14 @@
 <template>
   <div class="sub_header_nav">
-    <div class="list" :class="classes">
+    <div class="iview_tab" v-if="tabType == 'iview_tab'">
+      <ButtonGroup size="small">
+        <Button v-for="(item, index) in header_tab" :key="index"
+                :class="{'tab_active': active_tab == index}"
+                @click="navClick(item, index)">{{item.name}}</Button>
+      </ButtonGroup>
+    </div>
+
+    <div class="list" v-else :class="classes">
       <div class="item"
            v-for="(item, index) in header_tab"
            :key="index"
@@ -12,6 +20,7 @@
         <slot></slot>
       </div>
     </div>
+
   </div>
 </template>
 
@@ -25,6 +34,10 @@
           return []
         }
       },
+      tabType: {
+        type: String,
+        default: '',//类型  左left中center右right
+      },
       type: {
         type: String,
         default: 'center',//类型  左left中center右right
@@ -36,49 +49,63 @@
     },
     data() {
       return {
-        header_tab: [],
+        // header_tab: [],
         active_tab: 0,
       }
     },
     computed: {
+      header_tab(){
+        let result = this.$deepClone(this.data);
+        return result;
+      },
       classes () {
         return [
           {
-            'list_left': this.type === 'left',
-            'list_right': this.type === 'right',
-            'three_tab': this.clType === 'three_tab',
+            'list_left': !this.tabType && this.type === 'left',
+            'list_right': !this.tabType && this.type === 'right',
+            'three_tab': !this.tabType && this.clType === 'three_tab',
           }
         ];
       },
     },
     components: {},
     created() {
-      this.header_tab = this.$deepClone(this.data);
+
     },
     mounted() {
       this.router_changeMatch();
     },
     methods: {
       router_changeMatch() {
-        let path = this.$route.path.split('/')[2];
+        let path = this.$route.path.split('/').pop();
         for (let index = 0; index < this.header_tab.length; index++) {
-          let tab = this.header_tab[index].path.split('/')[2];
-          if (path === tab) {
+          let tab = this.header_tab[index].path.split('/').pop();
+          if(path === tab){
             this.active_tab = index;
             break;
           }
         }
       },
       navClick(item, index){
+        /*for (let index = 0; index < this.header_tab.length; index++) {
+          if(item.id == this.header_tab[index].id){
+            this.active_tab = index;
+            this.$router.push({
+              path: item.path
+            });
+            break;
+          }
+        }*/
         this.active_tab = index;
         this.$router.push({
-          path: item.path,
-        })
+          path: item.path
+        });
+        this.$emit('tabClick', item);
       }
     },
     watch: {
       '$route': function (to, from) {
-        this.router_changeMatch();
+        // this.router_changeMatch();
       }
     }
   }
@@ -89,7 +116,36 @@
   width: 100%;
   height: 40px;
   background: #fafafa;
-  border-bottom: 1px solid #e1e1e2;
+
+  .iview_tab{
+    .ivu-btn{
+      padding: 3px 30px;
+      background: #ffffff;
+      color: rgba(136,136,136,1);
+      border-color: rgba(229,229,229,1);
+      outline: none;
+      box-shadow: 0 0 0 transparent!important;
+      &:nth-of-type(1){
+        border-right: none!important;
+      }
+      &:nth-of-type(2){
+        border-left: none!important;
+      }
+      &:hover{
+        background: #f5f5f7;
+        color: rgba(102,102,102,1);
+        border-color: rgba(220,220,221,1);
+        padding: 3px 30px;
+      }
+      &.tab_active{
+        background: rgba(124,125,133,1);
+        color: rgba(226,226,228,1);
+        border-color: rgba(124,125,133,1);
+      }
+    }
+  }
+
+
   .list_right{
     display: flex;
     justify-content: right!important;
@@ -103,6 +159,7 @@
     justify-content: center;
     height: 100%;
     position: relative;
+    border-bottom: 1px solid #e1e1e2;
 
     .item{
       margin: 0 22px;
@@ -122,10 +179,12 @@
   }
 
   .three_tab{
+    border-bottom: 1px solid rgba(225,225,226,1);
     .item{
-      margin: 0 22px 0 0;
+      margin: 0 22px -1px 0;
       color: rgba(102,102,102,1);
-      padding: 13px 0;
+      padding: 0;
+      /*padding: 13px 0;*/
       &:hover{
         color: rgba(51,51,51,1);
       }

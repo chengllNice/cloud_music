@@ -35,6 +35,7 @@
 .home{
   height: 100%;
   padding: 0 30px;
+  padding-bottom: 30px;
   background: #fafafa;
   .home_header_tab{
     margin-bottom: 20px;

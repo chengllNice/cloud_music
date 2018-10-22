@@ -21,26 +21,36 @@ export default {
       children: [
         {
           path: '/home/home_recommend',
+          name: 'home_recommend',
           component: home_recommend,
         },
         {
           path: '/home/playlist',
+          name: 'playlist',
           component: playlist,
         },
         {
           path: '/home/dj_radio',
+          name: 'dj_radio',
           component: dj_radio,
         },
         {
           path: '/home/top_list',
+          name: 'top_list',
           component: top_list,
         },
         {
           path: '/home/songer_list',
+          name: 'songer_list',
           component: songer_list,
         },
+        /*{
+          path: '/home/new_music',
+          redirect: '/home/new_music/music',
+        },*/
         {
           path: '/home/new_music',
+          name: 'new_music',
           component: new_music,
         }
       ]
