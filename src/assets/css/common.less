@@ -1,0 +1,18 @@
+.ellipsis(@line){
+  text-overflow: -o-ellipsis-lastline;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: @line;
+  line-clamp: @line;
+  -webkit-box-orient: vertical;
+}
+
+.fontcolor(@color){
+  color: @color;
+}
+.bordercolor(@color){
+  border-width: 1px;
+  border-style: solid;
+  border-color: @color;
+}

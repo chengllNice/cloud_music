@@ -27,6 +27,9 @@
           <Icon v-else :type="iconClass"></Icon>
           <slot></slot>
         </div>
+        <div class="text" v-if="type == '' || type == 'text'">
+          <slot></slot>
+        </div>
       </div>
 
     </base-button>
@@ -39,7 +42,7 @@
     props: {
       type: {
         type: String,
-        default: '' //icon 纯图标  beforeicon 图标在前 aftericon 图标在后
+        default: '' //icon 纯图标  beforeicon 图标在前 aftericon 图标在后  默认纯文本
       },
       iconType: {
         type: Boolean,
@@ -71,7 +74,7 @@
       },
       backgroundColor: {
         type: String,
-        default: '#f2f2f2'
+        default: ''
       },
       fontSize: {
         type: String,
@@ -107,17 +110,28 @@
 .tool_button{
   line-height: 1;
   height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   .button_wrap{
     display: inline-block;
     border: 1px solid #ccc;
     font-size: 14px;
     text-align: center;
     overflow: hidden;
+    vertical-align: bottom;
     &>div{
       height: 100%;
       display: flex;
       justify-content: center;
       align-items: center;
+    }
+    .text{
+      display: block;
+      padding: 5px 10px;
+      -webkit-border-radius: 3px;
+      -moz-border-radius: 3px;
+      border-radius: 3px;
     }
   }
   .icon_button{
@@ -127,6 +141,45 @@
     font-size: 20px!important;
     padding: 0 3px;
     line-height: 0;
+  }
+  .play_music_icon_button{
+    border: 1px solid #c73333!important;
+    i{
+      color: #c73333;
+      font-size: 12px!important;
+      transform: scale(0.7);
+    }
+  }
+  .play_video_icon_button{
+    border: 1.5px solid #c73333!important;
+    border-radius: 3px;
+    padding: 0 1px;
+    height: 13px;
+    cursor: pointer;
+    i{
+      color: #c73333;
+      font-size: 12px!important;
+      transform: scale(0.7);
+      line-height: 0.8;
+    }
+    &:hover{
+      border-color: rgba(214,85,85,1);
+      i{
+        color: rgba(214,85,85,1);
+      }
+    }
+  }
+  .sq_button{
+    border: 1.2px solid #fd8152!important;
+    border-radius: 3px;
+    padding: 0 1px;
+    height: 13px;
+    .text{
+      padding: 0;
+      font-size: 12px;
+      transform: scale(0.8);
+      color: #fe6830;
+    }
   }
 }
 </style>

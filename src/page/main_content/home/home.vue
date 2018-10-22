@@ -1,22 +1,29 @@
 <template>
   <div class="home">
-    <sub-header-nav></sub-header-nav>
-    <router-view></router-view>
+    <!--<sub-header-nav :data="home_header_nav_data"></sub-header-nav>-->
+    <header-tab class="home_header_tab" :data="header_tab_data"></header-tab>
+    <div class="home_content">
+      <router-view></router-view>
+    </div>
   </div>
 </template>
 
 <script>
-  import subHeaderNav from './sub_header_nav/sub_header_nav'
+  import { home_header_tab_data} from "./home_data.js";
+
   export default {
     name: "home",
     data() {
-      return {}
+      return {
+        header_tab_data: [],
+      }
     },
     computed: {},
     components: {
-      subHeaderNav
+
     },
     created() {
+      this.header_tab_data = this.$deepClone(home_header_tab_data);
     },
     mounted() {
     },
@@ -28,6 +35,13 @@
 .home{
   height: 100%;
   padding: 0 30px;
-  background: #f5f5f7;
+  background: #fafafa;
+  .home_header_tab{
+    margin-bottom: 20px;
+  }
+  .home_content{
+    max-width: 1040px;
+    margin: auto;
+  }
 }
 </style>

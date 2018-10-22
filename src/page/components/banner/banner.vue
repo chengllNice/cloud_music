@@ -6,17 +6,20 @@
           <div class="item_img"
                :class="{ 'item_active' : index == item_active,
                 'item_active_pre' : index == item_active_pre,
-                'item_active_next' : index == item_active_next }">
+                'item_active_next' : index == item_active_next }"
+                :style="{transform: 'translateX('+ (index == item_active_pre ? (-translate_x) + 'px' : (index == item_active_next ? (translate_x + 'px') : '0px')) +')'}">
             <img :src="item.url" alt="">
             <div class="item_cover" v-if="index != item_active"></div>
           </div>
         </transition>
       </div>
       <div class="list_opare_box">
-        <div :class="{'opare_active' : index == item_active-1}" v-for="(item, index) in banner_data" :key="index"></div>
+        <div :class="{'opare_active' : (index+1) == (item_active == 0 ? '6' : item_active)}"
+             v-for="(item, index) in banner_data"
+             :key="index"
+              @click="opare_click(index)"></div>
       </div>
     </div>
-    <button @click="play">button</button>
   </div>
 </template>
 
@@ -33,15 +36,14 @@
     data(){
       return {
         item_active: 1,
+        translate_x: '0',
+        interval: null
         // item_active_pre: 0,
         // item_active_next: 2
       }
     },
     computed: {
       banner_data(){
-        // let first = this.listData[0];
-        // let end = this.listData[this.listData.length-1];
-        // let result = [end, ...this.listData, first]
         return this.listData;
       },
       item_active_pre(){
@@ -70,36 +72,39 @@
 
     },
     mounted(){
-      this.init();
+      // this.init();
       let vue = this;
       window.onresize = ()=>{
-        // vue.get_init();
+        vue.get_init();
       }
     },
     methods: {
       init(){
         let vue = this;
-        // this.get_init();
-        setInterval(function () {
+        this.get_init();
+        clearInterval(this.interval);
+        this.interval = setInterval(function () {
           vue.play();
-          // vue.get_init();
-        },2000)
+        },4000)
       },
       get_init(){
-        let h = ($('.list_img_box').width() - 408) / 2;
-        $('.item_active_pre').css({
-          transform: `translateX(${-h}px)`
-        });
-        $('.item_active_next').css({
-          transform: `translateX(${h}px)`
-        })
+        let h = 0;
+        h = ($('.list_img_box').width() - 408) / 2;
+        this.translate_x = h;
       },
       play(){
         this.item_active++;
-        console.log(this.item_active, this.item_active_next, this.item_active_pre)
         if(this.item_active >= this.banner_data.length){
           this.item_active = 0;
         }
+      },
+      opare_click(index){
+        if(index == 5){
+          this.item_active = 0;
+        }else{
+          this.item_active = index+1;
+        }
+        this.init();
       }
     }
   }
@@ -108,11 +113,11 @@
 <style lang="less" scoped>
 .banner{
   width: 100%;
-  margin-top: 20px;
+  /*margin-top: 20px;*/
   .list_box{
     position: relative;
     min-width: 764px;
-    max-width: 1018px;
+    max-width: 1040px;
     margin: auto;
     padding-bottom: 15px;
     .list_img_box{
@@ -126,8 +131,10 @@
         left: 0;
         right: 0;
         margin: auto;
-        /*transform: translateX(0px);*/
-        transition: transform 0.3s ease-in, width 0.3s ease-in, height 0.3s ease-in, z-index 0.25s ease-out;
+        z-index: -1;
+        transform: translateX(0px);
+        /*transition: transform 10s cubic-bezier(0,0,0.58,1), width 8s cubic-bezier(0,0,0.58,1), height 8s cubic-bezier(0,0,0.58,1), z-index 7s cubic-bezier(0,0,0.58,1);*/
+        transition: transform 0.4s cubic-bezier(0,0,0.58,1), width 0.2s cubic-bezier(0,0,0.58,1), height 0.2s cubic-bezier(0,0,0.58,1), z-index 0.25s cubic-bezier(0,0,0.58,1);
         /*transition-property: transform,width,height;*/
         img{
           width: 100%;
@@ -141,7 +148,7 @@
           position: absolute;
           left: 0;
           top: 0;
-          background: rgba(0,0,0,0.7);
+          transition: all 4.2s;
         }
       }
       .item_active{
@@ -152,12 +159,20 @@
       }
       .item_active_pre{
         z-index: 9;
-        transform: translateX(-200px) !important;
+        .item_cover{
+          background: #000;
+          opacity: 0.7;
+        }
+        /*transform: translateX(-200px) !important;*/
       }
       .item_active_next{
         z-index: 9;
+        .item_cover{
+          background: #000;
+          opacity: 0.7;
+        }
         /*transform: translateX(calc(50%)) !important;*/
-        transform: translateX(200px) !important;
+        /*transform: translateX(calc(50% - 204px)) !important;*/
       }
     }
     .list_opare_box{
@@ -171,7 +186,7 @@
       justify-content: center;
       &>div{
         width: 16px;
-        height: 2.2px;
+        height: 2.4px;
         background: #c8c8c8;
         margin: 0 3px;
       }
