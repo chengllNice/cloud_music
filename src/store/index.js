@@ -13,6 +13,7 @@ const state = {
     url: '../../../../static/music/1.mp3',
     picUrl: '../../../static/img/test/music_cover.jpg',
     song_name: '崇拜',
+    playStatus: 'pause',//play正在播放 pause暂停
     artists: [],
     like: '',
     crrentTime: '',//当前播放时间

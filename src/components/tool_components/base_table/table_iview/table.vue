@@ -956,7 +956,8 @@
             this.cloneData = deepCopy(this.data);
           }, 0);
         },
-        deep: true
+        deep: true,
+        mmediate: true
       },
       columns: {
         handler () {

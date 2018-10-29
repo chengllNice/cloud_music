@@ -22,6 +22,7 @@
              v-if="slot_item.table_slot && slot_item.table_slot != ''"
              :slot="slot_item.table_slot" slot-scope="rowData">
           <div v-if="slot_item.table_slot == 'sort_num'">
+            <!--{{rowData.rowData.playStatus == 'play'}}-->
             <i class="iconfont icon-volume_high" v-if="rowData.rowData.playStatus == 'play'"></i>
             <i class="iconfont icon-volume_close" v-else-if="rowData.rowData.playStatus == 'pause'"></i>
             <span v-else>{{rowData.rowData.sort_num || '0'}}</span>
@@ -40,13 +41,18 @@
                      :disabled-hover="config_data.disabledhover"
                      :highlight-row="config_data.highlightrow"
                      @on-current-change="currentChange"
+                     @on-row-dblclick="dbClickRow"
                      :columns="tableData.t_head[0]"
                      :data="tableData.t_body[0]">
 
           <template v-for="(slot_item, slot_index) in tableData.t_head[0]"
                v-if="slot_item.table_slot && slot_item.table_slot != ''"
                :slot="slot_item.table_slot" slot-scope="rowData">
-            <div v-if="slot_item.table_slot == 'sort_num'">{{rowData.rowData.sort_num || '0'}}</div>
+            <div v-if="slot_item.table_slot == 'sort_num'">
+              <i class="iconfont icon-volume_high" v-if="rowData.rowData.playStatus == 'play'"></i>
+              <i class="iconfont icon-volume_close" v-else-if="rowData.rowData.playStatus == 'pause'"></i>
+              <span v-else>{{rowData.rowData.sort_num || '0'}}</span>
+            </div>
             <slot v-else :name="slot_item.table_slot" :data="rowData.rowData"></slot>
           </template>
         </iview-table>
@@ -59,12 +65,17 @@
                      :disabled-hover="config_data.disabledhover"
                      :highlight-row="config_data.highlightrow"
                      @on-current-change="currentChange"
+                     @on-row-dblclick="dbClickRow"
                      :columns="tableData.t_head[1]"
                      :data="tableData.t_body[1]">
           <template v-for="(slot_item, slot_index) in tableData.t_head[1]"
                v-if="slot_item.table_slot && slot_item.table_slot != ''"
                :slot="slot_item.table_slot" slot-scope="rowData">
-            <div v-if="slot_item.table_slot == 'sort_num'">{{rowData.rowData.sort_num || '0'}}</div>
+            <div v-if="slot_item.table_slot == 'sort_num'">
+              <i class="iconfont icon-volume_high" v-if="rowData.rowData.playStatus == 'play'"></i>
+              <i class="iconfont icon-volume_close" v-else-if="rowData.rowData.playStatus == 'pause'"></i>
+              <span v-else>{{rowData.rowData.sort_num || '0'}}</span>
+            </div>
             <slot v-else :name="slot_item.table_slot" :data="rowData.rowData"></slot>
           </template>
         </iview-table>
@@ -77,6 +88,7 @@
 <script>
   let vue = null;
   import toolPage from './tool_page'
+  import { mapState } from 'vuex'
   export default {
     name: "baseTable",
     props: {
@@ -104,6 +116,7 @@
     data() {
       return {
         loading: true,
+        oldRowData: [],
         config_default: {
           colsNum: '1',
           size: "small",
@@ -116,6 +129,7 @@
       }
     },
     computed: {
+      ...mapState(['music_info']),
       config_data(){
         let config = this.config_default;
         let arr = Object.keys(this.config);
@@ -129,9 +143,8 @@
         return config;
       },
       tableData(){
-        // console.log('===!!!!!!!!')
-        // let result = this.data;
-        let result = this.$deepClone(this.data);
+        let result = this.data;
+        // let result = this.$deepClone(this.data);
         let t_head = result.t_head;
         let t_body = result.t_body;
         let t_head_copy = [];
@@ -198,11 +211,32 @@
     methods: {
       // 当前行改变
       currentChange(currentRow, oldCurrentRow){
-        console.log(currentRow)
+
       },
       dbClickRow(data, index){
+        this.oldRowData.push({data:data, index: index});
+        if(this.oldRowData.length>=3){
+          this.oldRowData.splice(0,1)
+        }
+        // 如果当前状态是暂停的就触发播放状态的更新,否则直接执行方法playStatusChange
+        if(this.music_info.playStatus == 'pause'){
+          this.$store.commit('get_music_info', {playStatus: 'play'});
+        }else{
+          this.playStatusChange(data, index, 'play');
+        }
         this.$emit('dbclick', {data: data, index: index});
-        // console.log(data, index)
+      },
+      playStatusChange(data, index, status){
+        data.playStatus = status;
+        if(this.config_data.colsNum == '1'){
+          this.tableData.t_body.splice(index,1,data);
+        }else if(this.config_data.colsNum == '2'){
+          if(this.tableData.t_body[0].length < (data.sort_num-0)){
+            this.tableData.t_body[1].splice(index,1,data);
+          }else{
+            this.tableData.t_body[0].splice(index,1,data);
+          }
+        }
       },
       loading_change(){
         if(this.data.t_body.length){
@@ -210,7 +244,7 @@
         }else{
           this.loading = true
         }
-      }
+      },
     },
     destroyed(){
       console.log('destroyed')
@@ -218,6 +252,28 @@
     watch: {
       'data.t_body': function (new_val, old_val) {
         this.loading_change();
+      },
+      'oldRowData': function (new_val, old_val) {
+        if(new_val.length >= 2){
+          let a = new_val[0];
+          a.data.playStatus = '';
+          let index = a.index;
+          if(this.config_data.colsNum == '1'){
+            this.tableData.t_body.splice(index,1,a.data);
+          }else if(this.config_data.colsNum == '2'){
+            if(this.tableData.t_body[0].length < (a.sort_num-0)){
+              this.tableData.t_body[1].splice(index,1,a.data);
+            }else{
+              this.tableData.t_body[0].splice(index,1,a.data);
+            }
+          }
+        }
+      },
+      'music_info.playStatus': function (new_val, old_val) {
+        console.log(new_val, old_val)
+        let data = this.oldRowData[this.oldRowData.length-1];
+        let status = new_val == 'play' ? 'play' : 'pause';
+        this.playStatusChange(data.data, data.index, status);
       }
     }
   }
@@ -226,6 +282,14 @@
 <style lang="less" scoped>
   .base_table{
     width: 100%;
+    .icon-volume_high{
+      color: #e83c3c;
+      font-size: 20px;
+    }
+    .icon-volume_close{
+      color: #e83c3c;
+      font-size: 20px;
+    }
     .base_table_cols_two{
       display: flex;
       .base_table_cols_two_item_center{

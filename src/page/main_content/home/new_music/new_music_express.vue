@@ -101,10 +101,12 @@
         let get_data = {
           type: id ? id : '0'
         };
-        this.table_data = null;
+        // this.table_data = null;
+        let table_data = this.$deepClone(new_music_data);
         this.table_data = this.$deepClone(new_music_data);
         get_top_song(get_data).then(res=>{
-          this.$tableListInit(res.data,this.table_data.data)
+          this.$tableListInit(res.data,table_data.data);
+          this.table_data = table_data;
         }).catch(err=>{
           console.log('err',err)
         })
@@ -122,12 +124,12 @@
             let info = {
               id: data.data.id,
               url: url,
+              playStatus: 'play',
               picUrl: data.data.picUrl,
               song_name: data.data.song_name,
               artists: data.data.artists,
             };
             this.$store.commit('get_music_info',info);
-            this.playStatusChange(data);
           }
         }).catch(err=>{
           console.log('err',err)
@@ -135,10 +137,7 @@
         console.log(data,'===')
       },
       playStatusChange(data){
-        console.log(data,'--')
-        data.data.playStatus='play';
-        this.table_data.data.t_body[data.index].playStatus = 'play';
-        console.log(data,'--==')
+
       }
     }
   }

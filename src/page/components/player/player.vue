@@ -150,10 +150,18 @@
           case 'play':
             $('#jplayerEl').jPlayer('pause');
             this.playStatus = 'pause';
+            let _info = {
+              playStatus: 'pause'
+            };
+            this.$store.commit('get_music_info',_info);
             break;
           case 'pause':
             $('#jplayerEl').jPlayer('play');
             this.playStatus = 'play';
+            let info = {
+              playStatus: 'play'
+            };
+            this.$store.commit('get_music_info',info);
             break;
         }
       },
@@ -200,8 +208,10 @@
           this.$localStorage.setStore('volume', new_val);
         }
       },
-      'music_info.url': function () {
-        this.againPlay();
+      'music_info.playStatus': function (new_val, old_val) {
+        if(new_val == 'play'){
+          this.againPlay();
+        }
       }
     }
   }

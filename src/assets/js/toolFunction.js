@@ -230,6 +230,7 @@ export const tableListInit = (result, table_list) => {
       table_list.t_body.push(obj)
     }
   }
+  return table_list;
 };
 
 /*
