@@ -5,7 +5,7 @@
     <div class="" v-for="(item, index) in all_data" :key="index">
       <base-sing-list class="home_list" :list-data="item" :cols-num="item.colsNum">
         <template v-if="item.slot && item.slot == 'song_body'" slot="song_body">
-          <base-table :data="item.data" :config="item.config" v-if="item.type == 'table'">
+          <base-table :data="item.data" :config="item.config" @dbclick="tableClick" v-if="item.type == 'table'">
             <template slot="content" slot-scope="data">
               <!--{{data}}-->
               <div class="new_song_content">
@@ -231,8 +231,27 @@
             reject();
           })
         })
-
-
+      },
+      tableClick(data){
+        let get_data = {
+          id: data.data.id
+        };
+        this.$commonApi.getSongUrl(get_data).then(res=>{
+          if(res.data && res.data.length){
+            let url = res.data[0].url;
+            let info = {
+              id: data.data.id,
+              url: url,
+              playStatus: 'play',
+              picUrl: data.data.picUrl,
+              song_name: data.data.song_name,
+              artists: data.data.artists,
+            };
+            this.$store.commit('get_music_info',info);
+          }
+        }).catch(err=>{
+          console.log('err',err)
+        });
       }
     },
     watch: {

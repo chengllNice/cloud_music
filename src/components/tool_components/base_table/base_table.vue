@@ -218,12 +218,7 @@
         if(this.oldRowData.length>=3){
           this.oldRowData.splice(0,1)
         }
-        // 如果当前状态是暂停的就触发播放状态的更新,否则直接执行方法playStatusChange
-        if(this.music_info.playStatus == 'pause'){
-          this.$store.commit('get_music_info', {playStatus: 'play'});
-        }else{
-          this.playStatusChange(data, index, 'play');
-        }
+        this.playStatusChange(data, index, 'play');
         this.$emit('dbclick', {data: data, index: index});
       },
       playStatusChange(data, index, status){
@@ -261,7 +256,7 @@
           if(this.config_data.colsNum == '1'){
             this.tableData.t_body.splice(index,1,a.data);
           }else if(this.config_data.colsNum == '2'){
-            if(this.tableData.t_body[0].length < (a.sort_num-0)){
+            if(this.tableData.t_body[0].length < (a.data.sort_num-0)){
               this.tableData.t_body[1].splice(index,1,a.data);
             }else{
               this.tableData.t_body[0].splice(index,1,a.data);
@@ -270,7 +265,6 @@
         }
       },
       'music_info.playStatus': function (new_val, old_val) {
-        console.log(new_val, old_val)
         let data = this.oldRowData[this.oldRowData.length-1];
         let status = new_val == 'play' ? 'play' : 'pause';
         this.playStatusChange(data.data, data.index, status);

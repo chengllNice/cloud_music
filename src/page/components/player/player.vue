@@ -208,8 +208,8 @@
           this.$localStorage.setStore('volume', new_val);
         }
       },
-      'music_info.playStatus': function (new_val, old_val) {
-        if(new_val == 'play'){
+      'music_info.id': function (new_val, old_val) {
+        if(this.music_info.playStatus == 'play'){
           this.againPlay();
         }
       }
