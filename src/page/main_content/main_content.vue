@@ -13,6 +13,11 @@
           <router-view></router-view>
         </div>-->
       </div>
+      <div class="common_lrx_view">
+        <vue-scroll :ops="scroll_option">
+          <common-lrc></common-lrc>
+        </vue-scroll>
+      </div>
     </div>
     <common-footer></common-footer>
   </div>
@@ -21,6 +26,7 @@
 <script>
   import commonHeader from '../components/common_header/common_header'
   import commonFooter from '../components/common_footer/common_footer'
+  import commonLrc from '../components/common_lrc/common_lrc'
   import leftNav from '../components/left_nav/left_nav'
   import BScroll from 'better-scroll'
 
@@ -48,6 +54,7 @@
     components: {
       commonHeader,
       leftNav,
+      commonLrc,
       commonFooter
     },
     created() {
@@ -97,6 +104,7 @@
   .main_content {
     height: 100%;
     .main_content_wrap {
+      position: relative;
       display: flex;
       padding-bottom: 50px;
       .left_nav {
@@ -107,6 +115,16 @@
         min-width: 822px;
         background: #fafafa;
         height: 100%;
+        overflow: hidden;
+      }
+      .common_lrx_view{
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 1000;
+        background: #fafafa;
         overflow: hidden;
       }
     }

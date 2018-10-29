@@ -32,7 +32,7 @@
 
     <div class="play_music_box" v-if="music_info.id">
       <div class="left">
-        <div class="music_cover_img">
+        <div class="music_cover_img" @click="">
           <img :src="music_info.picUrl" :alt="music_info.song_name">
           <div class="open">
             <i class="iconfont icon-open1"></i>
