@@ -8,6 +8,7 @@ Vue.use(Vuex);
 
 const state = {
   music_info: {
+  // 正在播放的歌曲信息
     id: '1',
     url: '../../../../static/music/1.mp3',
     picUrl: '../../../static/img/test/music_cover.jpg',
