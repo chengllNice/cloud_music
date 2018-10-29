@@ -1,5 +1,5 @@
 <template>
-  <div class="base_table" :class="{'stripe_color': stripe == 'stripe'}">
+  <div class="base_table" v-loading="loading" :class="{'stripe_color': stripe == 'stripe'}">
 
     <!--<Table border :columns="data[0].t_head" :data="data[0].t_body"></Table>-->
 
@@ -12,6 +12,7 @@
                    :disabled-hover="config_data.disabledhover"
                    :highlight-row="config_data.highlightrow"
                    @on-current-change="currentChange"
+                   @on-row-dblclick="dbClickRow"
                    :columns="tableData.t_head"
                    :data="tableData.t_body">
         <template slot="header">
@@ -20,7 +21,11 @@
         <template v-for="(slot_item, slot_index) in tableData.t_head"
              v-if="slot_item.table_slot && slot_item.table_slot != ''"
              :slot="slot_item.table_slot" slot-scope="rowData">
-          <div v-if="slot_item.table_slot == 'sort_num'">{{rowData.rowData.sort_num || '0'}}</div>
+          <div v-if="slot_item.table_slot == 'sort_num'">
+            <i class="iconfont icon-volume_high" v-if="rowData.rowData.playStatus == 'play'"></i>
+            <i class="iconfont icon-volume_close" v-else-if="rowData.rowData.playStatus == 'pause'"></i>
+            <span v-else>{{rowData.rowData.sort_num || '0'}}</span>
+          </div>
           <slot v-else :name="slot_item.table_slot" :data="rowData.rowData"></slot>
         </template>
       </iview-table>
@@ -78,7 +83,10 @@
       data: {
         type: Object,
         default: function () {
-          return {}
+          return {
+            t_body: [],
+            t_head: []
+          }
         }
       },
       config: {
@@ -95,6 +103,7 @@
     },
     data() {
       return {
+        loading: true,
         config_default: {
           colsNum: '1',
           size: "small",
@@ -120,15 +129,18 @@
         return config;
       },
       tableData(){
-        let result = this.data;
-        let t_head = this.data.t_head;
-        let t_body = this.data.t_body;
-
+        // console.log('===!!!!!!!!')
+        // let result = this.data;
+        let result = this.$deepClone(this.data);
+        let t_head = result.t_head;
+        let t_body = result.t_body;
+        let t_head_copy = [];
         if(t_head.length && this.config.colsNum == '2'){
           t_head.forEach(head_item=>{
+            let head_item_copy = [];
             head_item.forEach((item, index)=>{
-              if(item.noshow){
-                head_item.splice(index,1)
+              if(!item.noshow){
+                head_item_copy.push(item);
               }
               if(item.key == 'sort_num' && item.table_slot == 'sort_num'){
                 t_body.forEach((body_item, body_index)=>{
@@ -144,12 +156,13 @@
                   })
                 });
               }
-            })
-          })
+            });
+            t_head_copy.push(head_item_copy);
+          });
         }else if(t_head.length){
           t_head.forEach((head_item, head_index)=>{
-            if(head_item.noshow){
-              t_head.splice(head_index,1)
+            if(!head_item.noshow){
+              t_head_copy.push(head_item);
             }
             if(head_item.key == 'sort_num' && head_item.table_slot == 'sort_num'){
               t_body.forEach((body_item, body_index)=>{
@@ -160,10 +173,12 @@
                   }
                   body_item.sort_num = sort_num;
                 }
+                body_item.playStatus = !body_item.playStatus ? '' : body_item.playStatus
               });
             }
           })
         }
+        result.t_head = t_head_copy;
         return result;
       },
       changePage () {
@@ -175,15 +190,34 @@
       toolPage
     },
     created() {
-
+      console.log('created')
     },
     mounted() {
-
+      this.loading_change();
     },
     methods: {
       // 当前行改变
       currentChange(currentRow, oldCurrentRow){
         console.log(currentRow)
+      },
+      dbClickRow(data, index){
+        this.$emit('dbclick', {data: data, index: index});
+        // console.log(data, index)
+      },
+      loading_change(){
+        if(this.data.t_body.length){
+          this.loading = false;
+        }else{
+          this.loading = true
+        }
+      }
+    },
+    destroyed(){
+      console.log('destroyed')
+    },
+    watch: {
+      'data.t_body': function (new_val, old_val) {
+        this.loading_change();
       }
     }
   }
@@ -297,7 +331,7 @@
     .ivu-table-body{
       tr.ivu-table-row-hover{
         td{
-          background: #ebeced;
+          background: #ebeced!important;
         }
       }
     }
@@ -307,7 +341,7 @@
   .ivu-table-stripe .ivu-table-body tr.ivu-table-row-highlight:nth-child(2n) td,
   .ivu-table-stripe .ivu-table-fixed-body tr.ivu-table-row-highlight:nth-child(2n) td,
   tr.ivu-table-row-highlight.ivu-table-row-hover td{
-    background: #e3e3e5;
+    background: #e3e3e5!important;
   }
 
   .base_table_cols_two{

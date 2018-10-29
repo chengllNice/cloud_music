@@ -30,17 +30,21 @@
       </div>
     </div>
 
-    <div class="play_music_box">
+    <div class="play_music_box" v-if="music_info.id">
       <div class="left">
         <div class="music_cover_img">
-          <img :src="music_info_data.img" alt="">
+          <img :src="music_info.picUrl" :alt="music_info.song_name">
           <div class="open">
             <i class="iconfont icon-open1"></i>
           </div>
         </div>
         <div class="music_info">
-          <div class="music_name">{{music_info_data.name}}</div>
-          <div class="music_sing">{{music_info_data.sing_name}}</div>
+          <div class="music_name ellipsis_1" v-if="music_info.song_name">{{music_info.song_name}}</div>
+          <div class="music_sing ellipsis_1" v-if="music_info.artists && music_info.artists.length">
+            <span v-for="(artists_item, artists_index) in music_info.artists" :key="artists_index">
+              <span v-if="artists_index">/ </span> {{artists_item.name}}
+            </span>
+          </div>
         </div>
       </div>
       <div class="right">
@@ -68,7 +72,7 @@
       }
     },
     computed: {
-      ...mapState(["music_info_data"])
+      ...mapState(["music_info"])
     },
     created(){
       this.left_nav_data = this.$deepClone(left_nav_data);
@@ -199,6 +203,7 @@
       display: flex;
       align-items: center;
       .music_cover_img{
+        flex: none;
         width: 45px;
         height: 45px;
         overflow: hidden;
@@ -225,9 +230,10 @@
       }
       .music_info{
         margin-left: 8px;
+        padding-right: 10px;
         .music_name{
           cursor: pointer;
-          font-size: 13px;
+          font-size: 12px;
           color: #333333;
           margin-bottom: 5px;
         }

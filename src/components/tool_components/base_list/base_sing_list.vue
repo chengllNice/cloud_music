@@ -1,46 +1,76 @@
 <template>
   <div class="base_sing_list">
     <div class="list_box">
-      <div class="header_box" v-if="!listData.title.noshow">
-        <div class="title">{{listData.title.name}}</div>
-        <div class="other" v-if="listData.title.more_btn">
-          <span>{{listData.title.more_btn}}</span>
+      <div class="header_box" v-if="!base_data.title.noshow">
+        <div class="title">{{base_data.title.name}}</div>
+        <div class="other" v-if="base_data.title.more_btn">
+          <span>{{base_data.title.more_btn}}</span>
           <i class="iconfont icon-right"></i>
           <!--<slot name="header_right"></slot>-->
         </div>
       </div>
       <div class="body_box">
-        <slot name="song_body" v-if="listData.slot && listData.slot == 'song_body'"></slot>
-        <div class="item" v-else v-for="(item, index) in listData.data" :key="index"
+        <slot name="song_body" v-if="base_data.slot && base_data.slot == 'song_body'"></slot>
+        <div class="item" v-else v-for="(item, index) in base_data.data" :key="index"
              :style="{width: (100/colsNum)+'%'}"
             :class="{'itemFirst': index%colsNum == 0}">
-          <div class="item_img">
-            <img :src="item.imgUrl" :alt="item.name">
-            <div class="item_img_cover" v-if="item.expand && !item.expand.nocover">
-              <div class="cover_top" v-if="item.expand.cover_top">
+          <div class="item_img" :class="{'coverall': item.picUrl && base_data.type == 'album'}">
+            <!--<div class="coverall" v-if=""></div>-->
+            <img :src="item.picUrl+'?param='+(item.width || '')+'y'+(item.height || '')" :alt="item.name">
+            <div class="item_img_cover" v-if="base_data.expand && !base_data.expand.nocover">
+              <!--顶部覆盖-->
+              <div class="cover_top" v-if="base_data.expand && base_data.expand.cover_top">
                 <i class="iconfont"
-                   :class="{'icon-left_video': item.expand.cover_top == 'video',
-                    'icon-headphone': item.expand.cover_top == 'song'}"></i>
-                <span>{{item.value}}</span><span v-if="item.unit">{{item.unit}}</span>
+                   :class="{'icon-left_video': item.type == 'mv',
+                    'icon-headphone': item.type == 'sing_list'}"></i>
+                <span>{{item.playCount}}</span>
               </div>
 
-              <div class="top_drop_down" v-if="item.des && item.type != 'radio'">
-                {{item.des}}
+              <!--hover下拉-->
+              <div class="top_drop_down ellipsis_2" v-if="item.copywriter && base_data.expand && base_data.expand.drop_down">
+                {{item.copywriter}}
               </div>
 
-              <div class="cover_bottom" v-if="item.type == 'radio'">
-                {{item.name}}
+              <!--底部覆盖-->
+              <div class="cover_bottom ellipsis_1" v-if="item.type == 'radio'">
+                {{item.nickname}}
               </div>
 
-              <div class="play_circle_icon play_icon" v-if="item.type && item.type == 'song'">
+              <!--右下角播放图标-->
+              <div class="play_circle_icon play_icon" v-if="base_data.expand.play_icon">
                 <i class="iconfont icon-music_play"></i>
               </div>
-              <div class="play_circle_icon_01 play_icon" v-if="item.type && item.type == 'music_video_top'">
-                <i class="iconfont icon-left_video"></i>
+              <!--左上角视频图标-->
+              <div class="play_circle_icon_01 play_icon" v-if="base_data.expand.play_video">
+                <i class="iconfont icon-left_video" v-if="item.type == 'video_top'"></i>
+                <i class="iconfont icon-article_list" v-if="item.type == 'article'"></i>
               </div>
             </div>
           </div>
-          <div class="item_name" v-if="item.type == 'radio'">{{item.des}}</div>
+          <!--歌名+歌手-->
+          <div class="item_name" v-if="base_data.type == 'mv'">
+            <div class="name ellipsis_2">{{item.name}}</div>
+            <div v-if="item.artists.length">
+              <span v-for="(singer_item, singer_index) in item.artists" :key="singer_index">
+                <span v-if="singer_index != 0">/ </span> {{singer_item.name}}
+              </span>
+            </div>
+          </div>
+          <!--歌名+歌手+-->
+          <div class="item_name" v-else-if="base_data.type == 'album'">
+
+            <div class="name ellipsis_2">
+              <span>{{item.name}}</span>
+              <span v-if="item.alias && item.alias.length" v-for="(alias_item, alias_index) in item.alias" :key="alias_index">({{alias_item}})</span>
+            </div>
+
+            <div v-if="item.artists">
+              <span v-if="item.artists.name">{{item.artists.name}}</span>
+              <span v-else-if="item.artists.length" v-for="(singer_item, singer_index) in item.artists" :key="singer_index">
+                <span v-if="singer_index != 0">/ </span> {{singer_item.name}}
+              </span>
+            </div>
+          </div>
           <div class="item_name" v-else>{{item.name}}</div>
         </div>
       </div>
@@ -50,6 +80,8 @@
 </template>
 
 <script>
+  import { common_type} from "../../../page/main_content/common_data";
+
   export default {
     name: "baseSingList",
     data() {
@@ -69,7 +101,18 @@
         default: 5
       }
     },
-    computed: {},
+    computed: {
+      base_data(){
+        if(this.$typeOf(this.listData.data) === 'array'){
+          this.listData.data.forEach(item=>{
+            item.type = common_type[item.type]
+          });
+          return this.listData;
+        }else{
+          return this.listData;
+        }
+      }
+    },
     components: {},
     created() {
     },
@@ -117,18 +160,18 @@
       margin-left: -20px;
 
       .item{
-        /*width: 20%;*/
         padding-left: 20px;
-        /*margin-top: 10px;*/
         margin-bottom: 40px;
-        /*position: relative;*/
+        .coverall{
+            position: absolute;
+            top: 0;
+            left: -5px;
+            width: 100%;
+            height: 100%;
+            background: url("../../../../static/img/album_cover.png") no-repeat;
+            background-size: auto 100%;
+          }
         .item_img{
-          /*position: absolute;*/
-          /*padding-bottom: 100%;*/
-          /*width: 100%;*/
-          /*height: 0;*/
-          /*background-repeat: no-repeat;*/
-          /*background-size: 100% 100%;*/
           position: relative;
           cursor: pointer;
           overflow: hidden;
@@ -137,15 +180,14 @@
             width: 100%;
             height: 100%;
           }
+
           .item_img_cover{
-            /*display: none;*/
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             color: #ffffff;
-            /*text-align: right;*/
             box-shadow: 0 0 1px #e6e5e6 inset;
             overflow: hidden;
             .cover_top{
@@ -158,6 +200,9 @@
               i{
                 font-size: 12px;
                 margin-right: 1px;
+              }
+              .icon-left_video{
+                font-size: 14px;
               }
             }
 
@@ -219,6 +264,15 @@
           margin-top: 5px;
           .ellipsis(2);
           color: #333333;
+          .name{
+            color: #333333;
+            &>span:nth-of-type(2){
+              color: #888888;
+            }
+          }
+          div{
+            color: #888888;
+          }
         }
       }
 

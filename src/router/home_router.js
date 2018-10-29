@@ -7,7 +7,11 @@ const playlist = r => require.ensure([], () => r(require('../page/main_content/h
 const dj_radio = r => require.ensure([], () => r(require('../page/main_content/home/dj_radio/dj_radio')), 'dj_radio');
 const top_list = r => require.ensure([], () => r(require('../page/main_content/home/top_list/top_list')), 'top_list');
 const songer_list = r => require.ensure([], () => r(require('../page/main_content/home/songer_list/songer_list')), 'songer_list');
+
+// 最新音乐
 const new_music = r => require.ensure([], () => r(require('../page/main_content/home/new_music/new_music')), 'new_music');
+const new_music_express = r => require.ensure([], () => r(require('../page/main_content/home/new_music/new_music_express')), 'new_music_express');
+const new_music_album = r => require.ensure([], () => r(require('../page/main_content/home/new_music/new_music_album')), 'new_music_album');
 
 export default {
   path: '/',
@@ -44,14 +48,23 @@ export default {
           name: 'songer_list',
           component: songer_list,
         },
-        /*{
-          path: '/home/new_music',
-          redirect: '/home/new_music/music',
-        },*/
         {
           path: '/home/new_music',
           name: 'new_music',
+          redirect: '/home/new_music/express',
           component: new_music,
+          children: [
+            {
+              path: '/home/new_music/express',
+              name: 'new_music_express',
+              component: new_music_express,
+            },
+            {
+              path: '/home/new_music/album',
+              name: 'new_music_album',
+              component: new_music_album,
+            },
+          ]
         }
       ]
     }

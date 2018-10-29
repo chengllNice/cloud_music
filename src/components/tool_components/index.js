@@ -21,7 +21,6 @@ const install = function (Vue) {
   components.map(component => {
     Vue.component(component.name, component);
   });
-  // Vue.prototype.$fbmessage = fbMessage;
 };
 
 install(Vue);

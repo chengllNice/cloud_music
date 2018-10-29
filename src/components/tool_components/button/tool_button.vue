@@ -189,7 +189,7 @@
       color: #c73333;
       font-size: 12px!important;
       transform: scale(0.7);
-      line-height: 0.8;
+      /*line-height: 0.8;*/
     }
     &:hover{
       border-color: rgba(214,85,85,1);

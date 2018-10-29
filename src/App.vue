@@ -5,8 +5,21 @@
 </template>
 
 <script>
+  import { mapMutations } from 'vuex'
 export default {
-  name: 'App'
+  name: 'App',
+  data(){
+    return {
+
+    }
+  },
+  mounted(){
+
+  },
+  methods: {
+
+  },
+  watch: {}
 }
 </script>
 

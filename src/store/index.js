@@ -7,13 +7,20 @@ import getters from './getters'
 Vue.use(Vuex);
 
 const state = {
-  music_info_data: {
+  music_info: {
     id: '1',
-    img: '../../../static/img/test/music_cover.jpg',
-    name: '云烟成雨',
-    sing_name: '房东家的猫',
+    url: '../../../../static/music/1.mp3',
+    picUrl: '../../../static/img/test/music_cover.jpg',
+    song_name: '崇拜',
+    artists: [],
     like: '',
-  }
+    crrentTime: '',//当前播放时间
+    duration: '',//音乐总时长
+    volume: '',//音量
+    loop: '',//循环方式
+  },
+  device_info: {},
+  scroll_info: {},//滚动条相关信息
 };
 
 export default new Vuex.Store({

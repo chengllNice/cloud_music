@@ -8,7 +8,7 @@
                 'item_active_pre' : index == item_active_pre,
                 'item_active_next' : index == item_active_next }"
                 :style="{transform: 'translateX('+ (index == item_active_pre ? (-translate_x) + 'px' : (index == item_active_next ? (translate_x + 'px') : '0px')) +')'}">
-            <img :src="item.url" alt="">
+            <img :src="item.imageUrl" :alt="item.typeTitle">
             <div class="item_cover" v-if="index != item_active"></div>
           </div>
         </transition>
@@ -25,6 +25,7 @@
 
 <script>
 
+  import { mapState } from 'vuex'
   export default {
     name: "banner",
     props: {
@@ -43,6 +44,7 @@
       }
     },
     computed: {
+      ...mapState(['device_info']),
       banner_data(){
         return this.listData;
       },
@@ -72,11 +74,11 @@
 
     },
     mounted(){
-      // this.init();
+      this.init();
       let vue = this;
-      window.onresize = ()=>{
+      /*window.onresize = ()=>{
         vue.get_init();
-      }
+      }*/
     },
     methods: {
       init(){
@@ -90,6 +92,7 @@
       get_init(){
         let h = 0;
         h = ($('.list_img_box').width() - 408) / 2;
+        // console.log(h,'==========')
         this.translate_x = h;
       },
       play(){
@@ -104,6 +107,11 @@
         }else{
           this.item_active = index+1;
         }
+        this.init();
+      }
+    },
+    watch: {
+      'device_info.clientWidth': function (new_val, old_val) {
         this.init();
       }
     }

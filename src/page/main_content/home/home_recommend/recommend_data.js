@@ -5,37 +5,55 @@ export const banner_data = [
   {
     id: '',
     name: '',
-    url: 'http://p1.music.126.net/FKosQOaR4UqrXqJB2OoTIw==/109951163609842838.jpg',
+    targetId: '',
+    titleColor: '',
+    typeTitle: '',
+    imageUrl: 'http://p1.music.126.net/FKosQOaR4UqrXqJB2OoTIw==/109951163609842838.jpg',
     path: '',
   },
   {
     id: '',
     name: '',
-    url: 'http://p1.music.126.net/o1271c-rWLyg__YwNUROnw==/109951163609805702.jpg',
+    targetId: '',
+    titleColor: '',
+    typeTitle: '',
+    imageUrl: 'http://p1.music.126.net/o1271c-rWLyg__YwNUROnw==/109951163609805702.jpg',
     path: '',
   },
   {
     id: '',
     name: '',
-    url: 'http://p1.music.126.net/o1271c-rWLyg__YwNUROnw==/109951163609805702.jpg',
+    targetId: '',
+    titleColor: '',
+    typeTitle: '',
+    imageUrl: 'http://p1.music.126.net/o1271c-rWLyg__YwNUROnw==/109951163609805702.jpg',
     path: '',
   },
   {
     id: '',
     name: '',
-    url: 'http://p1.music.126.net/gM9qjiyrtPlST1wNzyBBGA==/109951163609577049.jpg',
+    targetId: '',
+    titleColor: '',
+    typeTitle: '',
+    imageUrl: 'http://p1.music.126.net/gM9qjiyrtPlST1wNzyBBGA==/109951163609577049.jpg',
     path: '',
   },
   {
     id: '',
     name: '',
-    url: 'http://p1.music.126.net/fzOR64FqUT3wRyEfrr3UGg==/109951163610265914.jpg',
+    targetId: '',
+    titleColor: '',
+    typeTitle: '',
+    imageUrl: 'http://p1.music.126.net/fzOR64FqUT3wRyEfrr3UGg==/109951163610265914.jpg',
     path: '',
   },
   {
     id: '',
     name: '',
-    url: 'http://p1.music.126.net/GjuKNvh3q8vHDCVagLYI6A==/109951163609581725.jpg',
+    targetId: '',
+    titleColor: '',
+    typeTitle: '',
+    imageUrl: 'http://p1.music.126.net/GjuKNvh3q8vHDCVagLYI6A==/109951163609581725.jpg',
     path: '',
   },
 ];
@@ -47,142 +65,149 @@ export const recommend_sing_data = {
   type: '',
   weight: '0',//权值，排序优先度
   colsNum: 5,//列数
+  expand: {
+    cover_top: true,
+    drop_down: true,
+    play_icon: true
+  },
   title: {
     name: '推荐歌单',
     noshow: false,
     more_btn: '更多'
   },
+  uiconfig: {
+    id: 'id',
+    type: 'type',
+    alg: 'alg',
+    canDislike: 'canDislike',
+    highQuality: 'highQuality',
+    name: 'name',
+    copywriter: 'copywriter',
+    picUrl: 'picUrl',
+    playCount: 'playCount',
+    trackCount: 'trackCount',
+  },
   data: [
     {
       id: '',
-      type: 'song',
+      type: 0,
+      alg: '',
+      canDislike: '',
+      highQuality: '',
       name: '每日歌曲推荐',
-      des: '岛·独立乐队 用音乐反抗烂俗的理想',
-      imgUrl: 'http://p2.music.126.net/0b55rjPaYszNQnlo847iKg==/109951163603235587.jpg',
-      value: '1110000',
-      unit: '',
-      reason: '',
-      expand: {
-        cover_top: 'music',
-      }
+      copywriter: '岛·独立乐队 用音乐反抗烂俗的理想',
+      picUrl: 'http://p2.music.126.net/0b55rjPaYszNQnlo847iKg==/109951163603235587.jpg',
+      playCount: '1110000',
+      trackCount: '',
     },
     {
       id: '',
-      type: 'song',
-      name: '天冷了，你穿秋裤了么？',
-      des: '',
-      imgUrl: 'http://p2.music.126.net/AfyMT9PJ77cZHBnqqvn7Kw==/109951163597978312.jpg',
-      value: '11500000',
-      unit: '',
-      reason: '',
-      expand: {
-        cover_top: 'music',
-      }
+      type: 0,
+      alg: '',
+      canDislike: '',
+      highQuality: '',
+      name: '每日歌曲推荐',
+      copywriter: '岛·独立乐队 用音乐反抗烂俗的理想',
+      picUrl: 'http://p2.music.126.net/0b55rjPaYszNQnlo847iKg==/109951163603235587.jpg',
+      playCount: '1110000',
+      trackCount: '',
     },
     {
       id: '',
-      type: 'song',
-      name: '治愈男生//回眸之时，只望遇见你 治愈男生//回眸之时，只望遇见你 治愈男生//回眸之时，只望遇见你',
-      des: '',
-      imgUrl: 'http://p2.music.126.net/oiM3WXz-tqBcaiMaFTj6Dg==/109951163436775633.jpg',
-      value: '1230000',
-      unit: '',
-      reason: '',
-      expand: {
-        cover_top: 'music',
-      }
+      type: 0,
+      alg: '',
+      canDislike: '',
+      highQuality: '',
+      name: '每日歌曲推荐',
+      copywriter: '岛·独立乐队 用音乐反抗烂俗的理想',
+      picUrl: 'http://p2.music.126.net/0b55rjPaYszNQnlo847iKg==/109951163603235587.jpg',
+      playCount: '1110000',
+      trackCount: '',
     },
     {
       id: '',
-      type: 'song',
-      name: '叱咤紫檀的流行-悦耳旋律',
-      des: '',
-      imgUrl: 'http://p1.music.126.net/uQs62nKqzJyXxaykSjqLNQ==/109951163606708305.jpg',
-      value: '200000',
-      unit: '',
-      reason: '',
-      expand: {
-        cover_top: 'music',
-      }
+      type: 0,
+      alg: '',
+      canDislike: '',
+      highQuality: '',
+      name: '每日歌曲推荐',
+      copywriter: '岛·独立乐队 用音乐反抗烂俗的理想',
+      picUrl: 'http://p2.music.126.net/0b55rjPaYszNQnlo847iKg==/109951163603235587.jpg',
+      playCount: '1110000',
+      trackCount: '',
     },
     {
       id: '',
-      type: 'song',
-      name: '私人珍藏●上传通过审核',
-      des: '',
-      imgUrl: 'http://p2.music.126.net/yIDqq7EudewjiV7eIS42hA==/109951163545753157.jpg',
-      value: '1110000',
-      unit: '',
-      reason: '',
-      expand: {
-        cover_top: 'music',
-      }
+      type: 0,
+      alg: '',
+      canDislike: '',
+      highQuality: '',
+      name: '每日歌曲推荐',
+      copywriter: '岛·独立乐队 用音乐反抗烂俗的理想',
+      picUrl: 'http://p2.music.126.net/0b55rjPaYszNQnlo847iKg==/109951163603235587.jpg',
+      playCount: '1110000',
+      trackCount: '',
     },
     {
       id: '',
-      type: 'song',
-      name: '东西 （cover 林俊呈）',
-      des: '',
-      imgUrl: 'http://p1.music.126.net/5eU0VKwoQPvZkpox4cAI6w==/109951163608095279.jpg',
-      value: '11500000',
-      unit: '',
-      reason: '',
-      expand: {
-        cover_top: 'music',
-      }
+      type: 0,
+      alg: '',
+      canDislike: '',
+      highQuality: '',
+      name: '每日歌曲推荐',
+      copywriter: '岛·独立乐队 用音乐反抗烂俗的理想',
+      picUrl: 'http://p2.music.126.net/0b55rjPaYszNQnlo847iKg==/109951163603235587.jpg',
+      playCount: '1110000',
+      trackCount: '',
     },
     {
       id: '',
-      type: 'song',
-      name: '『Future Bass™』 直\\击\\内\\心\\的\\旋\\律',
-      des: '',
-      imgUrl: 'http://p2.music.126.net/On4ABGqNXtJiz99ier6fVQ==/109951163515219001.jpg',
-      value: '1230000',
-      unit: '',
-      reason: '',
-      expand: {
-        cover_top: 'music',
-      }
+      type: 0,
+      alg: '',
+      canDislike: '',
+      highQuality: '',
+      name: '每日歌曲推荐',
+      copywriter: '岛·独立乐队 用音乐反抗烂俗的理想',
+      picUrl: 'http://p2.music.126.net/0b55rjPaYszNQnlo847iKg==/109951163603235587.jpg',
+      playCount: '1110000',
+      trackCount: '',
     },
     {
       id: '',
-      type: 'song',
-      name: '我今年24岁，除了年轻什么都没有。',
-      des: '',
-      imgUrl: 'http://p1.music.126.net/l1oynDroapT-bq-ZuW6E9A==/109951163605123450.jpg',
-      value: '120000',
-      unit: '',
-      reason: '',
-      expand: {
-        cover_top: 'music',
-      }
+      type: 0,
+      alg: '',
+      canDislike: '',
+      highQuality: '',
+      name: '每日歌曲推荐',
+      copywriter: '岛·独立乐队 用音乐反抗烂俗的理想',
+      picUrl: 'http://p2.music.126.net/0b55rjPaYszNQnlo847iKg==/109951163603235587.jpg',
+      playCount: '1110000',
+      trackCount: '',
     },
     {
       id: '',
-      type: 'song',
-      name: '日语 | 泪水与梦呓藏在枕下歌唱',
-      des: '',
-      imgUrl: 'http://p1.music.126.net/wpahk9cQCDtdzJPE52EzJQ==/109951163271025942.jpg',
-      value: '90000',
-      unit: '',
-      reason: '',
-      expand: {
-        cover_top: 'music',
-      }
+      type: 0,
+      alg: '',
+      canDislike: '',
+      highQuality: '',
+      name: '每日歌曲推荐',
+      copywriter: '岛·独立乐队 用音乐反抗烂俗的理想',
+      picUrl: 'http://p2.music.126.net/0b55rjPaYszNQnlo847iKg==/109951163603235587.jpg',
+      playCount: '1110000',
+      trackCount: '',
     },
     {
       id: '',
-      type: 'song',
-      name: '你的青春里有没有属于你的一首歌？',
-      des: '',
-      imgUrl: 'http://p2.music.126.net/9HEe4TmWFOK2kVUgYDT4Iw==/109951163602600219.jpg',
-      value: '25130000',
-      unit: '',
-      reason: '',
-      expand: {
-        cover_top: 'music',
-      }
-    }
+      type: 0,
+      alg: '',
+      canDislike: '',
+      highQuality: '',
+      name: '每日歌曲推荐',
+      copywriter: '岛·独立乐队 用音乐反抗烂俗的理想',
+      picUrl: 'http://p2.music.126.net/0b55rjPaYszNQnlo847iKg==/109951163603235587.jpg',
+      playCount: '1110000',
+      trackCount: '',
+    },
   ]
 };
 
@@ -193,58 +218,83 @@ export const exclusive_data = {
   type: '',
   weight: '1',//权值，排序优先度
   colsNum: 3,//列数
+  expand: {
+    drop_down: true,
+    play_video: true,
+  },
   title: {
     name: '独家放送',
     noshow: false,
     more_btn: '更多'
   },
+  uiconfig: {
+    id: 'id',
+    alg: "alg",
+    type: 'type',
+    name: 'name',
+    eventType: 'eventType',
+    eventUserId: 'eventUserId',
+    copywriter: "copywriter",
+    picUrl: "picUrl",
+    sPicUrl: "sPicUrl",
+    url: "url",
+    videoId: "videoId",
+    width: 'width',
+    height: 'height'
+  },
   data: [
     {
       id: '',
-      type: 'music_video_top',
-      name: '【一周音乐视频榜】第44期：天气变冷，我只想听一首甜甜的男女对唱',
-      des: '',
-      imgUrl: 'http://p1.music.126.net/8FiQuMfgIypuBn5qvo7ACw==/109951163608573216.jpg?param=210y140&quality=100',
-      value: '1110000',
-      unit: '',
-      reason: '',
-      expand: {}
-    },
-    {
-      id: '',
+      alg: "featured",
       type: 'music_video_top',
       name: '【一周音乐视频榜】第43期：这一刻安静感受粤语歌的独特味道',
-      des: '',
-      imgUrl: 'http://p1.music.126.net/PkTE0qzvigs6RXy_xmnNxQ==/109951163596460494.jpg?param=210y140&quality=100',
-      value: '11500000',
-      unit: '',
-      reason: '',
-      expand: {}
+      eventType: 39,
+      eventUserId: 334202489,
+      copywriter: "男声版《左手指月》 一字一句唱出荡气回肠",
+      picUrl: "http://p2.music.126.net/7YLYnuNzOoBvqp7qbkgIgQ==/109951163608605718.jpg",
+      sPicUrl: "http://p2.music.126.net/6NoM_MSW-mAbUh-tc_gfrQ==/109951163608595987.jpg",
+      url: "334202489",
+      videoId: "1435D4CE26A1874738232455CC8448CB",
     },
     {
       id: '',
+      alg: "featured",
       type: 'music_video_top',
-      name: '【一周音乐视频榜】第35期：慢慢喜欢你，是最美好的事情',
-      des: '',
-      imgUrl: 'http://p1.music.126.net/QdHzFVoI96T0r7ws8T4Kew==/109951163453025730.jpg?param=210y140&quality=100',
-      value: '1230000',
-      unit: '',
-      reason: '',
-      expand: {}
-    }
+      name: '【一周音乐视频榜】第43期：这一刻安静感受粤语歌的独特味道',
+      eventType: 39,
+      eventUserId: 334202489,
+      copywriter: "男声版《左手指月》 一字一句唱出荡气回肠",
+      picUrl: "http://p2.music.126.net/7YLYnuNzOoBvqp7qbkgIgQ==/109951163608605718.jpg",
+      sPicUrl: "http://p2.music.126.net/6NoM_MSW-mAbUh-tc_gfrQ==/109951163608595987.jpg",
+      url: "334202489",
+      videoId: "1435D4CE26A1874738232455CC8448CB",
+    },
+    {
+      id: '',
+      alg: "featured",
+      type: 'music_video_top',
+      name: '【一周音乐视频榜】第43期：这一刻安静感受粤语歌的独特味道',
+      eventType: 39,
+      eventUserId: 334202489,
+      copywriter: "男声版《左手指月》 一字一句唱出荡气回肠",
+      picUrl: "http://p2.music.126.net/7YLYnuNzOoBvqp7qbkgIgQ==/109951163608605718.jpg",
+      sPicUrl: "http://p2.music.126.net/6NoM_MSW-mAbUh-tc_gfrQ==/109951163608595987.jpg",
+      url: "334202489",
+      videoId: "1435D4CE26A1874738232455CC8448CB",
+    },
   ]
 };
 
-//最新歌单
+//最新音乐
 export const new_song_data = {
   id: '',
   name: '',
   type: 'table',
-  weight: '1',//权值，排序优先度
+  weight: '2',//权值，排序优先度
   colsNum: 1,//列数
   slot: 'song_body',
   title: {
-    name: '最新歌单',
+    name: '最新音乐',
     noshow: false,
     more_btn: '更多'
   },
@@ -256,17 +306,61 @@ export const new_song_data = {
     t_head: [
       [
         {
-          title: '',
+          title: '歌曲排序',
           key: 'sort_num',
           width: 35,
           tooltip: true,
-          table_slot: 'sort_num'
+          table_slot: 'sort_num',
+          // jpath: 'song.no'
+        },
+        {
+          title: '歌曲id',
+          key: 'id',
+          noshow: true,
+          jpath: 'song.id'
+        },
+        {
+          title: '歌名',
+          key: 'song_name',
+          noshow: true,
+          jpath: 'song.name'
+        },
+        {
+          title: '歌曲别名',
+          key: 'alias',
+          noshow: true,
+          jpath: 'song.alias'
+        },
+        {
+          title: '歌手',
+          key: 'artists',
+          noshow: true,
+          jpath: 'song.artists'
+        },
+        {
+          title: '封面图片',
+          key: 'picUrl',
+          noshow: true,
+          jpath: 'song.album.picUrl'
+        },
+        {
+          title: 'MVid',
+          key: 'mvid',
+          noshow: true,
+          jpath: 'song.mvid'
+        },
+        {
+          title: '最大码率',
+          key: 'maxbr',
+          noshow: true,
+          jpath: 'song.privilege.maxbr'
         },
         {
           title: '',
           key: 'content',
           tooltip: true,
-          table_slot: 'content'
+          table_slot: 'content',
+          jpath: ''
         },
         /*{
           title: '操作',
@@ -279,20 +373,61 @@ export const new_song_data = {
       ],
       [
         {
-          title: '',
+          title: '歌曲排序',
           key: 'sort_num',
-          // type: 'index',
           width: 35,
           tooltip: true,
-          // className: 'table_index',
-          table_slot: 'sort_num'
+          table_slot: 'sort_num',
+          // jpath: 'song.no'
+        },
+        {
+          title: '歌曲id',
+          key: 'id',
+          noshow: true,
+          jpath: 'song.id'
+        },
+        {
+          title: '歌名',
+          key: 'song_name',
+          noshow: true,
+          jpath: 'song.name'
+        },
+        {
+          title: '歌曲别名',
+          key: 'alias',
+          noshow: true,
+          jpath: 'song.alias'
+        },
+        {
+          title: '歌手',
+          key: 'artists',
+          noshow: true,
+          jpath: 'song.artists'
+        },
+        {
+          title: '封面图片',
+          key: 'picUrl',
+          noshow: true,
+          jpath: 'song.album.picUrl'
+        },
+        {
+          title: 'MVid',
+          key: 'mvid',
+          noshow: true,
+          jpath: 'song.mvid'
+        },
+        {
+          title: '最大码率',
+          key: 'maxbr',
+          noshow: true,
+          jpath: 'song.privilege.maxbr'
         },
         {
           title: '',
           key: 'content',
-          // width: 50,
           tooltip: true,
-          table_slot: 'content'
+          table_slot: 'content',
+          jpath: ''
         },
         /*{
           title: '操作',
@@ -308,96 +443,23 @@ export const new_song_data = {
       [
         {
           id: '',
-          img: 'http://p2.music.126.net/tt8xwK-ASC2iqXNUXYKoDQ==/109951163606377163.jpg?param=50y50&quality=100',
-          song_name: '年少有为',
-          singer: '李荣浩',
-          des: '',
-          video: false,
-          superQuality: false,//超品质
-        },
-        {
-          id: '',
-          img: 'http://p1.music.126.net/tt8xwK-ASC2iqXNUXYKoDQ==/109951163606377163.jpg?param=130y130',
-          song_name: '耳朵',
-          singer: '李荣浩',
-          des: '',
-          video: true,
-          superQuality: true,//超品质
-        },
-        {
-          id: '',
-          img: 'http://p2.music.126.net/tt8xwK-ASC2iqXNUXYKoDQ==/109951163606377163.jpg?param=50y50&quality=100',
-          song_name: '年少有为',
-          singer: '李荣浩',
-          des: '',
-          video: true,
-          superQuality: true,//超品质
-        },
-        {
-          id: '',
-          img: 'http://p1.music.126.net/tt8xwK-ASC2iqXNUXYKoDQ==/109951163606377163.jpg?param=130y130',
-          song_name: '耳朵',
-          singer: '李荣浩',
-          des: '',
-          video: true,
-          superQuality: true,//超品质
-        },
-        {
-          id: '',
-          img: 'http://p2.music.126.net/pBJOJF3y9cATRZAJ02Ju-w==/109951163611930628.jpg?param=130y130',
-          song_name: '年少心事',
-          singer: '王一博',
-          des: '',
-          video: true,
-          superQuality: true,//超品质
+          song_name: '',
+          maxbr: '',
+          mvid: '',
+          pic: '',
+          singer: [],
+          alias: '',
         },
       ],
       [
         {
           id: '',
-          img: 'http://p1.music.126.net/-qHPT3rhxDlu5zQV9NcQ-A==/109951163555860423.jpg?param=130y130',
-          song_name: '盗将行',
-          singer: '花粥,马雨阳',
-          des: '',
-          video: true,//是否有mv视频
-          superQuality: true,//超品质
+          song_name: '',
+          maxbr: '',
+          mvid: '',
+          pic: '',
+          singer: []
         },
-        {
-          id: '',
-          img: 'http://p2.music.126.net/oov7j64hTKZSm0CEUkRNoQ==/109951163111639178.jpg?param=50y50&quality=100',
-          song_name: '不染',
-          singer: '毛不易',
-          des: '电视剧《香蜜沉沉烬如霜》主题曲',
-          video: true,
-          superQuality: true,//超品质
-        },
-        {
-          id: '',
-          img: 'http://p2.music.126.net/WafK2OQfEtqXitdDXJ772Q==/109951163252847249.jpg?param=50y50&quality=100',
-          song_name: '可不可以',
-          singer: '张紫豪',
-          des: '',
-          video: true,
-          superQuality: true,//超品质
-        },
-        {
-          id: '',
-          img: 'http://p1.music.126.net/DSTg1dR7yKsyGq4IK3NL8A==/109951163046050093.jpg?param=130y130',
-          song_name: '云烟成雨',
-          singer: '房东的猫',
-          des: '动画《我是江小白》片尾曲',
-          video: true,
-          superQuality: true,//超品质
-        },
-        {
-          id: '',
-          img: 'http://p1.music.126.net/W9HqFsgMcjgWjW9SutIvrw==/18956679974613469.jpg?param=130y130',
-          song_name: '魔鬼中的天使',
-          singer: '田馥甄',
-          des: '',
-          video: false,
-          superQuality: true,//超品质
-        }
       ]
     ],
     t_page: {}
@@ -478,53 +540,43 @@ export const new_song_data = {
 export const recommend_mv_data = {
   id: '',
   name: '',
-  type: '',
-  weight: '2',//权值，排序优先度
+  type: 'mv',
+  weight: '3',//权值，排序优先度
   colsNum: 3,//列数
+  expand: {
+    cover_top: true,
+    drop_down: true
+  },
   title: {
     name: '推荐MV',
     noshow: false,
     more_btn: '更多'
   },
+  uiconfig: {
+    id: 'id',
+    type: 'type',
+    name: 'name',
+    copywriter: 'copywriter',
+    picUrl: 'picUrl',//封面
+    playCount: 'playCount',//播放量
+    artists: 'artists',//歌手组
+    canDislike: 'canDislike',//喜欢
+  },
   data: [
     {
       id: '',
       type: '',
-      name: '耳朵--李荣浩',
-      des: '岛·独立乐队 用音乐反抗烂俗的理想',
-      imgUrl: 'http://p1.music.126.net/5M6-A0b1CfEqEoJc7AV7DA==/109951163611566256.jpg?param=159y90',
-      value: '1110000',
-      unit: '',
-      reason: '',
-      expand: {
-        cover_top: 'video',
-      }
-    },
-    {
-      id: '',
-      type: '',
-      name: '云烟成雨--房东的猫深圳现场',
-      des: '',
-      imgUrl: 'http://p2.music.126.net/POkTF0l_6uDqOq5y1arEKA==/109951163573184529.jpg?param=159y90',
-      value: '11500000',
-      unit: '',
-      reason: '',
-      expand: {
-        cover_top: 'video',
-      }
-    },
-    {
-      id: '',
-      type: '',
-      name: '一念天堂--张磊',
-      des: '',
-      imgUrl: 'http://p1.music.126.net/uTIiak543Ip2iPyYLZGdig==/528865126064557.jpg?param=159y90',
-      value: '1230000',
-      unit: '',
-      reason: '',
-      expand: {
-        cover_top: 'video',
-      }
+      name: '',
+      copywriter: '',
+      picUrl: '',//封面
+      playCount: '',//播放量
+      artists: [
+        {
+          id: '',
+          name: ''
+        }
+      ],//歌手组
+      canDislike: '',//喜欢
     }
   ]
 };
@@ -534,80 +586,26 @@ export const radio_station_data = {
   id: '',
   name: '',
   type: '',
-  weight: '2',//权值，排序优先度
+  weight: '4',//权值，排序优先度
   colsNum: 5,//列数
+  expand: {
+
+  },
   title: {
     name: '主播电台',
     noshow: false,
     more_btn: '更多'
   },
-  data: [
-    {
-      id: '',
-      type: 'radio',
-      name: '翊个人的江湖',
-      des: '解析人生样本 伴你成为更好自己',
-      imgUrl: 'http://p2.music.126.net/JAXmMw2HqPwsOB9gXqwTng==/6627856092806601.jpg',
-      value: '',
-      unit: '',
-      reason: '',
-      expand: {
-        cover_top: '',
-      }
-    },
-    {
-      id: '',
-      type: 'radio',
-      name: '丫蛋蛋换个心情做自己',
-      des: '不染（完整版 欢快版）cover-毛不易',
-      imgUrl: 'http://p2.music.126.net/2aI-A9HcbnvdRhB5bueIUA==/109951163549018969.jpg',
-      value: '',
-      unit: '',
-      reason: '',
-      expand: {
-        cover_top: '',
-      }
-    },
-    {
-      id: '',
-      type: 'radio',
-      name: '蕊希电台',
-      des: '一个人爱不爱你就看这四点。',
-      imgUrl: 'http://p2.music.126.net/mMqw9kb2365u4502h6WdvA==/109951163608558654.jpg',
-      value: '',
-      unit: '',
-      reason: '',
-      expand: {
-        cover_top: '',
-      }
-    },
-    {
-      id: '',
-      type: 'radio',
-      name: '失恋留声机',
-      des: '你的孤独 虽败犹荣',
-      imgUrl: 'http://p1.music.126.net/amM10rl0ozIiP1ckBye-Eg==/109951163606874437.jpg',
-      value: '',
-      unit: '',
-      reason: '',
-      expand: {
-        cover_top: '',
-      }
-    },
-    {
-      id: '',
-      type: 'radio',
-      name: '林俊杰1307电台',
-      des: '第193期：光阴荏苒 借宿十年',
-      imgUrl: 'http://p1.music.126.net/JoypCT_eLY6X_TrdcUqSDw==/109951163611947823.jpg',
-      value: '',
-      unit: '',
-      reason: '',
-      expand: {
-        cover_top: '',
-      }
-    }
-  ]
+  uiconfig: {
+    id: 'id',
+    type: 'type',
+    name: 'name',
+    nickname: 'program.dj.nickname',
+    copywriter: 'program.dj.copywriter',
+    picUrl: 'program.dj.avatarUrl',
+    canDislike: 'canDislike',
+  },
+  data: []
 };
 
 

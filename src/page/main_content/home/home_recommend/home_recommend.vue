@@ -7,9 +7,10 @@
         <template v-if="item.slot && item.slot == 'song_body'" slot="song_body">
           <base-table :data="item.data" :config="item.config" v-if="item.type == 'table'">
             <template slot="content" slot-scope="data">
+              <!--{{data}}-->
               <div class="new_song_content">
-                <div class="left_img" v-if="data.data.img">
-                  <img :src="data.data.img" alt="">
+                <div class="left_img" v-if="data.data.picUrl">
+                  <img :src="data.data.picUrl" alt="">
                   <div class="img_cover">
                     <div class="abs_center play_icon">
                       <i class="iconfont icon-music_play"></i>
@@ -18,13 +19,19 @@
                 </div>
                 <div class="right_info">
                   <div class="song_name" v-if="data.data.song_name">
-                    <span>{{data.data.song_name}}</span>
-                    <span v-if="data.data.des">({{data.data.des}})</span>
+                    <div>{{data.data.song_name}}</div>
+                    <div v-if="data.data.alias && data.data.alias.length">
+                      <span class="ellipsis_1" v-for="(alias_item, alias_index) in data.data.alias" :key="alias_index">({{alias_item}})</span>
+                    </div>
                   </div>
                   <div class="singer">
-                    <base-tool-button v-if="data.data.video" type="icon" cl-type="play_video_icon_button" icon-class="icon-music_play"></base-tool-button>
-                    <base-tool-button v-if="data.data.superQuality" type="" cl-type="sq_button">SQ</base-tool-button>
-                    <span v-if="data.data.singer">{{data.data.singer}}</span>
+                    <base-tool-button v-if="data.data.mvid" type="icon" cl-type="play_video_icon_button" icon-class="icon-music_play"></base-tool-button>
+                    <base-tool-button v-if="data.data.maxbr && data.data.maxbr == '999000'" type="" cl-type="sq_button">SQ</base-tool-button>
+                    <span v-if="data.data.artists && data.data.artists.length">
+                      <span v-for="(singer_item, singer_index) in data.data.artists" :key="singer_index">
+                        <span v-if="singer_index != 0">/ </span> {{singer_item.name}}
+                      </span>
+                    </span>
                   </div>
                 </div>
               </div>
@@ -43,6 +50,7 @@
 </template>
 
 <script>
+  import { mapState } from 'vuex'
   import banner from '../../../components/banner/banner';
   import {
     banner_data,
@@ -51,6 +59,13 @@
     recommend_mv_data,
     radio_station_data,
     new_song_data} from "./recommend_data";
+  import {
+    get_banner,
+    get_personalized,
+    get_privatecontent,
+    get_newsong,
+    get_mv,
+    get_djprogram} from "../../../../server/home";
 
   export default {
     name: "home_recommend",
@@ -65,41 +80,165 @@
         radio_station_data: {},//电台
       }
     },
-    computed: {},
+    computed: {
+      ...mapState(['device_info'])
+    },
     components: {
       banner
     },
     created() {
-      this.banner_data = this.$deepClone(banner_data);
+      // this.banner_data = this.$deepClone(banner_data);
       this.recommend_data = this.$deepClone(recommend_sing_data);
       this.exclusive_data = this.$deepClone(exclusive_data);
       this.new_song_data = this.$deepClone(new_song_data);
       this.recommend_mv_data = this.$deepClone(recommend_mv_data);
       this.radio_station_data = this.$deepClone(radio_station_data);
-      this.all_data.push(
-        this.recommend_data,
-        this.exclusive_data,
-        this.new_song_data,
-        this.recommend_mv_data,
-        this.radio_station_data);
 
     },
     mounted() {
       this.init();
     },
     methods: {
-      init(){
-        this.init_data();
+      async init(){
+        this.get_init_data();
       },
-      init_data(){
-        this.all_data.forEach(item=>{
-          if(this.$typeOf(item.data) == 'array' && item.data.length){
-            item.data.forEach(item_01=>{
-              this.$unitFormat(item_01,5)
-            });
-          }
+      async get_init_data(){
+        await this.get_banner_data();//获取banner
+        await this.get_personalized_data();//获取推荐歌单
+        await this.get_privatecontent_data();//获取独家放送
+        await this.get_newsong_data();//获取最新音乐
+        await this.get_mv_data();//获取推荐MV
+        await this.get_dj_recommend_data();//获取推荐电台
+        this.all_data_format();
+
+      },
+      all_data_format(){
+
+        let recommend_data = this.$deepClone(this.recommend_data);
+        let exclusive_data = this.$deepClone(this.exclusive_data);
+        let new_song_data = this.$deepClone(this.new_song_data);
+        let recommend_mv_data = this.$deepClone(this.recommend_mv_data);
+        let radio_station_data = this.$deepClone(this.radio_station_data);
+
+        let device_info = this.device_info;
+        if(device_info.clientWidth >= 1068){
+          radio_station_data.colsNum = 6;
+        }else{
+          radio_station_data.colsNum = this.radio_station_data.colsNum;
+        }
+        if(device_info.clientWidth >= 1304){
+          recommend_mv_data.colsNum = 4;
+        }else{
+          recommend_mv_data.colsNum = this.recommend_mv_data.colsNum;
+        }
+
+        let recommend_colsNum = recommend_data.colsNum || 10;
+        let exclusive_colsNum = exclusive_data.colsNum || 5;
+        let recommend_mv_colsNum = recommend_mv_data.colsNum || 3;
+        let radio_station_colsNum = radio_station_data.colsNum || 5;
+
+
+        recommend_data.data.splice(recommend_colsNum*2);
+        exclusive_data.data.splice(exclusive_colsNum);
+        recommend_mv_data.data.splice(recommend_mv_colsNum);
+        radio_station_data.data.splice(radio_station_colsNum);
+        this.all_data = [];
+        this.all_data.push(
+          recommend_data,
+          exclusive_data,
+          new_song_data,
+          recommend_mv_data,
+          radio_station_data
+        );
+        this.all_data.sort(function (a, b) {
+          return a.weight - b.weight;
         })
       },
+      async get_banner_data(){
+        get_banner().then(res=> {
+          this.banner_data = res.banners;
+        }).catch(err=>{
+          console.log('err',err);
+        })
+      },
+      async get_personalized_data(){
+        return new Promise((resolve, reject)=>{
+          get_personalized().then(res=>{
+            let format_data = this.$uiconfigFormat(res.result,this.recommend_data.uiconfig);
+            this.recommend_data.data = format_data;
+            this.$unitFormat(this.recommend_data.data, 'playCount');
+            // this.all_data.push(this.recommend_data);
+            resolve();
+          }).catch(err=>{
+            console.log('err',err);
+            reject(err);
+          })
+        });
+      },
+      async get_privatecontent_data(){
+        return new Promise((resolve, reject)=>{
+          get_privatecontent().then(res=>{
+            let format_data = this.$uiconfigFormat(res.result,this.exclusive_data.uiconfig);
+            this.exclusive_data.data = format_data;
+            this.exclusive_data.data.forEach(item=>{
+              this.$setObjectValue(item, 'width', 338);
+              this.$setObjectValue(item, 'height', 189);
+            });
+            // this.all_data.push(this.exclusive_data);
+            resolve()
+          }).catch(err=>{
+            console.log('err',err);
+            reject(err)
+          })
+        });
+      },
+      async get_newsong_data(){
+        return new Promise((resolve, reject)=>{
+          get_newsong().then(res=>{
+            this.$tableListInit(res.result, this.new_song_data.data);
+            resolve()
+            // this.all_data.push(this.new_song_data);
+          }).catch(err=>{
+            console.log('err',err);
+            reject()
+          })
+        });
+      },
+      async get_mv_data(){
+        return new Promise((resolve, reject)=>{
+          get_mv().then(res=>{
+            let format_data = this.$uiconfigFormat(res.result,this.recommend_mv_data.uiconfig);
+            this.recommend_mv_data.data = format_data;
+            this.$unitFormat(this.recommend_mv_data.data, 'playCount');
+            resolve()
+            // this.all_data.push(this.recommend_mv_data);
+          }).catch(err=>{
+            console.log('err',err);
+            reject()
+          })
+        })
+      },
+      async get_dj_recommend_data(){
+        return new Promise((resolve, reject)=>{
+          get_djprogram().then(res=>{
+            let format_data = this.$uiconfigFormat(res.result,this.radio_station_data.uiconfig);
+            this.radio_station_data.data = format_data;
+            resolve();
+            // this.$unitFormat(this.radio_station_data.data, 'playCount');
+            // this.all_data.push(this.radio_station_data);
+          }).catch(err=>{
+            console.log('err',err);
+            reject();
+          })
+        })
+
+
+      }
+    },
+    watch: {
+      'device_info.clientWidth': function (new_val, old_val) {
+        this.all_data_format();
+      }
     }
   }
 </script>
@@ -140,8 +279,13 @@
       justify-content: space-between;
       margin-left: 10px;
       .song_name{
+        display: flex;
+        align-items: center;
+        justify-content: left;
         color: #333333;
-        span:nth-of-type(2){
+        div:nth-of-type(2){
+          flex: 1;
+          padding-left: 5px;
           color: #888888;
         }
       }

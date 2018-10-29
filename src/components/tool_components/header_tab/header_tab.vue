@@ -41,10 +41,6 @@
       type: {
         type: String,
         default: 'center',//类型  左left中center右right
-      },
-      clType: {
-        type: String,
-        default: '',//类型  左left中center右right
       }
     },
     data() {
@@ -61,9 +57,9 @@
       classes () {
         return [
           {
-            'list_left': !this.tabType && this.type === 'left',
-            'list_right': !this.tabType && this.type === 'right',
-            'three_tab': !this.tabType && this.clType === 'three_tab',
+            'list_left': this.type === 'left',
+            'list_right': this.type === 'right',
+            'three_tab': this.tabType === 'three_tab',
           }
         ];
       },
@@ -77,7 +73,15 @@
     },
     methods: {
       router_changeMatch() {
-        let path = this.$route.path.split('/').pop();
+        let path_arr = this.$route.path.split('/');
+        let path = path_arr.pop();
+        let params = this.$route.params;
+        if(JSON.stringify(params) != '{}' && !this.tabType){
+          Object.keys(params).forEach(key=>{
+            let index = path_arr.indexOf(params[key]);
+            path = path_arr.splice(index,1)[0];
+          })
+        }
         for (let index = 0; index < this.header_tab.length; index++) {
           let tab = this.header_tab[index].path.split('/').pop();
           if(path === tab){
@@ -87,19 +91,12 @@
         }
       },
       navClick(item, index){
-        /*for (let index = 0; index < this.header_tab.length; index++) {
-          if(item.id == this.header_tab[index].id){
-            this.active_tab = index;
-            this.$router.push({
-              path: item.path
-            });
-            break;
-          }
-        }*/
         this.active_tab = index;
-        this.$router.push({
-          path: item.path
-        });
+        if(item.path){
+          this.$router.push({
+            path: item.path
+          });
+        }
         this.$emit('tabClick', item);
       }
     },
