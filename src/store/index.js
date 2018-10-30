@@ -13,10 +13,13 @@ const state = {
     url: '../../../../static/music/1.mp3',
     picUrl: '../../../static/img/test/music_cover.jpg',
     song_name: '崇拜',
+    album_name: '林俊杰',//专辑名
+    alias: ['林俊杰'],//别名，来源
     playStatus: 'pause',//play正在播放 pause暂停
-    artists: [],
+    artists: ['林俊杰'],//歌手
     like: '',
-    crrentTime: '',//当前播放时间
+    maxbr: '320000',//频率，音质
+    currentTime: '',//当前播放时间
     duration: '',//音乐总时长
     volume: '',//音量
     loop: '',//循环方式

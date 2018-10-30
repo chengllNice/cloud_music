@@ -1,5 +1,8 @@
 <template>
     <div class="common_lrc">
+
+      <i class="iconfont icon-close lrc_close"></i>
+
       <div class="lrc_main">
         <div class="bg_blur_box"></div>
         <div class="lrc_main_left">
@@ -12,12 +15,38 @@
           </div>
         </div>
         <div class="lrc_main_right">
-          <div class="panel lyric">
-            <div class="lyric_wrap">
-              <ul id="lyric">
-                <li>HTML5 music player</li>
-              </ul>
+          <div class="song_info">
+            <div class="song_name_box">
+              <span class="song_name">{{music_info.song_name}}</span>
+              <span class="song_maxbr">
+                {{music_info.maxbr.substring(0,3)}}k
+              </span>
             </div>
+            <div class="song_album_box">
+              <div class="album_info ellipsis_1">
+                <span class="label">专辑： </span>
+                <span class="name ellipsis_1">{{music_info.album_name}}</span>
+              </div>
+              <div class="artists_info ellipsis_1">
+                <span class="label">歌手： </span>
+                <span class="name ellipsis_1" v-if="music_info.artists.length">
+                  <span v-for="(item, index) in music_info.artists" :key="index">{{item}}</span>
+                </span>
+              </div>
+              <div class="alias_info ellipsis_1">
+                <span class="label">来源： </span>
+                <span class="name ellipsis_1" v-if="music_info.alias.length">{{music_info.alias[0]}}</span>
+              </div>
+            </div>
+          </div>
+          <div class="panel lyric">
+            <vue-scroll ref="vs" :ops="option">
+              <div class="lyric_wrap">
+                <ul id="lyric">
+                  <li>HTML5 music player</li>
+                </ul>
+              </div>
+            </vue-scroll>
           </div>
         </div>
       </div>
@@ -36,18 +65,34 @@
       props: {
 
       },
+
       data(){
           return {
             songId: '1318568346',
-            lrc_data: ''
+            lrc_data: '',
+            text_temp: '',
+            option: {
+              vuescroll: {},
+              scrollPanel: {},
+              rail: {
+                gutterOfSide: '0px',//滚动轨道距离侧边的距离
+              },
+              bar: {
+                background: '#8a8a8a',
+                keepShow: true,
+                opacity: 0.5,
+                hoverStyle: {
+                  background: '#b6b6bc'
+                }
+              }
+            }
           }
       },
       computed: {
         ...mapState(['music_info'])
       },
       mounted(){
-        // this.get_song_lrc_handler(this.songId);
-        this.renderLyric(this.parseLyric(lrc.lrc));
+        this.get_song_lrc_handler(this.songId);
       },
       methods: {
         get_song_lrc_handler(id){
@@ -57,6 +102,8 @@
           this.$commonApi.getSongLrc(get_data).then(res=>{
             // this.lrc_data = res.lrc.lyric;
             this.lrc_data = this.parseLyric(res.lrc.lyric);
+            this.renderLyric(this.lrc_data);
+            console.log(this.lrc_data,'0000')
             console.log(res)
           }).catch(err=>{
 
@@ -77,10 +124,12 @@
               var min = Number(String(t.match(/\[\d*/i)).slice(1)),
                 sec = Number(String(t.match(/\:\d*/i)).slice(1));
               var time = min * 60 + sec;
-              lrcObj[time] = clause;
+              lrcObj[time] = {
+                index: i,
+                text: clause
+              };
             }
           }
-          console.log(lrcObj);
           return lrcObj;
         },
         // 渲染
@@ -88,18 +137,17 @@
           let lyric = $("#lyric");
           let lyric_wrap = $(".lyric_wrap");
           lyric.html("");
-          var lyricLineHeight = 27,
-          offset = lyric_wrap.offset().height*0.4;
+          console.log(data.length,'len')
 
           for(var k in data){
-            var txt = data[k];
+            var txt = data[k].text;
             if(!txt)txt = "&nbsp;";
             // music.lyric.parsed[k] = {
             //   index:i++,
             //   text:txt,
             //   top: i*lyricLineHeight-offset
             // };
-            var li = $("<li>"+txt+"</li>");
+            var li = $("<li data_index="+k+">"+txt+"</li>");
             lyric.append(li);
           }
           // $player.bind("timeupdate",updateLyric);
@@ -107,29 +155,38 @@
         },
         // 歌词滚动
         updateLyric(){
-          var data = $player.music.lyric.parsed;
-          if(!data)return;
-          var currentTime = Math.round(this.currentTime);
-          var lrc = data[currentTime];
+          let vue = this;
+          var currentTime = Math.round(this.music_info.currentTime);
+          var lrc = this.lrc_data[currentTime];
+
           if(!lrc)return;
+          let lyric_wrap = $(".lyric_wrap");
           var text = lrc.text;
-          if(text != text_temp){
+          var index = lrc.index;
+          if(text != this.text_temp){
             locationLrc(lrc);
-            text_temp = text;
+            this.text_temp = text;
           }
           function locationLrc(lrc){
-            lyric_wrap.find(".lyric_wrap .on").removeClass("on");
-            var li = lyric_wrap.find("li:nth-child("+(lrc.index+1)+")");
+            let a = `li[data_index='${currentTime}']`;
+            $(".lyric_wrap li").removeClass('on');
+            var li = lyric_wrap.find(a);
             li.addClass("on");
-            var top = Math.min(0,-lrc.top);
-            //lyric.css({"-webkit-transform":"translate(0,-"+lrc.top+"px)"});
-            lyric.css({"margin-top":top});
+            if(index>=4){
+              vue.$refs.vs.scrollBy({
+                dx: 0,
+                dy: 35
+              });
+            }
           }
         }
       },
       watch: {
         'music_info.id': function (new_val, old_val) {
           this.get_song_lrc_handler(new_val);
+        },
+        'music_info.currentTime': function (new_val, old_val) {
+          this.updateLyric();
         }
       }
     }
@@ -139,10 +196,32 @@
 .common_lrc{
   width: 100%;
   background: #f2f2f2;
+  position: relative;
+
+  .lrc_close{
+    position: absolute;
+    right: 8%;
+    top: 33px;
+    z-index: 100;
+    border-radius: 2px;
+    font-size: 18px;
+    padding: 2px 8px;
+    color: #666666;
+    line-height: 1;
+    cursor: pointer;
+    border: 1px solid #dfdfe1;
+    background: #f8f8f9;
+    &:hover{
+      border-color: #e2e2e2;
+      background: #fafafb;
+    }
+  }
+
   .lrc_main{
+    height: 445px;
     position: relative;
     display: flex;
-    align-items: center;
+    /*align-items: center;*/
     justify-content: center;
 
     .bg_blur_box{
@@ -207,11 +286,127 @@
 
     }
     .lrc_main_right{
-      width: 500px;
+      width: 430px;
+      padding-left: 140px;
+      position: relative;
+      z-index: 1;
+
+      .song_info{
+        padding-top: 30px;
+        .song_name_box{
+          display: flex;
+          align-items: center;
+          .song_name{
+            font-size: 22px;
+            /*font-weight: bold;*/
+            color: #1f2020;
+          }
+          .song_maxbr{
+            font-size: 12px;
+            color: #c34142;
+            border: 1px solid #c34142;
+            position: relative;
+            padding: 0 5px;
+            border-radius: 2px;
+            letter-spacing: 1px;
+            margin-left: 5px;
+            line-height: 1.2;
+            cursor: pointer;
+            &:after{
+              content: '';
+              position: absolute;
+              top: -8px;
+              left: 0;
+              right: 0;
+              margin: auto;
+              width: 0;
+              height: 0;
+              /*line-height: 0;*/
+              border-left: 4px solid transparent;
+              border-top: 4px solid transparent;
+              border-right: 4px solid transparent;
+              border-bottom: 4px solid #c34142;
+            }
+            &:hover{
+              color: #b82525;
+              border-color: #b82525;
+              &:after{
+                border-bottom-color: #b82525;
+              }
+            }
+          }
+        }
+        .song_album_box{
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding-top: 5px;
+          padding-bottom: 20px;
+          .album_info, .artists_info, .alias_info{
+            display: flex;
+            align-items: center;
+            .label{
+              font-size: 13px;
+              color: #2d2a28;
+            }
+            .name{
+              font-size: 13px;
+              color: #3c6cb5;
+              cursor: pointer;
+              &:hover{
+                color: #0a4bad;
+              }
+            }
+          }
+
+        }
+      }
+
       .panel.lyric{
-        color: #ffffff;
+        color: #2d2a28;
+        border-right: 1px solid rgba(138,139,143,0.4);
+        .lyric_wrap{
+          height: 330px;
+          li{
+            line-height: 35px;
+          }
+        }
+        /*.lyric_wrap{
+          position: absolute;
+          bottom: 15px;
+          left: 0;
+          width: 100%;
+          top: 15px;
+          overflow: hidden;
+          #lyric{
+            padding: 5px;
+            -webkit-transition:500ms ease-out;
+            li{
+              text-align: center;
+              font-size: 15px;
+              padding: 5px 0;
+              &.on{
+                font-weight: bold;
+                color: #36a3e1;
+              }
+            }
+          }
+        }*/
       }
     }
   }
 }
+</style>
+<style lang="less">
+  .lrc_main_right{
+    li{
+      line-height: 35px;
+      font-size: 15px;
+      font-family: Arial;
+    }
+    .on{
+      color: #ffffff!important;
+    }
+  }
+
 </style>

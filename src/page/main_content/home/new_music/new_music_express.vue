@@ -115,6 +115,7 @@
         this.get_top_song_list(data.id);
       },
       tableClick(data){
+        console.log(data,'data')
         let get_data = {
           id: data.data.id
         };

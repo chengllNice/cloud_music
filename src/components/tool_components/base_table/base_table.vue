@@ -265,9 +265,11 @@
         }
       },
       'music_info.playStatus': function (new_val, old_val) {
-        let data = this.oldRowData[this.oldRowData.length-1];
-        let status = new_val == 'play' ? 'play' : 'pause';
-        this.playStatusChange(data.data, data.index, status);
+        if(this.oldRowData.length){
+          let data = this.oldRowData[this.oldRowData.length-1];
+          let status = new_val == 'play' ? 'play' : 'pause';
+          this.playStatusChange(data.data, data.index, status);
+        }
       }
     }
   }
