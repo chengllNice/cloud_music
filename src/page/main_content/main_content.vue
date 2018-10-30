@@ -126,6 +126,7 @@
         z-index: 1000;
         background: #fafafa;
         overflow: hidden;
+        padding-bottom: 50px;
       }
     }
   }
