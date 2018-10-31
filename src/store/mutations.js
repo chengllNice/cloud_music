@@ -2,7 +2,6 @@
 export default {
   get_music_info(state, info){
     Object.keys(info).forEach(key=>{
-      console.log(info[key]);
       state.music_info[key] = info[key];
     });
   },

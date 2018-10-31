@@ -128,7 +128,6 @@
           this.currentTime.text = this.$timeFormat(e.jPlayer.status.currentTime*1000);
           this.currentTime.m = e.jPlayer.status.currentTime;
           this.play_precent = e.jPlayer.status.currentPercentAbsolute;
-          console.log( e.jPlayer.status.volume,'--------')
           // let v = this.$localStorage.getStore('volume');
           this.volume = (this.$typeOf(e.jPlayer.status.volume) === 'undefined' ? this.volume : e.jPlayer.status.volume*100);
           this.$store.commit('get_music_info', {currentTime: this.currentTime.m});

@@ -9,8 +9,8 @@ Vue.use(Vuex);
 const state = {
   music_info: {
   // 正在播放的歌曲信息
-    id: '1',
-    url: '../../../../static/music/1.mp3',
+    id: '505632651',
+    url: '../../../../static/music/3.mp3',
     picUrl: '../../../static/img/test/music_cover.jpg',
     song_name: '崇拜',
     album_name: '林俊杰',//专辑名

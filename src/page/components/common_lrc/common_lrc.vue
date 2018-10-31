@@ -7,11 +7,13 @@
         <div class="bg_blur_box"></div>
         <div class="lrc_main_left">
           <div class="album_cover_box">
-            <div class="album_cover"></div>
-            <div class="album_swith"></div>
-            <div class="song_cover">
-              <img src="../../../../static/img/test/music_cover.jpg" alt="">
+            <div class="album_cover_wrap album_rotate">
+              <div class="album_cover"></div>
+              <div class="song_cover">
+                <img src="../../../../static/img/test/music_cover.jpg" alt="">
+              </div>
             </div>
+            <div class="album_swith"></div>
           </div>
         </div>
         <div class="lrc_main_right">
@@ -43,7 +45,9 @@
             <vue-scroll ref="vs" :ops="option">
               <div class="lyric_wrap">
                 <ul id="lyric">
-                  <li>HTML5 music player</li>
+                  <li v-if="lrc_loading"><img class="loading" src="../../../../static/img/loading.svg"/>歌词加载中...</li>
+                  <li v-else-if="lrc_data.toString() == '{}'">歌词加载失败...</li>
+                  <li v-else v-for="(val, key, index) in lrc_data" :key="index" :data_index="key" :class="{'on': lrc_row_active.index == index}">{{val.text}}</li>
                 </ul>
               </div>
             </vue-scroll>
@@ -68,8 +72,11 @@
 
       data(){
           return {
-            songId: '1318568346',
-            lrc_data: '',
+            songId: '',
+            lrc_data: {},
+            lrc_loading: true,
+            lrc_row_active: {},
+            lrc_arr: [],
             text_temp: '',
             option: {
               vuescroll: {},
@@ -92,21 +99,23 @@
         ...mapState(['music_info'])
       },
       mounted(){
-        this.get_song_lrc_handler(this.songId);
+        this.get_song_lrc_handler();
       },
       methods: {
-        get_song_lrc_handler(id){
+        // 获取歌曲url
+        get_song_lrc_handler(){
+          this.lrc_loading = true;
           let get_data = {
-            id: id
+            id: this.music_info.id
           };
           this.$commonApi.getSongLrc(get_data).then(res=>{
             // this.lrc_data = res.lrc.lyric;
             this.lrc_data = this.parseLyric(res.lrc.lyric);
-            this.renderLyric(this.lrc_data);
-            console.log(this.lrc_data,'0000')
-            console.log(res)
+            this.lrc_arr = Object.keys(this.lrc_data);
+            console.log(this.lrc_arr)
+            this.lrc_loading = false;
           }).catch(err=>{
-
+            console.log('err',err)
           })
         },
         // 解析歌词
@@ -132,58 +141,38 @@
           }
           return lrcObj;
         },
-        // 渲染
-        renderLyric(data){
-          let lyric = $("#lyric");
-          let lyric_wrap = $(".lyric_wrap");
-          lyric.html("");
-          console.log(data.length,'len')
-
-          for(var k in data){
-            var txt = data[k].text;
-            if(!txt)txt = "&nbsp;";
-            // music.lyric.parsed[k] = {
-            //   index:i++,
-            //   text:txt,
-            //   top: i*lyricLineHeight-offset
-            // };
-            var li = $("<li data_index="+k+">"+txt+"</li>");
-            lyric.append(li);
-          }
-          // $player.bind("timeupdate",updateLyric);
-          // lyric.html("<li style='text-align: center'>歌词加载失败</li>");
-        },
         // 歌词滚动
         updateLyric(){
           let vue = this;
-          var currentTime = Math.round(this.music_info.currentTime);
-          var lrc = this.lrc_data[currentTime];
-
-          if(!lrc)return;
-          let lyric_wrap = $(".lyric_wrap");
-          var text = lrc.text;
-          var index = lrc.index;
-          if(text != this.text_temp){
-            locationLrc(lrc);
-            this.text_temp = text;
+          let currentTime = Math.round(this.music_info.currentTime);//当前时间点
+          if(!currentTime){
+            return
           }
-          function locationLrc(lrc){
-            let a = `li[data_index='${currentTime}']`;
-            $(".lyric_wrap li").removeClass('on');
-            var li = lyric_wrap.find(a);
-            li.addClass("on");
-            if(index>=4){
-              vue.$refs.vs.scrollBy({
-                dx: 0,
-                dy: 35
-              });
+          let lrc_show = {};
+          let len = this.lrc_arr.length;
+          for(let i = 0; i <= len; i++){
+            if(currentTime < this.lrc_arr[i]){
+              let index = (i-1) || 0;
+              lrc_show = this.lrc_data[this.lrc_arr[index]];
+              break;
             }
           }
+          // 判断如果一致的时候滚动
+          if(lrc_show && this.lrc_row_active.index == lrc_show.index){
+            return;
+          }
+          this.lrc_row_active = lrc_show;
+          // 滚动
+          let dy = (this.lrc_row_active.index-3) <= 0 ? 0 : (this.lrc_row_active.index-3) * 35;
+          vue.$refs.vs.scrollTo({
+            x: 0,
+            y: dy
+          });
         }
       },
       watch: {
         'music_info.id': function (new_val, old_val) {
-          this.get_song_lrc_handler(new_val);
+          this.get_song_lrc_handler();
         },
         'music_info.currentTime': function (new_val, old_val) {
           this.updateLyric();
@@ -234,7 +223,8 @@
       right: 0;
       margin: auto;
       background: url("../../../../static/img/test/music_cover.jpg") no-repeat;
-      background-size: 80% 100%;
+      background-size: 60% 100%;
+      background-position: center;
       filter: blur(70px);
     }
     .lrc_main_left{
@@ -246,22 +236,37 @@
         width: 325px;
         height: 325px;
         position: relative;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        .album_cover{
-          position: absolute;
-          top: 0;
-          left: 0;
-          /*border-radius: 50%;*/
-          overflow: hidden;
+        .album_cover_wrap{
+          display: flex;
+          align-items: center;
+          justify-content: center;
           width: 325px;
           height: 325px;
-          background: url("../../../../static/img/cd-mine.png") no-repeat;
-          background-size: 100% 100%;
-          /*<!--background-position: -222px -919px;-->*/
-          /*background-size: 185%;*/
+          .album_cover{
+            position: absolute;
+            top: 0;
+            left: 0;
+            /*border-radius: 50%;*/
+            overflow: hidden;
+            width: 325px;
+            height: 325px;
+            background: url("../../../../static/img/cd-mine.png") no-repeat;
+            background-size: 100% 100%;
+            /*<!--background-position: -222px -919px;-->*/
+            /*background-size: 185%;*/
+          }
+          .song_cover{
+            width: 210px;
+            height: 210px;
+            border-radius: 50%;
+            overflow: hidden;
+            img{
+              width: 100%;
+              height: 100%;
+            }
+          }
         }
+
         .album_swith{
           position: absolute;
           top: -58px;
@@ -272,16 +277,7 @@
           background: url("../../../../static/img/swith.png") no-repeat;
           background-size: 80%;
         }
-        .song_cover{
-          width: 210px;
-          height: 210px;
-          border-radius: 50%;
-          overflow: hidden;
-          img{
-            width: 100%;
-            height: 100%;
-          }
-        }
+
       }
 
     }
@@ -400,6 +396,7 @@
 <style lang="less">
   .lrc_main_right{
     li{
+      height: 35px;
       line-height: 35px;
       font-size: 15px;
       font-family: Arial;
