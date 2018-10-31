@@ -10,5 +10,8 @@ export default {
   },
   get_scroll_info(state, info){
     state.scroll_info = info;
+  },
+  set_lrc_panal_show(state, info){
+    state.lrc_panal_show = info;
   }
 }

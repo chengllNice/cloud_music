@@ -1,19 +1,25 @@
 <template>
     <div class="common_lrc">
 
-      <i class="iconfont icon-close lrc_close"></i>
+      <i class="iconfont icon-close lrc_close" @click="lrc_panal_close"></i>
 
       <div class="lrc_main">
         <div class="bg_blur_box"></div>
         <div class="lrc_main_left">
           <div class="album_cover_box">
-            <div class="album_cover_wrap album_rotate">
+            <div class="album_cover_wrap" :class="{'album_rotate': music_info.playStatus == 'play'}">
               <div class="album_cover"></div>
               <div class="song_cover">
                 <img src="../../../../static/img/test/music_cover.jpg" alt="">
               </div>
             </div>
-            <div class="album_swith"></div>
+            <div class="album_swith" :class="{'album_switch': music_info.playStatus == 'play'}"></div>
+          </div>
+          <div class="album_cover_bottom">
+            <base-tool-button type="beforeicon" clType="default_button" iconClass="icon-left_like" height="21px">喜欢</base-tool-button>
+            <base-tool-button type="beforeicon" clType="default_button" iconClass="icon-add_file" height="21px">收藏</base-tool-button>
+            <base-tool-button type="beforeicon" clType="default_button" iconClass="icon-left_down" height="21px">下载</base-tool-button>
+            <base-tool-button type="beforeicon" clType="default_button" iconClass="icon-shape" height="21px">分享</base-tool-button>
           </div>
         </div>
         <div class="lrc_main_right">
@@ -27,30 +33,30 @@
             <div class="song_album_box">
               <div class="album_info ellipsis_1">
                 <span class="label">专辑： </span>
-                <span class="name ellipsis_1">{{music_info.album_name}}</span>
+                <span class="name ellipsis_1" v-if="music_info.album">{{music_info.album.name}}</span>
               </div>
               <div class="artists_info ellipsis_1">
                 <span class="label">歌手： </span>
                 <span class="name ellipsis_1" v-if="music_info.artists.length">
-                  <span v-for="(item, index) in music_info.artists" :key="index">{{item}}</span>
+                  <span v-for="(item, index) in music_info.artists" :key="index"><span v-if="index != 0">/</span>{{item.name}}</span>
                 </span>
               </div>
-              <div class="alias_info ellipsis_1">
+              <div class="alias_info ellipsis_1" v-if="music_info.alias.length">
                 <span class="label">来源： </span>
-                <span class="name ellipsis_1" v-if="music_info.alias.length">{{music_info.alias[0]}}</span>
+                <span class="name ellipsis_1">{{music_info.alias[0]}}</span>
               </div>
             </div>
           </div>
           <div class="panel lyric">
+            <div class="lyric_wrap">
             <vue-scroll ref="vs" :ops="option">
-              <div class="lyric_wrap">
                 <ul id="lyric">
                   <li v-if="lrc_loading"><img class="loading" src="../../../../static/img/loading.svg"/>歌词加载中...</li>
                   <li v-else-if="lrc_data.toString() == '{}'">歌词加载失败...</li>
                   <li v-else v-for="(val, key, index) in lrc_data" :key="index" :data_index="key" :class="{'on': lrc_row_active.index == index}">{{val.text}}</li>
                 </ul>
-              </div>
             </vue-scroll>
+            </div>
           </div>
         </div>
       </div>
@@ -72,6 +78,7 @@
 
       data(){
           return {
+            initAlbumCoverRotate: 0,
             songId: '',
             lrc_data: {},
             lrc_loading: true,
@@ -80,7 +87,9 @@
             text_temp: '',
             option: {
               vuescroll: {},
-              scrollPanel: {},
+              scrollPanel: {
+                // initialScrollY: 300
+              },
               rail: {
                 gutterOfSide: '0px',//滚动轨道距离侧边的距离
               },
@@ -96,7 +105,7 @@
           }
       },
       computed: {
-        ...mapState(['music_info'])
+        ...mapState(['music_info', 'lrc_panal_show'])
       },
       mounted(){
         this.get_song_lrc_handler();
@@ -112,7 +121,6 @@
             // this.lrc_data = res.lrc.lyric;
             this.lrc_data = this.parseLyric(res.lrc.lyric);
             this.lrc_arr = Object.keys(this.lrc_data);
-            console.log(this.lrc_arr)
             this.lrc_loading = false;
           }).catch(err=>{
             console.log('err',err)
@@ -163,11 +171,17 @@
           }
           this.lrc_row_active = lrc_show;
           // 滚动
-          let dy = (this.lrc_row_active.index-3) <= 0 ? 0 : (this.lrc_row_active.index-3) * 35;
-          vue.$refs.vs.scrollTo({
-            x: 0,
-            y: dy
-          });
+
+          let dy = (this.lrc_row_active.index-3) <= 0 ? 0 : (this.lrc_row_active.index-3) * 34;
+          $('.lyric_wrap .__panel').animate({scrollTop: dy + 'px' }, 300);
+          // $('.__panel').scrollTop(dy);
+          // vue.$refs.vs.scrollTo({
+          //   x: 0,
+          //   y: dy
+          // },true);
+        },
+        lrc_panal_close(){
+          this.$store.commit('set_lrc_panal_show', false)
         }
       },
       watch: {
@@ -224,13 +238,17 @@
       margin: auto;
       background: url("../../../../static/img/test/music_cover.jpg") no-repeat;
       background-size: 60% 100%;
-      background-position: center;
+      background-position: 20% center;
       filter: blur(70px);
     }
     .lrc_main_left{
       position: relative;
       z-index: 2;
       padding-top: 53px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding-bottom: 10px;
 
       .album_cover_box{
         width: 325px;
@@ -269,21 +287,31 @@
 
         .album_swith{
           position: absolute;
-          top: -58px;
+          top: -53px;
           left: 50%;
           /*overflow: hidden;*/
           width: 105px;
           height: 130px;
           background: url("../../../../static/img/swith.png") no-repeat;
           background-size: 80%;
+          background-position: 0 -6px;
+          transform: rotate(-30deg);
+          transform-origin: 10px top;
+          transition: all 1s;
         }
 
+      }
+      .album_cover_bottom{
+
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
       }
 
     }
     .lrc_main_right{
-      width: 430px;
-      padding-left: 140px;
+      width: 510px;
+      padding-left: 120px;
       position: relative;
       z-index: 1;
 
@@ -341,14 +369,19 @@
           .album_info, .artists_info, .alias_info{
             display: flex;
             align-items: center;
+            flex: 1;
+
             .label{
+              min-width: 45px;
               font-size: 13px;
               color: #2d2a28;
             }
             .name{
+              /*min-width: 50px;*/
               font-size: 13px;
               color: #3c6cb5;
               cursor: pointer;
+              padding-right: 5px;
               &:hover{
                 color: #0a4bad;
               }
@@ -361,11 +394,11 @@
       .panel.lyric{
         color: #2d2a28;
         border-right: 1px solid rgba(138,139,143,0.4);
+        #lyric{
+          transition: all 0.3s ease;
+        }
         .lyric_wrap{
           height: 330px;
-          li{
-            line-height: 35px;
-          }
         }
         /*.lyric_wrap{
           position: absolute;
@@ -396,8 +429,9 @@
 <style lang="less">
   .lrc_main_right{
     li{
-      height: 35px;
-      line-height: 35px;
+      /*height: 35px;*/
+      /*line-height: 35px;*/
+      padding-bottom: 12px;
       font-size: 15px;
       font-family: Arial;
     }

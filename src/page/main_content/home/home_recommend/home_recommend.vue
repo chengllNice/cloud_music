@@ -233,6 +233,7 @@
         })
       },
       tableClick(data){
+        // console.log(data)
         let get_data = {
           id: data.data.id
         };

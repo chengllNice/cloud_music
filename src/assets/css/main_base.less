@@ -93,7 +93,11 @@ img{
 
 
 .album_rotate{
-  animation: rotateLoading 10s linear infinite;
+  animation: rotateLoading 40s linear infinite;
+}
+.album_switch{
+  //animation: rotateSwitch 0.5s linear;
+  transform: rotate(0deg)!important;
 }
 
 .loading{
@@ -113,7 +117,14 @@ img{
     transform: rotate(360deg);
   }
 }
-
+@keyframes rotateSwitch {
+  from{
+    transform: rotate(0deg);
+  }
+  to{
+    transform: rotate(30deg);
+  }
+}
 
 
 .color333{
