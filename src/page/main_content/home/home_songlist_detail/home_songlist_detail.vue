@@ -1,6 +1,6 @@
 <template>
   <div class="home_songlist_detail">
-    <songlist-detail></songlist-detail>
+    <songlist-detail :data="songlist.data"></songlist-detail>
   </div>
 </template>
 
@@ -51,6 +51,7 @@
         });
         // let format_data = this.$uiconfigFormat(this.songlist.data.tracks,this.songlist.uiconfig);
         this.$tableListInit(this.songlist.data.tracks, this.songlist.data.table_data);
+
 
         console.log(this.songlist)
 

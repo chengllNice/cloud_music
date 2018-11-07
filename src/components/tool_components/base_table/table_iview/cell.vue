@@ -7,7 +7,7 @@
     <template v-if="renderType === 'operate'">
       <div class="table-cell-operate">
         <i class="iconfont icon-left_like" title="喜欢"></i>
-        <i class="iconfont icon-left_down"></i>
+        <i class="iconfont icon-download"></i>
       </div>
     </template>
     <template v-if="renderType === 'selection'">

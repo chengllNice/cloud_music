@@ -1,11 +1,8 @@
 <template>
   <div class="base_table" v-loading="loading" :class="{'stripe_color': stripe == 'stripe'}">
-
     <!--<Table border :columns="data[0].t_head" :data="data[0].t_body"></Table>-->
-
-
     <!--一列表格-->
-    <div class="" v-if="config.colsNum == '1'">
+    <div class="" v-if="config_data.colsNum == '1'">
       <iview-table :stripe="config_data.stripe"
                    :size="config_data.size"
                    :show-header="config_data.showheader"
@@ -33,7 +30,7 @@
     </div>
 
     <!--两列表格-->
-    <div class="base_table_cols_two" v-if="config.colsNum == '2'">
+    <div class="base_table_cols_two" v-if="config_data.colsNum == '2'">
       <div class="base_table_cols_two_item_one">
         <iview-table :stripe="config_data.stripe"
                      :size="config_data.size"
@@ -57,7 +54,7 @@
           </template>
         </iview-table>
       </div>
-      <div class="base_table_cols_two_item_center" v-if="config.space" :style="{width: config.space}"></div>
+      <div class="base_table_cols_two_item_center" v-if="config_data.space" :style="{width: config_data.space}"></div>
       <div class="base_table_cols_two_item_two">
         <iview-table :stripe="config_data.stripe"
                      :size="config_data.size"
@@ -320,7 +317,12 @@
         cursor: pointer;
         &:nth-of-type(1){
           margin-right: 4px;
-          font-weight: 900;
+          font-weight: 100;
+          /*font-weight: 900;*/
+        }
+        &:nth-of-type(2){
+          font-size: 16px;
+          font-weight: 400;
         }
         &:hover{
           color: #333333;

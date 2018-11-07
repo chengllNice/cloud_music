@@ -236,31 +236,42 @@ export const tableListInit = (result, table_list) => {
 /*
 * 时间转换
 * */
-export const timeFormat = (msd) => {
-  var time = parseFloat(msd) / 1000;
+export const timeFormat = (msd, type) => {
+  var time = '';
   let zeroFormat = (num) => {
     if(num<=9){
       num = '0' + num;
     }
     return num;
   };
-  if (null != time && "" != time) {
-    if (time > 60 && time < 60 * 60) {
-      time = zeroFormat(parseInt(time / 60.0)) + ":" + zeroFormat(parseInt((parseFloat(time / 60.0) -
-        parseInt(time / 60.0)) * 60));
-    }
-    else if (time >= 60 * 60 && time < 60 * 60 * 24) {
-      time = zeroFormat(parseInt(time / 3600.0)) + ":" + zeroFormat(parseInt((parseFloat(time / 3600.0) -
-        parseInt(time / 3600.0)) * 60)) + ":" +
-        zeroFormat(parseInt((parseFloat((parseFloat(time / 3600.0) - parseInt(time / 3600.0)) * 60) -
-          parseInt((parseFloat(time / 3600.0) - parseInt(time / 3600.0)) * 60)) * 60));
-    }
-    else {
-      time = '00:' + zeroFormat(parseInt(time));
-    }
+  if(type){
+    let y = msd.getFullYear();
+    let m = zeroFormat(msd.getMonth()+1);
+    let d = zeroFormat(msd.getDate());
+
+    time = `${y}-${m}-${d}`;
   }else{
-    time = '00:00'
+    time = parseFloat(msd) / 1000;
+
+    if (null != time && "" != time) {
+      if (time > 60 && time < 60 * 60) {
+        time = zeroFormat(parseInt(time / 60.0)) + ":" + zeroFormat(parseInt((parseFloat(time / 60.0) -
+          parseInt(time / 60.0)) * 60));
+      }
+      else if (time >= 60 * 60 && time < 60 * 60 * 24) {
+        time = zeroFormat(parseInt(time / 3600.0)) + ":" + zeroFormat(parseInt((parseFloat(time / 3600.0) -
+          parseInt(time / 3600.0)) * 60)) + ":" +
+          zeroFormat(parseInt((parseFloat((parseFloat(time / 3600.0) - parseInt(time / 3600.0)) * 60) -
+            parseInt((parseFloat(time / 3600.0) - parseInt(time / 3600.0)) * 60)) * 60));
+      }
+      else {
+        time = '00:' + zeroFormat(parseInt(time));
+      }
+    }else{
+      time = '00:00'
+    }
   }
+
   return time;
 };
 

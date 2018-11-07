@@ -27,9 +27,9 @@ export const songlist_data = {
     table_data: {
       t_head: [
         {
-          title: '歌曲排序',
+          title: '',
           key: 'sort_num',
-          width: 35,
+          width: 45,
           tooltip: true,
           table_slot: 'sort_num',
           // jpath: 'song.no'
@@ -38,6 +38,19 @@ export const songlist_data = {
           title: '操作',
           type: 'operate',
           key: 'operate',
+          width: 60
+        },
+        {
+          title: '别名',
+          key: 'alias',
+          noshow: true,
+          jpath: 'alia'
+        },
+        {
+          title: '封面',
+          key: 'picUrl',
+          noshow: true,
+          jpath: 'al.picUrl'
         },
         {
           title: 'id',
@@ -46,27 +59,34 @@ export const songlist_data = {
           jpath: 'id'
         },
         {
-          title: '标题',
-          key: 'name',
-          noshow: true,
-          jpath: 'name'
+          title: '音乐标题',
+          key: 'song_name',
+          noshow: false,
+          jpath: 'name',
+          minWidth: 270,
+          table_slot: 'song_name'
         },
         {
           title: '歌手',
           key: 'artists',
-          noshow: true,
-          jpath: 'ar'
+          noshow: false,
+          jpath: 'ar',
+          minWidth: 185,
+          table_slot: 'artists'
         },
         {
           title: '专辑',
-          key: 'album',
-          noshow: true,
-          jpath: 'al'
+          key: 'album_name',
+          noshow: false,
+          jpath: 'al',
+          minWidth: 170,
+          table_slot: 'album'
         },
         {
           title: '时长',
           key: 'duration',
-          jpath: 'dt'
+          jpath: 'dt',
+          width: 80
         }
       ],
       t_body: [
