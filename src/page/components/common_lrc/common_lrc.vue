@@ -4,13 +4,14 @@
       <i class="iconfont icon-close lrc_close" @click="lrc_panal_close"></i>
 
       <div class="lrc_main">
-        <div class="bg_blur_box"></div>
+        <div class="bg_blur_box" :style="{'background-image': 'url('+music_info.picUrl+')'}"></div>
+        <!--<div class="bg_opacity_blur_box"></div>-->
         <div class="lrc_main_left">
           <div class="album_cover_box">
             <div class="album_cover_wrap" :class="{'album_rotate': music_info.playStatus == 'play'}">
               <div class="album_cover"></div>
               <div class="song_cover">
-                <img src="../../../../static/img/test/music_cover.jpg" alt="">
+                <img :src="music_info.picUrl" alt="">
               </div>
             </div>
             <div class="album_swith" :class="{'album_switch': music_info.playStatus == 'play'}"></div>
@@ -49,14 +50,15 @@
           </div>
           <div class="panel lyric">
             <div class="lyric_wrap">
-            <vue-scroll ref="vs" :ops="option">
-                <ul id="lyric">
-                  <li v-if="lrc_loading"><img class="loading" src="../../../../static/img/loading.svg"/>歌词加载中...</li>
-                  <li v-else-if="lrc_data.toString() == '{}'">歌词加载失败...</li>
-                  <li v-else v-for="(val, key, index) in lrc_data" :key="index" :data_index="key" :class="{'on': lrc_row_active.index == index}">{{val.text}}</li>
-                </ul>
-            </vue-scroll>
+              <vue-scroll ref="vs" :ops="option">
+                  <ul id="lyric">
+                    <li v-if="lrc_loading"><img class="loading" src="../../../../static/img/loading.svg"/>歌词加载中...</li>
+                    <li v-else-if="lrc_data.toString() == '{}'">歌词加载失败...</li>
+                    <li v-else v-for="(val, key, index) in lrc_data" :key="index" :data_index="key" :class="{'on': lrc_row_active.index == index}">{{val.text}}</li>
+                  </ul>
+              </vue-scroll>
             </div>
+            <div class=""></div>
           </div>
         </div>
       </div>
@@ -203,8 +205,9 @@
 
   .lrc_close{
     position: absolute;
-    right: 8%;
+    right: 50%;
     top: 33px;
+    transform: translateX(465px);
     z-index: 100;
     border-radius: 2px;
     font-size: 18px;
@@ -236,11 +239,14 @@
       left: 0;
       right: 0;
       margin: auto;
-      background: url("../../../../static/img/test/music_cover.jpg") no-repeat;
-      background-size: 60% 100%;
-      background-position: 20% center;
-      filter: blur(70px);
+      /*border-radius: 50%;*/
+      background-image: url("../../../../static/img/test/music_cover.jpg");
+      background-repeat: no-repeat;
+      background-size: 90% 100%;
+      background-position: -100px -80px;
+      filter: blur(75px);
     }
+
     .lrc_main_left{
       position: relative;
       z-index: 2;

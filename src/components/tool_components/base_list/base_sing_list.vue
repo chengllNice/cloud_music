@@ -14,7 +14,7 @@
         <div class="item" v-else v-for="(item, index) in base_data.data" :key="index"
              :style="{width: (100/colsNum)+'%'}"
             :class="{'itemFirst': index%colsNum == 0}">
-          <div class="item_img" :class="{'coverall': item.picUrl && base_data.type == 'album'}">
+          <div class="item_img" :class="{'coverall': item.picUrl && base_data.type == 'album'}" @click="itemClick(item)">
             <!--<div class="coverall" v-if=""></div>-->
             <img :src="item.picUrl+'?param='+(item.width || '')+'y'+(item.height || '')" :alt="item.name">
             <div class="item_img_cover" v-if="base_data.expand && !base_data.expand.nocover">
@@ -119,7 +119,9 @@
     mounted() {
     },
     methods: {
-
+      itemClick(data){
+        this.$emit('songlistClick',data)
+      }
     }
   }
 </script>
@@ -219,7 +221,7 @@
               transform: translateY(-100%);
               transition: transform 0.3s ease 0.8s;
             }
-            
+
             .cover_bottom{
               position: absolute;
               bottom: 0;

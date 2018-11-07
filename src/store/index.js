@@ -24,6 +24,10 @@ const state = {
     volume: '',//音量
     loop: '',//循环方式
   },
+  // 播放列表
+  music_list: [
+    {}
+  ],
   device_info: {},
   scroll_info: {},//滚动条相关信息,
   lrc_panal_show: false,//歌词面板控制
