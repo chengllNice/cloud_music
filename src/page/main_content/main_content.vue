@@ -13,11 +13,11 @@
           <router-view></router-view>
         </div>-->
       </div>
-      <div class="common_lrx_view">
-        <vue-scroll :ops="scroll_option">
-          <common-lrc></common-lrc>
-        </vue-scroll>
-      </div>
+      <!--<div class="common_lrx_view">-->
+        <!--<vue-scroll :ops="scroll_option">-->
+          <!--<common-lrc></common-lrc>-->
+        <!--</vue-scroll>-->
+      <!--</div>-->
     </div>
     <common-footer></common-footer>
   </div>
