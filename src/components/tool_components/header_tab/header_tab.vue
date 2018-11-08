@@ -9,7 +9,7 @@
     </div>
 
     <div class="iview_tab_song" v-else-if="tabType == 'iview_tab_song'">
-      <div class="item" :class="{'active': active_tab == index}" v-for="(item, index) in header_tab" :key="index">{{item.name}} <span v-if="item.value">({{item.value}})</span></div>
+      <div class="item" :class="{'active': active_tab == index}" v-for="(item, index) in header_tab" :key="index" @click="navClick(item, index)">{{item.name}} <span v-if="item.value">({{item.value}})</span></div>
     </div>
 
     <div class="list" v-else :class="classes">

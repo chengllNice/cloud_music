@@ -73,9 +73,9 @@
 
     <div class="songlist_bottom">
       <div class="table_tab">
-        <header-tab class="home_header_tab" tab-type="iview_tab_song" :data="header_tab_data"></header-tab>
+        <header-tab class="home_header_tab" tab-type="iview_tab_song" :data="header_tab_data" @tabClick="tabClick"></header-tab>
       </div>
-      <div class="table_box">
+      <div class="table_box" v-if="tab_active == '0'">
         <base-table @dbclick="tableClick" :data="songData.table_data">
           <template slot="song_name" slot-scope="data">
             <div class="song_name ellipsis_1">
@@ -95,11 +95,16 @@
           </template>
         </base-table>
       </div>
+      <div class="comment_tab" v-if="tab_active == '1'">
+        <comment :data="commentData"></comment>
+      </div>
+      <div class="collection_tab" v-if="tab_active == '2'"></div>
     </div>
   </div>
 </template>
 
 <script>
+  import comment from './comment'
   export default {
     name: "songlistDetail",
     props: {
@@ -112,38 +117,53 @@
     },
     data(){
       return {
+        tab_active: '0',
+        songlist_id: '',
         header_tab_data: [
           {
+            id: '0',
             name: '歌曲列表',
             value: ''
           },
           {
+            id: '1',
             name: '评论',
             value: '221'
           },
           {
+            id: '2',
             name: '收藏者',
             value: ''
           }
-        ]
+        ],
+        commentData: {
+          hot: [],
+          comment: []
+        }
       }
+    },
+    components: {
+      comment
     },
     computed: {
       songData(){
         // let result = this.data;
         let result = this.$deepClone(this.data);
-        let time = this.$timeFormat(new Date(result.createTime), 'date');
+        let time = this.$timeFormat(result.createTime, 'yy-mm-dd');
         this.$setObjectValue(result, 'createTime', time);
         return result;
       }
     },
     created(){
-
+      this.songlist_id = this.$route.query.id || '';
     },
     mounted(){
-
+      this.getSonglistComment();
     },
     methods: {
+      tabClick(data){
+        this.tab_active = data.id;
+      },
       tableClick(data){
         let get_data = {
           id: data.data.id
@@ -168,6 +188,19 @@
         });
         console.log(data,'===')
       },
+      getSonglistComment(){
+        let get_data = {
+          id: this.songlist_id,
+          limit: 50,
+          offset: 0
+        };
+        this.$commonApi.getSonglistComment(get_data).then(res=>{
+          this.commentData.comment = res.comments;
+          this.commentData.hot = res.hotComments;
+        }).catch(err=>{
+          console.log('err',err)
+        })
+      }
     }
   }
 </script>

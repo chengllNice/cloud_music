@@ -2,7 +2,8 @@ import {
   get_song_url,
   get_song_detail,
   get_song_lrc,
-  get_songlist_detail
+  get_songlist_detail,
+  get_songlist_comment
 } from "../../server/common_api";
 
 const getSongUrl = (data) => {
@@ -45,9 +46,20 @@ const getSonglistDetail = (data) => {
   })
 };
 
+const getSonglistComment = (data) => {
+  return new Promise((resolve, reject) => {
+    get_songlist_comment(data).then(res => {
+      resolve(res)
+    }).catch(err=>{
+      reject(err)
+    })
+  })
+};
+
 export default {
   getSongUrl,
   getSongLrc,
   getSongDetail,
-  getSonglistDetail
+  getSonglistDetail,
+  getSonglistComment
 }

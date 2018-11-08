@@ -245,11 +245,87 @@ export const timeFormat = (msd, type) => {
     return num;
   };
   if(type){
-    let y = msd.getFullYear();
-    let m = zeroFormat(msd.getMonth()+1);
-    let d = zeroFormat(msd.getDate());
+    let _date = new Date(msd);
+    let now_date = new Date();
+    let now_y = now_date.getFullYear();
+    let now_m = zeroFormat(now_date.getMonth()+1);
+    let now_d = zeroFormat(now_date.getDate());
+    let now_time = now_date.getTime();
+    let _date_time = _date.getTime();
+    let y = _date.getFullYear();
+    let m = zeroFormat(_date.getMonth()+1);
+    let d = zeroFormat(_date.getDate());
 
-    time = `${y}-${m}-${d}`;
+    let _h = zeroFormat(_date.getHours());
+    let _m = zeroFormat(_date.getMinutes());
+    let _s = zeroFormat(_date.getSeconds());
+
+    if(type == 'comment'){
+      let dis_time = now_time - _date_time;
+      //计算出相差天数
+      let dis_days=Math.floor(dis_time/(24*3600*1000));
+      if(now_y == y && now_m == m && now_d == d){
+        //计算出小时数
+        let leave1=dis_time%(24*3600*1000);    //计算天数后剩余的毫秒数
+        let dis_hours=Math.floor(leave1/(3600*1000));
+        //计算相差分钟数
+        let leave2=leave1%(3600*1000);        //计算小时数后剩余的毫秒数
+        let dis_minutes=Math.floor(leave2/(60*1000));
+        //计算相差秒数
+        let leave3=leave2%(60*1000);      //计算分钟数后剩余的毫秒数
+        let dis_seconds=Math.round(leave3/1000);
+        if(dis_hours == 0){
+          time = `${dis_minutes}分钟前`;
+          if(dis_minutes == 0){
+            time = `刚刚`;
+          }
+        }else{
+          time = `${_h}:${_m}`;
+        }
+      }else if(dis_days == 0){
+        time = `昨天 ${_h}:${_m}`
+      }else{
+        time = `${m}月${d}日 ${_h}:${_m}`;
+      }
+    }else{
+      let y_i = type.indexOf('yy');
+      let m_i = type.indexOf('mm');
+      let d_i = type.indexOf('dd');
+
+      let _h_i = type.indexOf('hh');
+      let _m_i = type.lastIndexOf('mi');
+      let _s_i = type.indexOf('ss');
+
+      let y_m = type.substring(m_i-1,m_i);
+      let m_d = type.substring(d_i-1,d_i);
+
+      let h_m = type.substring(_m_i-1,_m_i);
+      let m_s = type.substring(_s_i-1,_s_i);
+
+      if(y_i<0){
+        y = '';
+        y_m = '';
+      }
+      if(m_i<0){
+        m = '';
+        m_d = '';
+      }
+      if(d_i<0){
+        d = ''
+      }
+      if(_h_i<0){
+        _h = '';
+        h_m = '';
+      }
+      if(_m_i<0){
+        _m = '';
+        m_s = '';
+      }
+      if(_s_i<0){
+        _s = '';
+      }
+      time = `${y}${y_m}${m}${m_d}${d} ${_h}${h_m}${_m}${m_s}${_s}`;
+    }
   }else{
     time = parseFloat(msd) / 1000;
 
