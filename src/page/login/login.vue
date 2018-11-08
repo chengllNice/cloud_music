@@ -3,9 +3,10 @@
       <div class="login_logo">
         <img src="../../../static/img/login_logo.png" alt="">
       </div>
-      <div class="login_btn">
-        <base-tool-button type="" class="phone_login" height="40px">手机号登录</base-tool-button>
-        <base-tool-button type="" class="phone_register" height="40px">注册</base-tool-button>
+      <div class="login_main">
+        <div class=""></div>
+        <div class="login_btn">登录</div>
+        <span>注册</span>
       </div>
       <div class="other_login_title">
         <span class="line_row_left"></span>
@@ -35,8 +36,12 @@
 <style lang="less" scoped>
 .login{
   .login_logo{
+    width: 50px;
+    height: 50px;
+    margin: auto;
     img{
-
+      width: 100%;
+      height: 100%;
     }
   }
   .login_btn{

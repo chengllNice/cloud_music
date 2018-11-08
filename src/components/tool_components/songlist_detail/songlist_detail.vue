@@ -96,7 +96,7 @@
         </base-table>
       </div>
       <div class="comment_tab" v-if="tab_active == '1'">
-        <comment :data="commentData"></comment>
+        <comment :comment-all-data="commentData.comment" :comment-hot-data="commentData.hot" :pageData="pageData" @pageChange="pageChange" @submitComment="submitComment"></comment>
       </div>
       <div class="collection_tab" v-if="tab_active == '2'"></div>
     </div>
@@ -139,6 +139,11 @@
         commentData: {
           hot: [],
           comment: []
+        },
+        pageData: {
+          total: 0,
+          page: 1,
+          pageSize: 50
         }
       }
     },
@@ -191,13 +196,44 @@
       getSonglistComment(){
         let get_data = {
           id: this.songlist_id,
-          limit: 50,
-          offset: 0
+          limit: this.pageData.pageSize,
+          offset: (this.pageData.page-1)*this.pageData.pageSize
         };
+        this.commentData.comment = [];
+        this.commentData.hot = [];
         this.$commonApi.getSonglistComment(get_data).then(res=>{
           this.commentData.comment = res.comments;
-          this.commentData.hot = res.hotComments;
+          if(res.hotComments){
+            this.commentData.hot = res.hotComments;
+          }
+          this.pageData.total = res.total;
         }).catch(err=>{
+          console.log('err',err)
+        })
+      },
+      pageChange(page){
+        this.pageData.page = page;
+        this.getSonglistComment();
+      },
+      submitComment(value){
+        let post_data = {
+          t: 1,
+          type: 2,
+          id: this.$route.query.id,
+          content: value
+        };
+        this.$commonApi.postSonglistComment(post_data).then(res=>{
+          if(res.code == 200){
+            this.$Message.success(res.msg);
+            this.pageData.page = 1;
+            this.getSonglistComment();
+          }else{
+            this.$Message.warning(res.msg)
+          }
+          console.log(res)
+        }).catch(err=>{
+          console.log(err)
+          this.$Message.warning('需要登录')
           console.log('err',err)
         })
       }

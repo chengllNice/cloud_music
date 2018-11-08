@@ -49,11 +49,12 @@ let ajax_after = (result) => {
         window.location.href = `${window.location.protocol}//${window.location.host}/login.html#/`;
       } */
       else {
-        Vue.$message.error(result.data.msg);
+
+        Vue.$Message.error(result.data.msg);
         reject(result.data);
       }
     } else {
-      Vue.$fbmessage.error('网络错误');
+      Vue.$Message.error('网络错误');
       reject(result.data);
     }
   })

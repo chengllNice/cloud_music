@@ -6,6 +6,7 @@
            ref="buttonWrap"
            @mouseover="mouse_over"
            @mouseout="mouse_out"
+           @click="btn_click"
            :style="{
              'width': width,
              'height': height,
@@ -130,6 +131,9 @@
       },
       mouse_out(){
 
+      },
+      btn_click(){
+        this.$emit('click')
       }
     }
   }

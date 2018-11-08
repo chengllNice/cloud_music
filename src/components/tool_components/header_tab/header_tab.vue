@@ -87,6 +87,9 @@
           })
         }
         for (let index = 0; index < this.header_tab.length; index++) {
+          if(!this.header_tab[index].path){
+            return
+          }
           let tab = this.header_tab[index].path.split('/').pop();
           if(path === tab){
             this.active_tab = index;

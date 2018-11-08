@@ -20,7 +20,7 @@
         <div class="header_img">
           <img src="../../../../static/img/person.png" alt="">
         </div>
-        <base-tool-button type="aftericon" iconClass="icon-arrow_down" backgroundColor="rgba(0,0,0,0)" fontColor="#eec1c1" font-size="12px"><span>未登录</span></base-tool-button>
+        <base-tool-button type="aftericon" iconClass="icon-arrow_down" backgroundColor="rgba(0,0,0,0)" fontColor="#eec1c1" font-size="12px" @click="loginClick"><span>未登录</span></base-tool-button>
       </div>
       <div class="skin">
         <base-tool-button type="icon" iconClass="icon-skin" backgroundColor="rgba(0,0,0,0)" fontColor="#eec1c1" font-size="18px"></base-tool-button>
@@ -32,10 +32,17 @@
         <base-tool-button type="icon" iconClass="icon-setting" backgroundColor="rgba(0,0,0,0)" fontColor="#eec1c1" font-size="22px"></base-tool-button>
       </div>
     </div>
+
+    <tool-modal :modal="true" width="350">
+      <div class="" slot="body">
+        <login></login>
+      </div>
+    </tool-modal>
   </div>
 </template>
 
 <script>
+  import login from '../../login/login'
   export default {
     name: "clCommonHeader",
     data() {
@@ -47,12 +54,18 @@
       }
     },
     computed: {},
-    components: {},
+    components: {
+      login
+    },
     created() {
     },
     mounted() {
     },
-    methods: {}
+    methods: {
+      loginClick(){
+
+      }
+    }
   }
 </script>
 

@@ -3,7 +3,7 @@
     <!--分页-->
     <div style="margin: 10px;overflow: hidden" v-if="pageData.total">
       <div style="float: right;">
-        <Page :total="pageData.total" :current="pageData.page" show-sizer show-elevator show-total @on-change="changePage"></Page>
+        <Page :total="pageData.total" :current="pageData.page" :page-size="pageData.pageSize" :show-sizer="showSizer" :show-elevator="showElevator" :show-total="showTotal" @on-change="changePage"></Page>
       </div>
     </div>
   </div>
@@ -21,6 +21,18 @@
             page: 1,
           }
         }
+      },
+      showSizer: {
+        type: Boolean,
+        default: false
+      },
+      showElevator: {
+        type: Boolean,
+        default: false
+      },
+      showTotal: {
+        type: Boolean,
+        default: false
       }
     },
     data() {
@@ -33,8 +45,8 @@
     mounted() {
     },
     methods: {
-      changePage(){
-
+      changePage(page){
+        this.$emit('pageChange', page);
       }
     }
   }
@@ -97,7 +109,7 @@
         border-radius: 2px;
       }
     }
-    .ivu-select-item-selected, 
+    .ivu-select-item-selected,
     .ivu-select-item-selected:hover{
       color: #c62f2f;
     }

@@ -5,6 +5,7 @@ import { baseSingList } from './base_list/base_list.js'
 import { baseTable, iviewTable } from './base_table/base_table.js'
 import { headerTab } from './header_tab/header_tab.js'
 import { songlistDetail } from './songlist_detail/songlist_data.js'
+import { toolModal } from './tool_modal/tool_modal.js'
 
 const components = [
   baseButton,
@@ -15,7 +16,8 @@ const components = [
   baseTable,
   iviewTable,
   headerTab,
-  songlistDetail
+  songlistDetail,
+  toolModal
 ];
 
 
@@ -37,5 +39,6 @@ export default {
   baseTable,
   iviewTable,
   headerTab,
-  songlistDetail
+  songlistDetail,
+  toolModal
 }

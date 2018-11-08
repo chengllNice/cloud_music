@@ -84,7 +84,7 @@
 
 <script>
   let vue = null;
-  import toolPage from './tool_page'
+  import toolPage from '../pagination/tool_page'
   import { mapState } from 'vuex'
   export default {
     name: "baseTable",

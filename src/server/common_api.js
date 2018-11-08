@@ -12,3 +12,5 @@ export const get_song_detail = (data) => ajax_get('/song/detail',data);
 export const get_songlist_detail = (data) => ajax_get('/playlist/detail',data);
 // 获取歌单评论
 export const get_songlist_comment = (data) => ajax_get('/comment/playlist',data);
+// 评论
+export const post_songlist_comment = (data) => ajax_get('/comment',data);
