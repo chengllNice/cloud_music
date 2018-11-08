@@ -115,7 +115,6 @@
         this.get_top_song_list(data.id);
       },
       tableClick(data){
-        console.log(data,'data')
         let get_data = {
           id: data.data.id
         };
@@ -129,6 +128,8 @@
               picUrl: data.data.picUrl,
               song_name: data.data.song_name,
               artists: data.data.artists,
+              album: data.data.album_name,
+              alias: data.data.alias
             };
             this.$store.commit('get_music_info',info);
           }

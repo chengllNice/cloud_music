@@ -13,6 +13,9 @@ const new_music = r => require.ensure([], () => r(require('../page/main_content/
 const new_music_express = r => require.ensure([], () => r(require('../page/main_content/home/new_music/new_music_express')), 'new_music_express');
 const new_music_album = r => require.ensure([], () => r(require('../page/main_content/home/new_music/new_music_album')), 'new_music_album');
 
+// 歌单详情
+const songlist_detail = r => require.ensure([], () => r(require('../page/main_content/home/home_songlist_detail/home_songlist_detail')), 'songlist_detail');
+
 export default {
   path: '/',
   component: main_content,
@@ -65,7 +68,12 @@ export default {
               component: new_music_album,
             },
           ]
-        }
+        },
+        {
+          path: '/home/songlist_detail',
+          name: 'songlist_detail',
+          component: songlist_detail,
+        },
       ]
     }
   ]

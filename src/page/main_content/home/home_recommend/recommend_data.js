@@ -356,6 +356,12 @@ export const new_song_data = {
           jpath: 'song.privilege.maxbr'
         },
         {
+          title: '专辑',
+          key: 'album',
+          noshow: true,
+          jpath: 'song.album'
+        },
+        {
           title: '',
           key: 'content',
           tooltip: true,
@@ -421,6 +427,12 @@ export const new_song_data = {
           key: 'maxbr',
           noshow: true,
           jpath: 'song.privilege.maxbr'
+        },
+        {
+          title: '专辑',
+          key: 'album',
+          noshow: true,
+          jpath: 'song.album'
         },
         {
           title: '',

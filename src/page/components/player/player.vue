@@ -103,8 +103,8 @@
       },
       jplayer_init(){
         let vue = this;
-        console.log('-----========', vue.music_info.url)
-        // http://m10.music.126.net/20181028121059/1ccbfdd240f7cdf76f09bb2e2fef2480/ymusic/0ca4/1dd7/df4b/86e8bf58a5a367aad23e84bef976bba3.mp3
+        let volume = vue.volume/100;
+        console.log('-----========', vue.music_info.url, vue.volume)
         $('#jplayerEl').jPlayer({
           ready: function (e) {
             $(this).jPlayer("setMedia", {
@@ -113,7 +113,7 @@
           },
           wmode: "window",
           supplied: 'mp3',
-          volume: vue.volume
+          volume: volume
           // smoothPlayBar: true,//平滑过渡播放条
           // remainingDuration: true,//是否显示剩余时间
           // useStateClassSkin: true,//是否使用皮肤

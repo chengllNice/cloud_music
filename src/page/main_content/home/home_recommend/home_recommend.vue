@@ -3,7 +3,8 @@
     <banner :list-data="banner_data"></banner>
 
     <div class="" v-for="(item, index) in all_data" :key="index">
-      <base-sing-list class="home_list" :list-data="item" :cols-num="item.colsNum">
+      <base-sing-list class="home_list" :list-data="item"
+                      :cols-num="item.colsNum" @songlistClick="songlistClickHandler">
         <template v-if="item.slot && item.slot == 'song_body'" slot="song_body">
           <base-table :data="item.data" :config="item.config" @dbclick="tableClick" v-if="item.type == 'table'">
             <template slot="content" slot-scope="data">
@@ -40,6 +41,7 @@
         </template>
       </base-sing-list>
     </div>
+
     <!--<base-sing-list class="home_list" :list-data="exclusive_data" :cols-num="3"></base-sing-list>-->
     <!--<base-sing-list class="home_list" :list-data="recommend_mv_data" :cols-num="3"></base-sing-list>-->
     <div class="home_footer">
@@ -103,11 +105,11 @@
         this.get_init_data();
       },
       async get_init_data(){
-        await this.get_banner_data();//获取banner
-        await this.get_personalized_data();//获取推荐歌单
-        await this.get_privatecontent_data();//获取独家放送
-        await this.get_newsong_data();//获取最新音乐
-        await this.get_mv_data();//获取推荐MV
+        this.get_banner_data();//获取banner
+        this.get_personalized_data();//获取推荐歌单
+        this.get_privatecontent_data();//获取独家放送
+        this.get_newsong_data();//获取最新音乐
+        this.get_mv_data();//获取推荐MV
         await this.get_dj_recommend_data();//获取推荐电台
         this.all_data_format();
 
@@ -233,6 +235,7 @@
         })
       },
       tableClick(data){
+        console.log(data)
         let get_data = {
           id: data.data.id
         };
@@ -246,12 +249,21 @@
               picUrl: data.data.picUrl,
               song_name: data.data.song_name,
               artists: data.data.artists,
+              album: data.data.album,
+              alias: data.data.alias,
             };
             this.$store.commit('get_music_info',info);
           }
         }).catch(err=>{
           console.log('err',err)
         });
+      },
+      songlistClickHandler(data){
+        console.log(data)
+        this.$router.push({
+          path: '/home/songlist_detail',
+          query: { id: data.id}
+        })
       }
     },
     watch: {

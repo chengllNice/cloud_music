@@ -8,6 +8,10 @@
       </ButtonGroup>
     </div>
 
+    <div class="iview_tab_song" v-else-if="tabType == 'iview_tab_song'">
+      <div class="item" :class="{'active': active_tab == index}" v-for="(item, index) in header_tab" :key="index">{{item.name}} <span v-if="item.value">({{item.value}})</span></div>
+    </div>
+
     <div class="list" v-else :class="classes">
       <div class="item"
            v-for="(item, index) in header_tab"
@@ -138,6 +142,34 @@
         background: rgba(124,125,133,1);
         color: rgba(226,226,228,1);
         border-color: rgba(124,125,133,1);
+      }
+    }
+  }
+
+  .iview_tab_song{
+    height: 100%;
+    display: flex;
+    align-items: flex-end;
+    .item{
+      border: 1px solid #e1e1e2;
+      color: #333333;
+      margin-right: 5px;
+      padding: 0 15px;
+      height: 30px;
+      line-height: 30px;
+      background: #ffffff;
+      font-size: 12px;
+      cursor: pointer;
+      border-bottom: none;
+      span{
+        cursor: pointer;
+      }
+      &:hover{
+        background: #f5f5f7;
+      }
+      &.active{
+        color: #ffffff;
+        background: #c62f2f;
       }
     }
   }

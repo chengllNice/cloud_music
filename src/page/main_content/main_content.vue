@@ -13,11 +13,13 @@
           <router-view></router-view>
         </div>-->
       </div>
-      <!--<div class="common_lrx_view">-->
-        <!--<vue-scroll :ops="scroll_option">-->
-          <!--<common-lrc></common-lrc>-->
-        <!--</vue-scroll>-->
-      <!--</div>-->
+      <transition name="lrc">
+        <div class="common_lrx_view" v-if="lrc_panal_show">
+          <vue-scroll :ops="scroll_option">
+            <common-lrc></common-lrc>
+          </vue-scroll>
+        </div>
+      </transition>
     </div>
     <common-footer></common-footer>
   </div>
@@ -29,6 +31,7 @@
   import commonLrc from '../components/common_lrc/common_lrc'
   import leftNav from '../components/left_nav/left_nav'
   import BScroll from 'better-scroll'
+  import { mapState } from 'vuex'
 
   export default {
     name: "main_content",
@@ -50,7 +53,9 @@
         }
       }
     },
-    computed: {},
+    computed: {
+      ...mapState(['lrc_panal_show'])
+    },
     components: {
       commonHeader,
       leftNav,
@@ -128,11 +133,24 @@
         overflow: hidden;
         padding-bottom: 50px;
       }
+      .lrc-enter-active, .lrc-leave-active{
+        transition: all 0.3s;
+      }
+      .lrc-enter, .lrc-leave-to{
+        transform: scale(0);
+        transform-origin: left bottom;
+      }
     }
   }
 </style>
-<style>
-  .__vuescroll .__view{
-    width: 100%!important;
+<style lang="less">
+  .main_content{
+    .main_content_view{
+      .__vuescroll .__view{
+        width: 100%!important;
+      }
+    }
+
   }
+
 </style>
