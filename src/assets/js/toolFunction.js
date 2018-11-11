@@ -158,7 +158,7 @@ export const unitFormat = (data, key, len) => {
   let _len = len || 5;
   let _unit = '';
   let format_fn = (obj) => {
-    let _value = Math.floor(getObjectValue(obj, key));
+    let _value = Math.floor(getObjectValue(obj, key)-0);
     if(_value.toString().length > _len){
       _value = Math.floor(_value / Math.pow(10,_len-1));
       _unit = '万';

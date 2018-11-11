@@ -57,44 +57,27 @@
       </div>
 
       <div class="singer_album">
-        <base-sing-list class=""
-                        v-if="album_icon_active == 'theme'"
-                        :list-data="singer_album_data"
-                        :cols-num="singer_album_data.colsNum"></base-sing-list>
-
-        <base-table :data="singer_album_list_data.data"
-                    :config="singer_album_list_data.config"
-                    v-if="album_icon_active == 'list'"
-                    @dbclick="tableClick">
-          <template slot="picUrl_content" slot-scope="data">
-            <div class="album_picUrl">
-              <img :src="data.data.picUrl" alt="">
-            </div>
-          </template>
-          <template slot="name_content" slot-scope="data">
-            <div class="album_name ellipsis_1">
-              <span class="ellipsis_1">{{data.data.name}}</span>
-              <span class="alias_name ellipsis_1" v-for="(item, index) in data.data.alias" :key="index">({{item}})</span>
-            </div>
-          </template>
-        </base-table>
+        <album-info v-show="tab_active == '0'" :tab_active="tab_active" :album_icon_active="album_icon_active"></album-info>
+        <mv-info v-show="tab_active == '1'" :tab_active="tab_active"></mv-info>
+        <detail-info v-show="tab_active == '2'"></detail-info>
+        <simi-singer-info v-show="tab_active == '3'"></simi-singer-info>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-  import { singer_album_data, singer_album_list_data} from "./singer_detail_data";
-  import { get_artist_detail, get_artist_desc, get_artist_album} from "../../../server/common_api";
-  import { mapState } from 'vuex'
+  import { get_artist_detail} from "../../../server/common_api";
+  import albumInfo from './album_info'
+  import mvInfo from './mv_info'
+  import detailInfo from './detail_info'
+  import simiSingerInfo from './simi_singer_info'
 
   export default {
     name: "singer_detail_common",
     data() {
       return {
         singer_detail: {},
-        singer_album_data: {},
-        singer_album_list_data: {},
         header_tab_data: [
           {
             id: '0',
@@ -118,31 +101,25 @@
           }
         ],
         album_icon_active: 'theme_list',
-        pageChange: true,
-        is_more: true,
-        page: {
-          page: 1,
-          total: 0,
-          pageSize: 24
-        }
+        tab_active: '0'
       }
     },
     computed: {
-      ...mapState(['device_info', 'scroll_info'])
     },
     components: {
+      albumInfo,
+      mvInfo,
+      detailInfo,
+      simiSingerInfo
     },
     created() {
-      this.singer_album_data = this.$deepClone(singer_album_data);
-      this.singer_album_list_data = this.$deepClone(singer_album_list_data);
     },
     mounted() {
       this.init();
     },
     methods: {
-      init(){
+      async init(){
         this.get_artist_desc();
-        this.get_artist_album();
       },
       get_artist_desc(){
         let get_data = {
@@ -154,49 +131,15 @@
           console.log('err',err)
         })
       },
-      get_artist_album(){
-        let get_data = {
-          id: this.$route.query.id || '',
-          limit: this.page.pageSize,
-          offset: (this.page.page-1)*this.page.pageSize
-        };
-        get_artist_album(get_data).then(res=>{
-          let data_format = this.$uiconfigFormat(res.hotAlbums, this.singer_album_data.uiconfig);
-          data_format.forEach(item=>{
-            let time = this.$timeFormat(item.publishTime, 'yy-mm-dd');
-            let size = item.size + '首';
-            this.$setObjectValue(item, 'publishTime', time);
-            this.$setObjectValue(item, 'time', '发布时间：'+time);
-            this.$setObjectValue(item, 'size', size)
-          });
-          this.singer_album_list_data.data.t_body.push(...data_format);
-          this.singer_album_data.data.push(...data_format);
-          // this.loading = false;
-          this.page.total = res.total;
-          this.is_more = res.more;
-          this.pageChange = true;
-        }).catch(err=>{
-          console.log('err',err)
-        })
-      },
-      tabClick(){
-
+      tabClick(data){
+        this.tab_active = data.id;
       },
       albumListChange(type){
         this.album_icon_active = type;
       },
-      tableClick(){
-
-      }
     },
     watch: {
-      'scroll_info.process': function (new_val, old_val) {
-        if(new_val >= 0.98 && this.pageChange && this.is_more){
-          this.pageChange = false;
-          this.page.page++;
-          this.get_artist_album();
-        }
-      }
+
     }
   }
 </script>
@@ -349,26 +292,7 @@
   }
 
   .singer_album{
-    padding: 20px 30px 0 35px;
-    .album_picUrl{
-      height: 40px;
-      width: 48px;
-      margin: 10px 0;
-      background: url("../../../../static/img/album_cover.png") no-repeat;
-      background-size: auto 100%;
-      background-position: 1px center;
-      img{
-        /*width: 100%;*/
-        height: 100%;
-      }
-    }
-    .album_name{
-      display: flex;
-      align-items: center;
-      .alias_name{
-        color: #888;
-      }
-    }
+    padding: 20px 0;
   }
 }
 </style>
@@ -386,11 +310,5 @@
         }
       }
     }
-    .singer_album{
-      .item_img{
-        padding-right: 32px;
-      }
-    }
   }
-
 </style>

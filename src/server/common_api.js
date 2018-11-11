@@ -27,3 +27,13 @@ export const get_artist_detail = (data) => ajax_get('/artists',data);
 export const get_artist_desc = (data) => ajax_get('/artist/desc',data);
 // 获取歌手专辑
 export const get_artist_album = (data) => ajax_get('/artist/album',data);
+// 获取专辑内容
+export const get_album = (data) => ajax_get('/album',data);
+// 获取歌手mv
+export const get_artist_mv = (data) => ajax_get('/artist/mv',data);
+// 相似歌手
+export const get_simi_artist = (data) => ajax_get('/simi/artist',data);
+// mv地址
+export const get_mv_url = (data) => ajax_get('/mv/url',data);
+// 获取mv详情
+export const get_mv_detail = (data) => ajax_get('/mv/detail',data);

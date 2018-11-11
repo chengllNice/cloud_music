@@ -98,7 +98,6 @@
     },
     methods: {
       init(){
-        console.log('-----========')
         this.jplayer_init();
       },
       jplayer_init(){

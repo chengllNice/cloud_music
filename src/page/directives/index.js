@@ -1,14 +1,54 @@
+import Vue from 'vue';
+import loading from './loading'
+
+let create = (options) => {
+  let loadingComponent = Vue.extend(loading);
+  let componentVue = {};
+  return new Promise((resolve, reject) => {
+    //实例化ConfirmConstructor组件
+    componentVue = new loadingComponent({
+      el: document.createElement('div')
+    });
+    for (let index in options) {
+      componentVue[index] = options[index];
+    }
+    //返回vue实例
+    // componentVue.$on('complete', () => {
+    //   console.log('')
+    //   resolve(componentVue)
+    // })
+    resolve(componentVue)
+  })
+};
+
+let random_fn = (num) => {
+  let arr = [];
+  let len = num ? num : 1;
+  for(let i = 0; i < len; i++){
+    arr.push(Math.floor(Math.random()*10))
+  }
+  return arr.join('')
+};
+
 let directive = {};
 directive.install = function (vue) {
-  let _uid = 'vue-directive-loading' + Date.now().toString('16')
+  let _uid = '';
   vue.directive('loading',{
     // 钩子函数，被绑定元素插入父节点时调用 (父节点存在即可调用，不必存在于 document 中)。
     inserted(el){
-      el.focus()
       // console.log( 'inserted' );
     },
     // 只调用一次，指令第一次绑定到元素时调用，用这个钩子函数可以定义一个在绑定时执行一次的初始化动作。
     bind(el, binding, vnode){
+      // let spinner = '';
+      // create({
+      //   value: binding.value
+      // }).then(res=>{
+      //   console.log(res,'res')
+      //   spinner = res;
+      // });
+      _uid = 'vue-directive-loading' + Date.now().toString('16') + random_fn(10);
+
       let _value = binding.value;
       let spinner = document.createElement('div');
       spinner.id = _uid;
@@ -40,6 +80,7 @@ directive.install = function (vue) {
     // 指令的值可能发生了改变也可能没有。但是你可以通过比较更新前后的值来忽略不必要的模板更新
     update(el, binding, vnode){
       let spinner = document.getElementById(_uid);
+      // console.log(_uid,'_uid')
       spinner.style.display = binding.value ? 'block' : 'none';
       // el.style.height = 'auto';
       // console.log( 'update' );

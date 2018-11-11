@@ -90,7 +90,6 @@
 
 <script>
   import { common_type} from "../../../page/main_content/common_data";
-  import toolPage from '../pagination/tool_page'
 
 
   export default {
@@ -125,7 +124,7 @@
       }
     },
     components: {
-      toolPage
+
     },
     created() {
     },
