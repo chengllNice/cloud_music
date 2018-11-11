@@ -20,12 +20,15 @@ const getAllColumns = (cols, forTableHead = false) => {
   const columns = deepCopy(cols);
   const result = [];
   columns.forEach((column) => {
-    if (column.children) {
-      if (forTableHead) result.push(column);
-      result.push.apply(result, getAllColumns(column.children, forTableHead));
-    } else {
-      result.push(column);
+    if(!column.noshow){
+      if (column.children) {
+        if (forTableHead) result.push(column);
+        result.push.apply(result, getAllColumns(column.children, forTableHead));
+      } else {
+        result.push(column);
+      }
     }
+
   });
   return result;
 };

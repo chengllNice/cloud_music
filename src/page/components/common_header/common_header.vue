@@ -18,9 +18,11 @@
     <div class="header_right">
       <div class="login_box">
         <div class="header_img">
-          <img src="../../../../static/img/person.png" alt="">
+          <img v-if="user_info.avatarUrl" :src="user_info.avatarUrl" alt="">
+          <img v-else src="../../../../static/img/person.png" alt="">
         </div>
-        <base-tool-button type="aftericon" iconClass="icon-arrow_down" backgroundColor="rgba(0,0,0,0)" fontColor="#eec1c1" font-size="12px" @click="loginClick"><span>未登录</span></base-tool-button>
+        <base-tool-button v-if="user_info.id" type="aftericon" iconClass="icon-arrow_down" backgroundColor="rgba(0,0,0,0)" fontColor="#eec1c1" font-size="12px"><span>{{user_info.name}}</span></base-tool-button>
+        <base-tool-button v-else type="aftericon" iconClass="icon-arrow_down" backgroundColor="rgba(0,0,0,0)" fontColor="#eec1c1" font-size="12px" @click="loginClick"><span>未登录</span></base-tool-button>
       </div>
       <div class="skin">
         <base-tool-button type="icon" iconClass="icon-skin" backgroundColor="rgba(0,0,0,0)" fontColor="#eec1c1" font-size="18px"></base-tool-button>
@@ -33,7 +35,7 @@
       </div>
     </div>
 
-    <tool-modal :modal="true" width="350">
+    <tool-modal :modal="login_modal" width="350" :nofooter="true">
       <div class="" slot="body">
         <login></login>
       </div>
@@ -43,17 +45,22 @@
 
 <script>
   import login from '../../login/login'
+  import {mapState} from 'vuex'
+
   export default {
     name: "clCommonHeader",
     data() {
       return {
+        login_modal: false,
         search_input: {
           icon: 'ios-search-outline',
           placeholder: '搜索音乐，视频，歌词，电台'
         }
       }
     },
-    computed: {},
+    computed: {
+      ...mapState(['user_info'])
+    },
     components: {
       login
     },
@@ -63,7 +70,7 @@
     },
     methods: {
       loginClick(){
-
+        this.login_modal = true;
       }
     }
   }

@@ -601,7 +601,7 @@ export const radio_station_data = {
   weight: '4',//权值，排序优先度
   colsNum: 5,//列数
   expand: {
-
+    cover_bottom: true,//底部覆盖
   },
   title: {
     name: '主播电台',

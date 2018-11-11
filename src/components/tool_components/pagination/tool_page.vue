@@ -1,7 +1,7 @@
 <template>
   <div class="tool_page">
     <!--分页-->
-    <div style="margin: 10px;overflow: hidden" v-if="pageData.total">
+    <div style="padding: 10px;overflow: hidden" v-if="pageData.total">
       <div style="float: right;">
         <Page :total="pageData.total" :current="pageData.page" :page-size="pageData.pageSize" :show-sizer="showSizer" :show-elevator="showElevator" :show-total="showTotal" @on-change="changePage"></Page>
       </div>
@@ -11,7 +11,7 @@
 
 <script>
   export default {
-    name: "tool_page",
+    name: "toolPage",
     props: {
       pageData: {
         type: Object,

@@ -1,6 +1,6 @@
 <template>
   <div class="cl_input">
-    <Input v-model="value"
+    <Input v-model="input_value"
            :placeholder="data.placeholder || ''"
            :clearable="data.clearable || false"
            :icon="data.icon || ''"/>
@@ -45,8 +45,8 @@
       }
     },
     watch: {
-      'input_value': function () {
-
+      'input_value': function (new_val, old_val) {
+        this.$emit('input', new_val)
       },
       'value': function () {
         this.init_input_value();

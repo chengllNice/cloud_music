@@ -1,6 +1,6 @@
 export const left_nav_data = [
   {
-    id: '',
+    id: '0',
     noshow: false,
     title: {
       name: '推荐',
@@ -55,7 +55,7 @@ export const left_nav_data = [
     ]
   },
   {
-    id: '',
+    id: '1',
     noshow: false,
     title: {
       name: '我的音乐',
@@ -114,7 +114,7 @@ export const left_nav_data = [
     ]
   },
   {
-    id: '',
+    id: '2',
     noshow: false,
     title: {
       name: '创建的歌单',
@@ -123,7 +123,7 @@ export const left_nav_data = [
     },
     data: [
       {
-        id: 'local_music',
+        id: 'like_music',
         noshow: false,
         icon: {
           name: 'icon-left_like',
@@ -149,99 +149,14 @@ export const left_nav_data = [
     ]
   },
   {
-    id: '',
+    id: '3',
     noshow: false,
     title: {
       name: '收藏的歌单',
       new_item_btn: false,
       down_btn: true
     },
-    data: [
-      {
-        id: 'my_music',
-        noshow: false,
-        icon: {
-          name: 'icon-left_music_list',
-          fontSize: '17px',
-          fontWeight: '400'
-        },
-        // icon: 'icon-left_music_list',
-        name: '我的音乐',
-        path: '',
-      },
-      {
-        id: 'my_music',
-        noshow: false,
-        icon: {
-          name: 'icon-left_music_list',
-          fontSize: '17px',
-          fontWeight: '400'
-        },
-        // icon: 'icon-left_music_list',
-        name: '我的音乐',
-        path: '',
-      },
-      {
-        id: 'my_music',
-        noshow: false,
-        icon: {
-          name: 'icon-left_music_list',
-          fontSize: '17px',
-          fontWeight: '400'
-        },
-        // icon: 'icon-left_music_list',
-        name: '我的音乐',
-        path: '',
-      },
-      {
-        id: 'my_music',
-        noshow: false,
-        icon: {
-          name: 'icon-left_music_list',
-          fontSize: '17px',
-          fontWeight: '400'
-        },
-        // icon: 'icon-left_music_list',
-        name: '我的音乐',
-        path: '',
-      },
-      {
-        id: 'my_music',
-        noshow: false,
-        icon: {
-          name: 'icon-left_music_list',
-          fontSize: '17px',
-          fontWeight: '400'
-        },
-        // icon: 'icon-left_music_list',
-        name: '我的音乐',
-        path: '',
-      },
-      {
-        id: 'my_music',
-        noshow: false,
-        icon: {
-          name: 'icon-left_music_list',
-          fontSize: '17px',
-          fontWeight: '400'
-        },
-        // icon: 'icon-left_music_list',
-        name: '我的音乐',
-        path: '',
-      },
-      {
-        id: 'my_music',
-        noshow: false,
-        icon: {
-          name: 'icon-left_music_list',
-          fontSize: '17px',
-          fontWeight: '400'
-        },
-        // icon: 'icon-left_music_list',
-        name: '我的音乐22',
-        path: '',
-      }
-    ]
+    data: []
   }
 ];
 

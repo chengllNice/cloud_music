@@ -212,6 +212,7 @@
         if(this.music_info.playStatus == 'play'){
           this.againPlay();
         }
+        this.$localStorage.setStore('music_info', this.music_info);
       }
     }
   }

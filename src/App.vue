@@ -14,10 +14,13 @@ export default {
     }
   },
   mounted(){
-
+    this.user_info();
   },
   methods: {
-
+    user_info(){
+      this.$store.state.user_info = this.$localStorage.getStore('user_info');
+      this.$store.state.music_info = this.$localStorage.getStore('music_info');
+    }
   },
   watch: {}
 }

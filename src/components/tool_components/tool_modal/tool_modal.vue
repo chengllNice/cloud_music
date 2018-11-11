@@ -1,17 +1,18 @@
 <template>
-  <Modal v-model="modal" :width="width">
-    <div slot="header">
+  <Modal v-model="modal" :width="width" :footer-hide="true">
+    <div class="modal_header">
       <slot name="header"></slot>
     </div>
     <div class="modal_body">
       <slot name="body"></slot>
     </div>
-    <div slot="footer">
-      <div v-if="footer">
+    <div class="modal_footer">
+      <slot v-if="$slots.footer" name="footer"></slot>
+      <div v-else-if="nofooter"></div>
+      <div v-else>
         <Button>取消</Button>
         <Button type="primary">确定</Button>
       </div>
-      <slot v-else name="footer"></slot>
     </div>
   </Modal>
 </template>
@@ -27,6 +28,10 @@
       width: {
         type:String,
         default: "500"
+      },
+      nofooter: {
+        type: Boolean,
+        default: false
       }
     },
     data(){
@@ -51,6 +56,8 @@
   }
 </script>
 
-<style scoped>
-
+<style lang="less">
+.ivu-modal-body{
+  padding: 0!important;
+}
 </style>

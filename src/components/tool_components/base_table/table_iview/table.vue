@@ -776,8 +776,10 @@
       makeData () {
         let data = deepCopy(this.data);
         data.forEach((row, index) => {
-          row._index = index;
-          row._rowKey = rowKey++;
+          if(!row.noshow){
+            row._index = index;
+            row._rowKey = rowKey++;
+          }
         });
         return data;
       },

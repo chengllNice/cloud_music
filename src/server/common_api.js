@@ -14,3 +14,16 @@ export const get_songlist_detail = (data) => ajax_get('/playlist/detail',data);
 export const get_songlist_comment = (data) => ajax_get('/comment/playlist',data);
 // 评论
 export const post_songlist_comment = (data) => ajax_get('/comment',data);
+// 手机登录
+export const phone_login = (data) => ajax_get('/login/cellphone',data);
+// 获取用于歌单等信息
+export const get_user_subcount = (data) => ajax_get('/user/subcount',data);
+// 获取用户歌单
+export const get_user_playlist = (data) => ajax_get('/user/playlist',data);
+
+// 获取歌手详情
+export const get_artist_detail = (data) => ajax_get('/artists',data);
+// 获取歌手描述
+export const get_artist_desc = (data) => ajax_get('/artist/desc',data);
+// 获取歌手专辑
+export const get_artist_album = (data) => ajax_get('/artist/album',data);

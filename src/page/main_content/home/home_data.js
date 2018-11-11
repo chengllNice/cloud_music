@@ -21,9 +21,9 @@ export const home_header_tab_data = [
     path: '/home/top_list',
   },
   {
-    id: 'songer_list',
+    id: 'singer_list',
     name: '歌手',
-    path: '/home/songer_list',
+    path: '/home/singer_list',
   },
   {
     id: 'new_music',

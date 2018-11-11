@@ -16,13 +16,13 @@
           </div>
           <div class="body">
             <div class="body_list">
-              <div class="body_item" v-for="(body_item, body_index) in item.data" :key="body_index">
+              <div class="body_item" v-for="(body_item, body_index) in item.data" :key="body_index" @click="songlistClick(body_item)" :class="{'nav_active': nav_active == body_item.id}">
                 <div class="left_icon">
                   <i class="iconfont" :class="body_item.icon.name"
                      :style="{'font-size': body_item.icon.fontSize, 'font-weight': body_item.icon.fontWeight}">
                   </i>
                 </div>
-                <div class="left_name">{{body_item.name}}</div>
+                <div class="left_name ellipsis_1">{{body_item.name}}</div>
               </div>
             </div>
           </div>
@@ -63,16 +63,18 @@
   import { left_nav_data} from "./left_nav_data";
   import BScroll from 'better-scroll'
   import { mapState } from 'vuex'
+  import { get_user_playlist} from "../../../server/common_api";
 
   export default {
     name: "left_nav",
     data(){
       return {
-        left_nav_data: null
+        left_nav_data: null,
+        nav_active: 'find_music'
       }
     },
     computed: {
-      ...mapState(["music_info"])
+      ...mapState(["music_info", 'user_info'])
     },
     created(){
       this.left_nav_data = this.$deepClone(left_nav_data);
@@ -83,9 +85,16 @@
         setTimeout(()=>{
           vue.scroll_init();
         },20)
+        this.get_user_playlist();
+        this.nav_active_handler();
       })
     },
     methods: {
+      nav_active_handler(){
+        if(this.$route.query.id){
+          this.nav_active = this.$route.query.id;
+        }
+      },
       scroll_init(){
         let vue = this;
         let scroll = new BScroll(vue.$refs.leftNav,{
@@ -99,7 +108,84 @@
       },
       lrc_cover_show(){
         this.$store.commit('set_lrc_panal_show', true)
+      },
+      songlistClick(data){
+        this.nav_active = data.id;
+        if(data.type == 'songlist'){
+          this.$router.push({
+            path: '/songlist_detail_common',
+            query: { id: data.id}
+          })
+        }
+        if(data.id == 'find_music'){
+          this.$router.push({
+            path: '/home/home_recommend',
+          })
+        }
+      },
+      get_user_playlist(){
+        let get_data = {
+          uid: this.user_info.id
+        };
+        get_user_playlist(get_data).then(res=>{
+          let playlist = res.playlist;
+          this.left_nav_data[2].data = [];
+          this.left_nav_data[3].data = [];
+          playlist.forEach(item=>{
+            if(item.creator.userId == this.user_info.id){
+              let name = item.name;
+              let obj = {};
+              if(name.indexOf(this.user_info.name) != -1){
+                name = '我喜欢的音乐';
+                obj = {
+                  type: 'songlist',
+                  name: name,
+                  id: item.id,
+                  noshow: false,
+                  icon: {
+                    name: 'icon-left_like',
+                    fontSize: '18px',
+                    fontWeight: '600'
+                  },
+                }
+              }else{
+                obj = {
+                  type: 'songlist',
+                  name: name,
+                  id: item.id,
+                  noshow: false,
+                  icon: {
+                    name: 'icon-left_music_list',
+                    fontSize: '17px',
+                    fontWeight: '400'
+                  },
+                }
+              }
+              this.left_nav_data[2].data.push(obj);
+            }else{
+              let name = item.name;
+              let obj = {};
+              obj = {
+                type: 'songlist',
+                name: name,
+                id: item.id,
+                noshow: false,
+                icon: {
+                  name: 'icon-left_music_list',
+                  fontSize: '17px',
+                  fontWeight: '400'
+                },
+              };
+              this.left_nav_data[3].data.push(obj);
+            }
+          })
+        }).catch(err=>{
+          console.log('err',err)
+        });
       }
+    },
+    watch:{
+
     }
   }
 </script>
@@ -156,9 +242,10 @@
           .body_item{
             display: flex;
             align-items: center;
-            padding-left: 20px;
+            padding-left: 17px;
             height: 32px;
             cursor: pointer;
+            border-left: 3px solid transparent;
             &:hover{
               i{
                 color: #2b2b2b!important;
@@ -178,6 +265,17 @@
               color: #626262;
               font-size: 12px;
               padding-left: 10px;
+              cursor: pointer;
+            }
+          }
+          .nav_active{
+            border-left: 3px solid #c62f2f;
+            background: #e6e7ea;
+            i{
+              color: #2b2b2b!important;
+            }
+            .left_name{
+              color: #2b2b2b!important;
             }
           }
         }

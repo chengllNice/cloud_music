@@ -17,3 +17,17 @@ export const get_djprogram = data => ajax_get('/personalized/djprogram',data);
 export const get_top_song = data => ajax_get('/top/song',data);
 // 新碟上架
 export const get_top_album = data => ajax_get('/top/album',data);
+
+// 歌单
+// 歌单分类
+export const get_playlist_catlist = data => ajax_get('/playlist/catlist',data);
+// 歌单热门分类
+export const get_playlist_hot = data => ajax_get('/playlist/hot',data);
+// 歌单列表
+export const get_top_playlist = data => ajax_get('/top/playlist',data);
+
+// 歌手
+// 热门歌手
+export const get_top_artists = data => ajax_get('/top/artists',data);
+// 根据分类筛选歌手
+export const get_artists_list = data => ajax_get('/artist/list',data);

@@ -210,6 +210,10 @@
         return new Promise((resolve, reject)=>{
           get_mv().then(res=>{
             let format_data = this.$uiconfigFormat(res.result,this.recommend_mv_data.uiconfig);
+            format_data.forEach(item=>{
+              item.width = '338';
+              item.height = '189';
+            });
             this.recommend_mv_data.data = format_data;
             this.$unitFormat(this.recommend_mv_data.data, 'playCount');
             resolve()
@@ -259,9 +263,8 @@
         });
       },
       songlistClickHandler(data){
-        console.log(data)
         this.$router.push({
-          path: '/home/songlist_detail',
+          path: '/songlist_detail_common',
           query: { id: data.id}
         })
       }

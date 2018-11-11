@@ -22,6 +22,7 @@ directive.install = function (vue) {
       spinner.innerHTML = `<div style="
            width: 100%;
            padding-top: 20px;
+           padding-bottom: 20px;
            text-align: center;
            display: flex;
            align-items: center;

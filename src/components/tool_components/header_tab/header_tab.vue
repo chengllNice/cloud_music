@@ -10,6 +10,9 @@
 
     <div class="iview_tab_song" v-else-if="tabType == 'iview_tab_song'">
       <div class="item" :class="{'active': active_tab == index}" v-for="(item, index) in header_tab" :key="index" @click="navClick(item, index)">{{item.name}} <span v-if="item.value">({{item.value}})</span></div>
+      <div class="right_slot">
+        <slot></slot>
+      </div>
     </div>
 
     <div class="list" v-else :class="classes">
@@ -153,6 +156,7 @@
     height: 100%;
     display: flex;
     align-items: flex-end;
+    position: relative;
     .item{
       border: 1px solid #e1e1e2;
       color: #333333;

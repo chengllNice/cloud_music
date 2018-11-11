@@ -6,15 +6,12 @@ const home_recommend = r => require.ensure([], () => r(require('../page/main_con
 const playlist = r => require.ensure([], () => r(require('../page/main_content/home/playlist/playlist')), 'playlist');
 const dj_radio = r => require.ensure([], () => r(require('../page/main_content/home/dj_radio/dj_radio')), 'dj_radio');
 const top_list = r => require.ensure([], () => r(require('../page/main_content/home/top_list/top_list')), 'top_list');
-const songer_list = r => require.ensure([], () => r(require('../page/main_content/home/songer_list/songer_list')), 'songer_list');
+const singer_list = r => require.ensure([], () => r(require('../page/main_content/home/singer_list/singer_list')), 'singer_list');
 
 // 最新音乐
 const new_music = r => require.ensure([], () => r(require('../page/main_content/home/new_music/new_music')), 'new_music');
 const new_music_express = r => require.ensure([], () => r(require('../page/main_content/home/new_music/new_music_express')), 'new_music_express');
 const new_music_album = r => require.ensure([], () => r(require('../page/main_content/home/new_music/new_music_album')), 'new_music_album');
-
-// 歌单详情
-const songlist_detail = r => require.ensure([], () => r(require('../page/main_content/home/home_songlist_detail/home_songlist_detail')), 'songlist_detail');
 
 export default {
   path: '/',
@@ -47,9 +44,9 @@ export default {
           component: top_list,
         },
         {
-          path: '/home/songer_list',
-          name: 'songer_list',
-          component: songer_list,
+          path: '/home/singer_list',
+          name: 'singer_list',
+          component: singer_list,
         },
         {
           path: '/home/new_music',
@@ -68,12 +65,7 @@ export default {
               component: new_music_album,
             },
           ]
-        },
-        {
-          path: '/home/songlist_detail',
-          name: 'songlist_detail',
-          component: songlist_detail,
-        },
+        }
       ]
     }
   ]

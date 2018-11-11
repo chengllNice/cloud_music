@@ -9,7 +9,7 @@
   font-style: normal;
   letter-spacing: 0;
   outline: none;
-  cursor: default;
+  //cursor: default;
 }
 
 html,body{
@@ -36,7 +36,13 @@ a {
 img{
   vertical-align: bottom;
 }
-input,button,select,textarea{outline:none!important;}
+input,button,select,textarea{
+  outline:none!important;
+  &:focus{
+    border: none!important;
+    box-shadow: none!important;
+  }
+}
 textarea{resize:none!important;}
 
 /*定义滚动条高宽及背景 高宽分别对应横竖滚动条的尺寸*/

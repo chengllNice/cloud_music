@@ -16,7 +16,7 @@
             :class="{'itemFirst': index%colsNum == 0}">
           <div class="item_img" :class="{'coverall': item.picUrl && base_data.type == 'album'}" @click="itemClick(item)">
             <!--<div class="coverall" v-if=""></div>-->
-            <img :src="item.picUrl+'?param='+(item.width || '')+'y'+(item.height || '')" :alt="item.name">
+            <img :src="item.picUrl+'?param='+(item.width || '500')+'y'+(item.height || '500')" :alt="item.name">
             <div class="item_img_cover" v-if="base_data.expand && !base_data.expand.nocover">
               <!--顶部覆盖-->
               <div class="cover_top" v-if="base_data.expand && base_data.expand.cover_top">
@@ -32,8 +32,12 @@
               </div>
 
               <!--底部覆盖-->
-              <div class="cover_bottom ellipsis_1" v-if="item.type == 'radio'">
+              <div class="cover_bottom ellipsis_1" v-if="base_data.expand.cover_bottom">
+                <i class="iconfont icon-tab_personal" v-if="item.userType || item.userType == 0"></i>
                 {{item.nickname}}
+                <i class="iconfont icon-star" v-if="item.userType && item.userType == 200"></i>
+                <i class="iconfont icon-left_local_music1" v-if="item.userType && item.userType == 4"></i>
+                <i class="iconfont icon-wan_vip" v-if="item.userType && item.userType == 10"></i>
               </div>
 
               <!--右下角播放图标-->
@@ -70,17 +74,24 @@
                 <span v-if="singer_index != 0">/ </span> {{singer_item.name}}
               </span>
             </div>
+
+            <div v-if="item.publishTime">{{item.publishTime}}</div>
           </div>
           <div class="item_name" v-else>{{item.name}}</div>
         </div>
       </div>
       <div class="footer_box"></div>
     </div>
+    <div class="pagination">
+      <tool-page :pageData="base_data.page" @pageChange="pageChange"></tool-page>
+    </div>
   </div>
 </template>
 
 <script>
   import { common_type} from "../../../page/main_content/common_data";
+  import toolPage from '../pagination/tool_page'
+
 
   export default {
     name: "baseSingList",
@@ -113,7 +124,9 @@
         }
       }
     },
-    components: {},
+    components: {
+      toolPage
+    },
     created() {
     },
     mounted() {
@@ -121,6 +134,9 @@
     methods: {
       itemClick(data){
         this.$emit('songlistClick',data)
+      },
+      pageChange(page){
+        this.$emit('pageChange', page)
       }
     }
   }
@@ -229,8 +245,25 @@
               width: 100%;
               font-size: 12px;
               color: #ffffff;
-              padding: 8px 5px 2px 5px;
+              padding: 8px 8px 5px 8px;
               background: linear-gradient(360deg, rgba(0,0,0,0.6), rgba(0,0,0,0.2), rgba(255,0,0,0.02));
+              .icon-tab_personal{
+                font-size: 12px;
+                font-weight: 100;
+              }
+              .icon-star{
+                font-size: 12px;
+                color: #ffbd20;
+              }
+              .icon-left_local_music1{
+                color: #f0483b;
+                font-size: 12px;
+                font-weight: 600;
+              }
+              .icon-wan_vip{
+                font-size: 12px;
+                color: #f0483b;
+              }
             }
 
             .play_circle_icon{

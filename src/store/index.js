@@ -7,6 +7,16 @@ import getters from './getters'
 Vue.use(Vuex);
 
 const state = {
+  // 用户信息
+  user_info: {
+    name: '',
+    id: '',
+    avatarUrl: "",
+    backgroundUrl: "",
+    defaultAvatar: true,
+    description: "",
+    detailDescription: "",
+  },
   music_info: {
   // 正在播放的歌曲信息
     id: '505632651',
@@ -28,6 +38,7 @@ const state = {
   music_list: [
     {}
   ],
+
   device_info: {},
   scroll_info: {},//滚动条相关信息,
   lrc_panal_show: false,//歌词面板控制

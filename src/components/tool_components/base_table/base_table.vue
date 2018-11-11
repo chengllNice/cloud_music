@@ -19,7 +19,6 @@
              v-if="slot_item.table_slot && slot_item.table_slot != ''"
              :slot="slot_item.table_slot" slot-scope="rowData">
           <div v-if="slot_item.table_slot == 'sort_num'">
-            <!--{{rowData.rowData.playStatus == 'play'}}-->
             <i class="iconfont icon-volume_high" v-if="rowData.rowData.playStatus == 'play'"></i>
             <i class="iconfont icon-volume_close" v-else-if="rowData.rowData.playStatus == 'pause'"></i>
             <span v-else>{{rowData.rowData.sort_num || '0'}}</span>
@@ -141,17 +140,11 @@
       },
       tableData(){
         let result = this.data;
-        // let result = this.$deepClone(this.data);
         let t_head = result.t_head;
         let t_body = result.t_body;
-        let t_head_copy = [];
         if(t_head.length && this.config.colsNum == '2'){
           t_head.forEach(head_item=>{
-            let head_item_copy = [];
             head_item.forEach((item, index)=>{
-              if(!item.noshow){
-                head_item_copy.push(item);
-              }
               if(item.key == 'sort_num' && item.table_slot == 'sort_num'){
                 t_body.forEach((body_item, body_index)=>{
                   let len = body_item.length;
@@ -163,17 +156,14 @@
                       }
                       body_item_01.sort_num = sort_num;
                     }
+                    body_item_01.playStatus = !body_item_01.playStatus ? '' : body_item_01.playStatus
                   })
                 });
               }
             });
-            t_head_copy.push(head_item_copy);
           });
         }else if(t_head.length){
           t_head.forEach((head_item, head_index)=>{
-            if(!head_item.noshow){
-              t_head_copy.push(head_item);
-            }
             if(head_item.key == 'sort_num' && head_item.table_slot == 'sort_num'){
               t_body.forEach((body_item, body_index)=>{
                 if(this.$typeOf(body_item) == 'object' && !body_item.sort_num){
@@ -188,7 +178,6 @@
             }
           })
         }
-        result.t_head = t_head_copy;
         return result;
       },
       changePage () {
