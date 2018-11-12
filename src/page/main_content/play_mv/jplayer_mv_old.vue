@@ -1,74 +1,61 @@
 <template>
   <div class="jplayer_mv">
-    <div class="jp-video jp-video_mv" id="jp_container_1" role="application" aria-label="media player">
-      <div class="mv_header">111111111</div>
+    <div class="jp-audio" id="jp_container_1" role="application" aria-label="media player">
       <div class="jplayer_mv_box" id="jplayer_mv"></div>
-      <div class="jp-type-single">
-        <div class="jp-gui">
-          <div class="jp-interface player_mv_tool">
-            <div class="progress_box" @click="progress_control" @mousemove="progress_mousemove" @mouseout="progress_mouseout">
-              <div class="mouseover_time" :style="{transform: 'translate('+mouseover_time.left+'px)'}">
-                {{mouseover_time.text}}
-              </div>
-              <div class="play_progress_wrap" ref="mvProgressBar">
-                <div class="play_progress_crrent" :style="{width: play_precent + '%'}">
-                  <div class="play_progress_inner"><img v-if="loading" src="../../../../static/img/loading.svg" alt=""></div>
-                </div>
-              </div>
-            </div>
-            <div class="opare_box">
-              <div class="opare_left">
-                <div class="control_play" @click="playControl(playStatus)">
-                  <i class="iconfont icon-music_play" v-if="playStatus == 'pause'"></i>
-                  <i class="iconfont icon-music_pause" v-else></i>
-                </div>
-                <div class="time">
-                  <span class="current_time">{{currentTime.text}}</span>
-                  <span>/</span>
-                  <span class="duration_time">{{duration.text}}</span>
-                </div>
-              </div>
-              <div class="opare_rigth">
-
-                <!--<div class="play_volume_box jp-volume-controls">-->
-                  <!--<i class="iconfont jp-mute" :class="{'icon-volume_high': volume != 0, 'icon-volume_close': volume == 0}" tabindex="0"></i>-->
-                  <!--<div class="jp-volume-bar volume_wrap">-->
-                    <!--<div class="jp-volume-bar-value volume_inner"></div>-->
-                  <!--</div>-->
-                <!--</div>-->
-
-                <div class="play_volume_box">
-                  <i class="iconfont icon-volume_high" @click="volumeChange('close')" v-if="volume != 0"></i>
-                  <i class="iconfont icon-volume_close" @click="volumeChange('open')" v-else></i>
-                  <div class="volume_wrap" ref="mvVolumeBar" @click="volume_control">
-                    <div class="volume_inner" :style="{width: volume + '%'}"></div>
-                  </div>
-                </div>
-
-                <span class="line"></span>
-
-                <div class="br_box" @click="br_select_toggle=!br_select_toggle">
-                  <i class="iconfont icon-screen"></i>
-                  <span>高清</span>
-
-                  <div class="br_select" v-if="br_select_toggle">
-                    <div class="br_item" v-for="(item, index) in br_data" :key="index" @click="change_br(item, index)">
-                      <span class="br_icon"><i class="iconfont icon-right-slim1" v-if="index == br_active"></i></span>
-                      <span>{{item.name}}</span>
-                    </div>
-                  </div>
-                </div>
-
-                <span class="line"></span>
-
-                <div class="full_screen jp-full-screen">
-                  <i class="iconfont icon-open"></i>
-                </div>
-              </div>
+      <div class="player_mv_tool jp-type-single">
+        <div class="progress_box jp-progress" @click="progress_control" @mousemove="progress_mousemove" @mouseout="progress_mouseout">
+          <div class="mouseover_time" :style="{transform: 'translate('+mouseover_time.left+'px)'}">
+            {{mouseover_time.text}}
+          </div>
+          <div class="play_progress_wrap jp-seek-bar" ref="mvProgressBar">
+            <div class="play_progress_crrent jp-play-bar" :style="{width: play_precent + '%'}">
+              <div class="play_progress_inner"><img v-if="loading" src="../../../../static/img/loading.svg" alt=""></div>
             </div>
           </div>
         </div>
+        <div class="opare_box">
 
+          <div class="opare_left">
+            <div class="control_play" @click="playControl(playStatus)">
+              <i class="iconfont icon-music_play" v-if="playStatus == 'pause'"></i>
+              <i class="iconfont icon-music_pause" v-else></i>
+            </div>
+            <div class="time">
+              <span class="current_time">{{currentTime.text}}</span>
+              <span>/</span>
+              <span class="duration_time">{{duration.text}}</span>
+            </div>
+          </div>
+          <div class="opare_rigth">
+            <div class="play_volume_box">
+              <i class="iconfont icon-volume_high" @click="volumeChange('close')" v-if="volume != 0"></i>
+              <i class="iconfont icon-volume_close" @click="volumeChange('open')" v-else></i>
+              <div class="volume_wrap" ref="mvVolumeBar" @click="volume_control">
+                <div class="volume_inner" :style="{width: volume + '%'}"></div>
+              </div>
+            </div>
+
+            <span class="line"></span>
+
+            <div class="br_box" @click="br_select_toggle=!br_select_toggle">
+              <i class="iconfont icon-screen"></i>
+              <span>高清</span>
+
+              <div class="br_select" v-if="br_select_toggle">
+                <div class="br_item" v-for="(item, index) in br_data" :key="index" @click="change_br(item, index)">
+                  <span class="br_icon"><i class="iconfont icon-right-slim1" v-if="index == br_active"></i></span>
+                  <span>{{item.name}}</span>
+                </div>
+              </div>
+            </div>
+
+            <span class="line"></span>
+
+            <div class="full_screen jp-full-screen">
+              <i class="iconfont icon-open"></i>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -139,22 +126,20 @@
         let vue = this;
         $('#jplayer_mv').jPlayer({
           ready: function (e) {
-            // $(this).jPlayer("setMedia", {
-            //   m4v: 'http://vodkgeyttp8.vod.126.net/cloudmusic/JmAgIiAxJCAzYiFgMCRiMA==/mv/5966724/3d5e38ee086706bef507473d5cf3492a.mp4?wsSecret=a133b5a413ae0c681805d9131c6ceeef&wsTime=1542031421',
-            //   autoPlay: true
-            // }).jPlayer("play");
-            vue.againPlay();
+            $(this).jPlayer("setMedia", {
+              m4v: 'http://vodkgeyttp8.vod.126.net/cloudmusic/JmAgIiAxJCAzYiFgMCRiMA==/mv/5966724/3d5e38ee086706bef507473d5cf3492a.mp4?wsSecret=a133b5a413ae0c681805d9131c6ceeef&wsTime=1542031421',
+              autoPlay: true
+            }).jPlayer("play");
           },
           wmode: "window",
           supplied: 'mp4,m4v',
           size: {
             width: '690px',
-            height: '388px',
+            height: '388px'
           },
           fullSize: {
             width: '100%',
-            height: '100%',
-            cssClass: 'jp-video_mv'
+            height: '100%'
           },
           useStateClassSkin: true,
           autoBlur: false,
@@ -246,7 +231,7 @@
             $('#jplayer_mv').jPlayer('volume', 0);
             break;
           case 'open':
-            this.volume = 50 || 0;
+            this.volume = v || 0;
             $('#jplayer_mv').jPlayer('volume', this.volume/100);
             break;
           default:
@@ -266,7 +251,7 @@
       change_br(data, index){
         this.br_active = index;
         this.$emit('changeBr', data);
-      },
+      }
     },
     watch: {
       'mv_url': function (new_val, old_val) {
@@ -278,23 +263,10 @@
 </script>
 
 <style lang="less" scoped>
-  @import "jplayer.pink.flag.css";
 .jplayer_mv{
   width: 100%;
-  .mv_header{
-    height: 80px;
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-  }
   .jplayer_mv_box{
     background: #000;
-  }
-  .jp-video_mv{
-    width: 100%;
-    height: 100%;
-    position: relative;
   }
   .player_mv_tool{
     height: 50px;

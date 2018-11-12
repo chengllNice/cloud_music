@@ -85,8 +85,10 @@
         setTimeout(()=>{
           vue.scroll_init();
         },20)
-        this.get_user_playlist();
         this.nav_active_handler();
+        if(this.user_info.id){
+          this.get_user_playlist();
+        }
       })
     },
     methods: {
