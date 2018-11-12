@@ -13,7 +13,7 @@
             </div>
           </div>
           <div class="mv_play_box">
-            <jplayer-mv></jplayer-mv>
+            <jplayer-mv :mv_url="mv_url"></jplayer-mv>
             <!--<video src=""></video>-->
           </div>
         </div>
@@ -33,7 +33,8 @@
     data() {
       return {
         mv_data: {},
-        mv_id: ''
+        mv_id: '',
+        mv_url: ''
       }
     },
     computed: {},
@@ -57,6 +58,7 @@
         };
         get_mv_detail(get_data).then(res=>{
           this.mv_data = res.data;
+          this.mv_url = res.data.brs['480'];
         }).catch(err=>{
           console.log('err',err)
         })
@@ -93,6 +95,7 @@
         .mv_title_info{
           display: flex;
           align-items: center;
+          margin-bottom: 5px;
           &>*{
             margin-right: 5px;
           }

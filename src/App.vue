@@ -19,9 +19,11 @@ export default {
   methods: {
     user_info(){
       this.$store.state.user_info = this.$localStorage.getStore('user_info');
-      this.$store.state.music_info = this.$localStorage.getStore('music_info');
-      this.$store.state.music_info.playStatus = 'pause';
-      this.$localStorage.setStore('music_info', this.$store.state.music_info)
+      if(this.$localStorage.getStore('music_info')){
+        this.$store.state.music_info = this.$localStorage.getStore('music_info');
+        this.$store.state.music_info.playStatus = 'pause';
+        this.$localStorage.setStore('music_info', this.$store.state.music_info)
+      }
     }
   },
   watch: {}

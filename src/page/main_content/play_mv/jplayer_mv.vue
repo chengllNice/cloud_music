@@ -41,8 +41,8 @@
             <span>高清</span>
 
             <div class="br_select" v-if="br_select_toggle">
-              <div class="br_item" v-for="(item, index) in br_data" :key="index">
-                <i class="iconfont icon-right-slim1"></i>
+              <div class="br_item" v-for="(item, index) in br_data" :key="index" @click="change_br(item, index)">
+                <span class="br_icon"><i class="iconfont icon-right-slim1" v-if="index == br_active"></i></span>
                 <span>{{item.name}}</span>
               </div>
             </div>
@@ -63,10 +63,16 @@
   import jPlayer from 'jplayer'
   export default {
     name: "jplayer_mv",
+    props: {
+      mv_url: {
+        type: String,
+        default: ''
+      }
+    },
     data() {
       return {
         volume: 50,
-        playStatus: 'pause',
+        playStatus: 'play',
         play_precent: 50,
         loading: false,
         duration: {
@@ -83,23 +89,24 @@
         },
         br_data: [
           {
-            id: '0',
-            name: '1080P'
+            id: '1080',
+            name: '1080P',
           },
           {
-            id: '1',
-            name: '超清'
+            id: '720',
+            name: '超清',
           },
           {
-            id: '2',
-            name: '高清'
+            id: '480',
+            name: '高清',
           },
           {
-            id: '3',
-            name: '标清'
+            id: '240',
+            name: '标清',
           }
         ],
-        br_select_toggle: false
+        br_select_toggle: false,
+        br_active: '0'
       }
     },
     computed: {},
@@ -117,19 +124,23 @@
         let vue = this;
         $('#jplayer_mv').jPlayer({
           ready: function (e) {
-            $(this).jPlayer("setMedia", {
-              title: 'aa',
-              m4v: 'http://vodkgeyttp8.vod.126.net/cloudmusic/JmAgIiAxJCAzYiFgMCRiMA==/mv/5966724/ab9a1e87cb583f853a976627098a447f.mp4?wsSecret=01392a7109b6096802364b801b2b0484&wsTime=1541952338',
-              // poster: 'http://p1.music.126.net/VPmWx48rEJlEI0tv7_BoYg==/109951163502004608.jpg'
-            }).jPlayer('play');
+            vue.againPlay();
           },
           wmode: "window",
           supplied: 'mp4,m4v',
           size: {
             width: '690px',
             height: '388px'
-          }
+          },
+          keyEnabled: true,
+          fullScreen: true
         });
+        this.jplayer_listen();
+
+      },
+      jplayer_listen(){
+        this.mv_load_progress();
+        this.play_or_pause_status();
         this.timeUpdate();
       },
       timeUpdate(){
@@ -140,9 +151,23 @@
           this.currentTime.text = this.$timeFormat(e.jPlayer.status.currentTime*1000);
           this.currentTime.m = e.jPlayer.status.currentTime;
           this.play_precent = e.jPlayer.status.currentPercentAbsolute;
+          // e.jPlayer.status.paused
           // let v = this.$localStorage.getStore('volume');
           this.volume = (this.$typeOf(e.jPlayer.status.volume) === 'undefined' ? this.volume : e.jPlayer.status.volume*100);
 
+        });
+      },
+      play_or_pause_status(){
+        $('#jplayer_mv').bind($.jPlayer.event.play, (e) => {
+          this.playStatus = 'play'
+        });
+        $('#jplayer_mv').bind($.jPlayer.event.pause, (e) => {
+          this.playStatus = 'pause'
+        })
+      },
+      mv_load_progress(){
+        $('#jplayer_mv').bind($.jPlayer.event.seeking, (e) => {
+          console.log(e)
         });
       },
       progress_control(e){
@@ -205,10 +230,22 @@
         }
       },
       againPlay(){
+        console.log('againPlay')
+        let vue = this;
         $('#jplayer_mv').jPlayer('setMedia',{
-
-        }).jPlayer('play');
-        this.playStatus = 'play';
+          m4v: vue.mv_url,
+        })/*.jPlayer('play')*/;
+      },
+      // 切换清晰度
+      change_br(data, index){
+        this.br_active = index;
+        this.$emit('changeBr', data);
+      }
+    },
+    watch: {
+      'mv_url': function (new_val, old_val) {
+        console.log(new_val,'new')
+        this.change_br();
       }
     }
   }
@@ -417,7 +454,7 @@
           align-items: center;
           position: relative;
           .br_select{
-            width: 75px;
+            width: 70px;
             position: absolute;
             top: -130px;
             left: -15px;
@@ -435,6 +472,9 @@
               span{
                 width: 40px;
                 letter-spacing: 8px;
+              }
+              .br_icon{
+                width: 16px;
               }
               i{
                 font-size: 14px;
