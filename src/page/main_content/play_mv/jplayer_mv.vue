@@ -1,10 +1,29 @@
 <template>
   <div class="jplayer_mv">
-    <div class="jp-video jp-video_mv" id="jp_container_1" role="application" aria-label="media player">
-      <div class="mv_header">111111111</div>
-      <div class="jplayer_mv_box" id="jplayer_mv"></div>
+    <div class="jp-video jp-video-360p jp-video_mv" id="jp_container_1" role="application" aria-label="media player">
       <div class="jp-type-single">
+        <div class="jplayer_mv_box jp-jplayer" id="jplayer_mv"></div>
+        <div class="video_play_full" @click="playControl(playStatus)">
+          <div class="jp-video-play-icon" v-if="playStatus == 'pause'" tabindex="0"><i class="iconfont icon-music_play"></i></div>
+        </div>
         <div class="jp-gui">
+          <div class="mv_header" v-if="is_full">
+            <div class="mv_title_info">
+              <div class="mv_name">{{data.name}}</div>
+              <span>-</span>
+              <div class="mv_singer" v-for="(item, index) in data.artists" :key="index">
+                <span v-if="index != 0">/</span>
+                <span>{{item.name}}</span>
+              </div>
+            </div>
+            <div class="mv_header_opear">
+              <i class="iconfont icon-praise"></i>
+              <span></span>
+              <i class="iconfont icon-shape"></i>
+              <span></span>
+              <i class="iconfont icon-left_down"></i>
+            </div>
+          </div>
           <div class="jp-interface player_mv_tool">
             <div class="progress_box" @click="progress_control" @mousemove="progress_mousemove" @mouseout="progress_mouseout">
               <div class="mouseover_time" :style="{transform: 'translate('+mouseover_time.left+'px)'}">
@@ -49,7 +68,7 @@
 
                 <div class="br_box" @click="br_select_toggle=!br_select_toggle">
                   <i class="iconfont icon-screen"></i>
-                  <span>高清</span>
+                  <span>{{br_data[br_active].name}}</span>
 
                   <div class="br_select" v-if="br_select_toggle">
                     <div class="br_item" v-for="(item, index) in br_data" :key="index" @click="change_br(item, index)">
@@ -61,8 +80,9 @@
 
                 <span class="line"></span>
 
-                <div class="full_screen jp-full-screen">
-                  <i class="iconfont icon-open"></i>
+                <div class="full_screen jp-full-screen" @click="fullScreenHandler">
+                  <i class="iconfont icon-open" v-if="!is_full"></i>
+                  <i class="iconfont icon-close" v-else></i>
                 </div>
               </div>
             </div>
@@ -82,12 +102,19 @@
       mv_url: {
         type: String,
         default: ''
+      },
+      data: {
+        type: Object,
+        default:function () {
+          return {}
+        }
       }
     },
     data() {
       return {
-        volume: 50,
+        volume: this.$localStorage.getStore('volume') || 50,
         playStatus: 'play',
+        is_full: false,
         play_precent: 50,
         loading: false,
         duration: {
@@ -121,7 +148,7 @@
           }
         ],
         br_select_toggle: false,
-        br_active: '0'
+        br_active: 2
       }
     },
     computed: {},
@@ -137,16 +164,17 @@
       },
       jplayer_init(){
         let vue = this;
+        let volume = vue.volume/100;
         $('#jplayer_mv').jPlayer({
           ready: function (e) {
             // $(this).jPlayer("setMedia", {
-            //   m4v: 'http://vodkgeyttp8.vod.126.net/cloudmusic/JmAgIiAxJCAzYiFgMCRiMA==/mv/5966724/3d5e38ee086706bef507473d5cf3492a.mp4?wsSecret=a133b5a413ae0c681805d9131c6ceeef&wsTime=1542031421',
+            //   m4v: vue.mv_url,
             //   autoPlay: true
             // }).jPlayer("play");
-            vue.againPlay();
           },
           wmode: "window",
           supplied: 'mp4,m4v',
+          volume: volume,
           size: {
             width: '690px',
             height: '388px',
@@ -180,7 +208,6 @@
           // e.jPlayer.status.paused
           // let v = this.$localStorage.getStore('volume');
           this.volume = (this.$typeOf(e.jPlayer.status.volume) === 'undefined' ? this.volume : e.jPlayer.status.volume*100);
-
         });
       },
       play_or_pause_status(){
@@ -223,9 +250,6 @@
           case 'play':
             $('#jplayer_mv').jPlayer('pause');
             this.playStatus = 'pause';
-            let _info = {
-              playStatus: 'pause'
-            };
             break;
           case 'pause':
             $('#jplayer_mv').jPlayer('play');
@@ -246,7 +270,8 @@
             $('#jplayer_mv').jPlayer('volume', 0);
             break;
           case 'open':
-            this.volume = 50 || 0;
+            let v = this.$localStorage.getStore('volume');
+            this.volume = v || 0;
             $('#jplayer_mv').jPlayer('volume', this.volume/100);
             break;
           default:
@@ -256,23 +281,34 @@
         }
       },
       againPlay(){
-        console.log('againPlay')
         let vue = this;
+        console.log('againPlay',vue.mv_url)
         $('#jplayer_mv').jPlayer('setMedia',{
           m4v: vue.mv_url,
         }).jPlayer('play');
+        this.playStatus = 'play';
       },
       // 切换清晰度
       change_br(data, index){
         this.br_active = index;
         this.$emit('changeBr', data);
       },
+      fullScreenHandler(){
+        if(this.mv_url){
+          this.is_full = !this.is_full;
+        }
+      }
     },
     watch: {
       'mv_url': function (new_val, old_val) {
         console.log(new_val,'new')
-        this.change_br();
-      }
+        this.againPlay();
+      },
+      'volume': function (new_val, old_val) {
+        if(new_val){
+          this.$localStorage.setStore('volume', new_val);
+        }
+      },
     }
   }
 </script>
@@ -281,12 +317,53 @@
   @import "jplayer.pink.flag.css";
 .jplayer_mv{
   width: 100%;
+  height: 100%;
+
   .mv_header{
-    height: 80px;
+    height: 60px;
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
+    z-index: 10000;
+    background: rgba(0,0,0,0.8);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    .mv_title_info{
+      display: flex;
+      align-items: center;
+      padding: 10px;
+      &>*{
+        margin-right: 5px;
+      }
+      .mv_name,.mv_singer,span{
+        font-size: 18px;
+        color: #999999;
+      }
+    }
+    .mv_header_opear{
+      span{
+        width: 0;
+        height: 10px;
+        margin: 0 20px;
+        border-left: 1px solid #333;
+      }
+      i{
+        color: #f2f2f2;
+        font-size: 20px;
+        cursor: pointer;
+        &:hover{
+          color: #ffffff;
+        }
+      }
+      .icon-praise{
+        font-size: 22px;
+      }
+      .icon-left_down{
+        font-size: 22px;
+      }
+    }
   }
   .jplayer_mv_box{
     background: #000;
@@ -296,9 +373,38 @@
     height: 100%;
     position: relative;
   }
+  .video_play_full{
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2;
+    .jp-video-play-icon{
+      border: 2px solid #b7b5b8;
+      border-radius: 50%;
+      width: 72px;
+      height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding-left: 5px;
+      background: rgba(0,0,0,0.3);
+      &:hover{
+        border-color: #f2f2f2;
+        background: rgba(0,0,0,0.5);
+      }
+    }
+    .icon-music_play{
+      font-size: 40px;
+    }
+  }
   .player_mv_tool{
     height: 50px;
     background: #111111;
+    position: relative;
+    z-index: 5;
 
     .progress_box{
       height: 12px;
@@ -317,6 +423,7 @@
         font-size: 12px;
         padding: 4px 5px;
         border: 1px solid #383838;
+        background: rgba(0,0,0,0.5);
         position: absolute;
         top: -34px;
         left: 0;
@@ -334,7 +441,7 @@
           border: 1px solid #383838;
           border-left: none;
           border-top: none;
-          background: #111111;
+          background: linear-gradient(to left top, rgba(0,0,0,0.5) 50%, transparent 50%);
         }
       }
       /*padding-top: 5px;*/
@@ -534,9 +641,6 @@
             i{
               color: #a5a7a8;
             }
-          }
-          span{
-            letter-spacing: 3px;
           }
           i{
             font-size: 14px;

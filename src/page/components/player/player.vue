@@ -103,7 +103,6 @@
       jplayer_init(){
         let vue = this;
         let volume = vue.volume/100;
-        console.log('-----========', vue.music_info.url, vue.volume)
         $('#jplayerEl').jPlayer({
           ready: function (e) {
             $(this).jPlayer("setMedia", {
@@ -130,11 +129,6 @@
           // let v = this.$localStorage.getStore('volume');
           this.volume = (this.$typeOf(e.jPlayer.status.volume) === 'undefined' ? this.volume : e.jPlayer.status.volume*100);
           this.$store.commit('get_music_info', {currentTime: this.currentTime.m});
-          // this.volume = v ? v : (this.$typeOf(e.jPlayer.status.volume) === 'undefined' ? this.volume : e.jPlayer.status.volume*100);
-          // $('#jplayerEl').jPlayer('volume', this.volume/100);
-          /*if(this.playStatus == 'pause'){
-            $('#jplayerEl').jPlayer('pause');
-          }*/
         });
       },
       progress_control(e){

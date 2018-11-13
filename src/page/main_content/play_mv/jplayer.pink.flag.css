@@ -36,11 +36,11 @@
 	font-family:Verdana, Arial, sans-serif;
 	line-height:1.6;
 	color: #fff;
-	border-top:1px solid #554461;
-	border-left:1px solid #554461;
-	border-right:1px solid #180a1f;
-	border-bottom:1px solid #180a1f;
-	background-color:#3a2a45;
+	/*border-top:1px solid #554461;*/
+	/*border-left:1px solid #554461;*/
+	/*border-right:1px solid #180a1f;*/
+	/*border-bottom:1px solid #180a1f;*/
+	background-color:#000000;
 }
 .jp-audio {
 	width:201px;
@@ -152,6 +152,10 @@
 }
 
 /* @group single player controls */
+
+.jp-type-single{
+  position: relative;
+}
 
 .jp-type-single .jp-controls button {
 	width: 99px;
@@ -434,7 +438,7 @@ div.jp-video .jp-progress {
 /*}*/
 
 .jp-volume-bar {
-	background: url("jplayer.pink.flag.jpg") 0px -300px repeat-x;
+	/*background: url("jplayer.pink.flag.jpg") 0px -300px repeat-x;*/
 	position: absolute;
 	width: 197px;
 	height: 4px;
@@ -465,7 +469,7 @@ div.jp-video .jp-progress {
 }
 
 .jp-volume-bar-value {
-	background: url("jplayer.pink.flag.jpg") 0px -320px repeat-x;
+	/*background: url("jplayer.pink.flag.jpg") 0px -320px repeat-x;*/
 	height: 4px;
 }
 
@@ -609,6 +613,7 @@ span.jp-artist {
 
 
 .jp-video .jp-video-play {
+  position: absolute;
 	width:100%;
 	overflow:hidden; /* Important for nested negative margins to work in modern browsers */
 }
@@ -621,7 +626,8 @@ span.jp-artist {
 	height:360px;
 }
 .jp-video-full .jp-video-play {
-	height:100%;
+  margin: 0;
+  height: 100% !important;
 }
 .jp-video-play-icon {
 	position:relative;
@@ -637,11 +643,11 @@ span.jp-artist {
 	border:none;
 	cursor:pointer;
 
-	background: url("jplayer.pink.flag.video.play.png") 0 0 no-repeat;
-	text-indent:-9999px;
+	/*background: url("jplayer.pink.flag.video.play.png") 0 0 no-repeat;*/
+	/*text-indent:-9999px;*/
 }
 .jp-video-play-icon:focus {
-	background: url("jplayer.pink.flag.video.play.png") 0 -100px no-repeat;
+	/*background: url("jplayer.pink.flag.video.play.png") 0 -100px no-repeat;*/
 }
 
 

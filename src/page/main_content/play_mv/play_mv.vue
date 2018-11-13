@@ -4,7 +4,7 @@
       <div class="main_left">
         <div class="mv_box">
           <div class="mv_title_info">
-            <div class="back_icon"><i class="iconfont icon-arrow_drop_left"></i></div>
+            <div class="back_icon" @click="go_back"><i class="iconfont icon-arrow_drop_left"></i></div>
             <div class="mv_icon">MV</div>
             <div class="mv_name">{{mv_data.name}}</div>
             <div class="mv_singer" v-for="(item, index) in mv_data.artists" :key="index">
@@ -13,7 +13,7 @@
             </div>
           </div>
           <div class="mv_play_box">
-            <jplayer-mv :mv_url="mv_url"></jplayer-mv>
+            <jplayer-mv :mv_url="mv_url" :data="mv_data" @changeBr="changeBr"></jplayer-mv>
             <!--<video src=""></video>-->
           </div>
         </div>
@@ -73,7 +73,12 @@
           console.log('err',err)
         })
       },
-
+      go_back(){
+        this.$router.go(-1)
+      },
+      changeBr(data){
+        this.mv_url = this.mv_data.brs[data.id];
+      }
     }
   }
 </script>
