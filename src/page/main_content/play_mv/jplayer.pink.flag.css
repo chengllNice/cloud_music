@@ -155,6 +155,8 @@
 
 .jp-type-single{
   position: relative;
+  width: 100%;
+  height: 100%;
 }
 
 .jp-type-single .jp-controls button {
@@ -635,10 +637,10 @@ span.jp-artist {
 	width: 112px;
 	height: 100px;
 
-	margin-left:-56px;
-	margin-top:-50px;
-	left:50%;
-	top:50%;
+	/*margin-left:-56px;*/
+	/*margin-top:-50px;*/
+	/*left:50%;*/
+	/*top:50%;*/
 
 	border:none;
 	cursor:pointer;

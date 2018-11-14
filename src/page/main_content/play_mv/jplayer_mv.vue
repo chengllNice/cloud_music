@@ -1,11 +1,33 @@
 <template>
   <div class="jplayer_mv">
     <div class="jp-video jp-video-360p jp-video_mv" id="jp_container_1" role="application" aria-label="media player">
+      <div class="video_play_full" @click="playControl(playStatus)">
+        <div class="jp-video-play-icon" v-if="playStatus == 'pause'" tabindex="0"><i class="iconfont icon-music_play"></i></div>
+        <div class="play_end_repeat" tabindex="0" v-if="playStatus == 'end'">
+          <div class="next_mv_name">
+            <span>即将自动为您播放：</span>
+            <span>name</span>
+          </div>
+          <div class="repeat_opear_box">
+            <div class="repeat_icon_box">
+              <div class="repeat_icon">
+                <i class="iconfont icon-repeat_play"></i>
+              </div>
+              <div class="repeat_name">重新播放</div>
+            </div>
+            <div class="play_next_box">
+              <div class="play_next">
+                <i-circle :percent="auto_play_percent" :size='72' stroke-color='#ffffff' :trail-width="2" trail-color="#333333" :stroke-width="4">
+                  <i class="iconfont icon-music_play"></i>
+                </i-circle>
+              </div>
+              <div class="next_name">取消自动播放</div>
+            </div>
+          </div>
+        </div>
+      </div>
       <div class="jp-type-single">
         <div class="jplayer_mv_box jp-jplayer" id="jplayer_mv"></div>
-        <div class="video_play_full" @click="playControl(playStatus)">
-          <div class="jp-video-play-icon" v-if="playStatus == 'pause'" tabindex="0"><i class="iconfont icon-music_play"></i></div>
-        </div>
         <div class="jp-gui">
           <div class="mv_header" v-if="is_full">
             <div class="mv_title_info">
@@ -38,8 +60,8 @@
             <div class="opare_box">
               <div class="opare_left">
                 <div class="control_play" @click="playControl(playStatus)">
-                  <i class="iconfont icon-music_play" v-if="playStatus == 'pause'"></i>
-                  <i class="iconfont icon-music_pause" v-else></i>
+                  <i class="iconfont icon-music_pause" v-if="playStatus == 'play'"></i>
+                  <i class="iconfont icon-music_play" v-else></i>
                 </div>
                 <div class="time">
                   <span class="current_time">{{currentTime.text}}</span>
@@ -88,7 +110,6 @@
             </div>
           </div>
         </div>
-
       </div>
     </div>
   </div>
@@ -112,6 +133,7 @@
     },
     data() {
       return {
+        auto_play_percent: 0,
         volume: this.$localStorage.getStore('volume') || 50,
         playStatus: 'play',
         is_full: false,
@@ -193,9 +215,10 @@
 
       },
       jplayer_listen(){
-        this.mv_load_progress();
+        this.mv_end();
         this.play_or_pause_status();
         this.timeUpdate();
+        this.video_click();
       },
       timeUpdate(){
         $('#jplayer_mv').bind($.jPlayer.event.timeupdate, (e) => {
@@ -218,9 +241,26 @@
           this.playStatus = 'pause'
         })
       },
-      mv_load_progress(){
-        $('#jplayer_mv').bind($.jPlayer.event.seeking, (e) => {
-          console.log(e)
+      video_click(){
+        let vue = this;
+        $('#jplayer_mv').bind($.jPlayer.event.click, (e) => {
+          console.log('ppp')
+          vue.playControl(vue.playStatus);
+        });
+      },
+      mv_end(){
+        let vue = this;
+        $('#jplayer_mv').bind($.jPlayer.event.ended, (e) => {
+          this.playStatus = 'end';
+          this.auto_play_percent = 0;
+          let t = null;
+          t = setInterval(function () {
+            vue.auto_play_percent++;
+            if(vue.auto_play_percent > 100){
+              clearInterval(t);
+              $('#jplayer_mv').jPlayer('play')
+            }
+          },80);
         });
       },
       progress_control(e){
@@ -255,6 +295,10 @@
             $('#jplayer_mv').jPlayer('play');
             this.playStatus = 'play';
             break;
+          case 'end':
+            $('#jplayer_mv').jPlayer('play');
+            this.playStatus = 'play';
+            break;
         }
       },
       volume_control(e){
@@ -282,7 +326,6 @@
       },
       againPlay(){
         let vue = this;
-        console.log('againPlay',vue.mv_url)
         $('#jplayer_mv').jPlayer('setMedia',{
           m4v: vue.mv_url,
         }).jPlayer('play');
@@ -301,7 +344,6 @@
     },
     watch: {
       'mv_url': function (new_val, old_val) {
-        console.log(new_val,'new')
         this.againPlay();
       },
       'volume': function (new_val, old_val) {
@@ -381,6 +423,10 @@
     top: 0;
     left: 0;
     z-index: 2;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     .jp-video-play-icon{
       border: 2px solid #b7b5b8;
       border-radius: 50%;
@@ -398,6 +444,78 @@
     }
     .icon-music_play{
       font-size: 40px;
+    }
+    .play_end_repeat{
+      .next_mv_name{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: rgba(255,255,255,0.7);
+        font-size: 13px;
+        margin-bottom: 40px;
+      }
+      .repeat_opear_box{
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(0,0,0,0.8);
+        .repeat_icon_box{
+          margin: 0 10px;
+          width: 105px;
+          .repeat_icon{
+            width: 73px;
+            height: 73px;
+            margin: auto;
+            border: 2px solid #666666;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            i{
+              font-size: 40px;
+            }
+          }
+          .repeat_name{
+            width: 100%;
+            height: 25px;
+            margin-top: 10px;
+            line-height: 25px;
+            text-align: center;
+            color: #9d9fa0;
+            font-size: 13px;
+          }
+        }
+        .play_next_box{
+          margin: 0 10px;
+          width: 105px;
+          .play_next{
+            width: 73px;
+            height: 73px;
+            margin: auto;
+            cursor: pointer;
+            i{
+              margin-left: 5px;
+            }
+          }
+          .next_name{
+            width: 100%;
+            height: 25px;
+            margin-top: 10px;
+            line-height: 25px;
+            color: #9d9fa0;
+            font-size: 13px;
+            background: #333333;
+            border-radius: 25px;
+            text-align: center;
+            &:hover{
+              background: #4c4c4c;
+            }
+          }
+        }
+      }
     }
   }
   .player_mv_tool{
