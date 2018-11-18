@@ -31,3 +31,11 @@ export const get_top_playlist = data => ajax_get('/top/playlist',data);
 export const get_top_artists = data => ajax_get('/top/artists',data);
 // 根据分类筛选歌手
 export const get_artists_list = data => ajax_get('/artist/list',data);
+
+
+// 排行榜
+export const get_top_list = data => ajax_get('/top/list',data);
+// 歌手榜
+export const get_toplist_artist = data => ajax_get('/toplist/artist',data);
+// 所有榜单内容摘要
+export const get_toplist_detail = data => ajax_get('/toplist/detail',data);

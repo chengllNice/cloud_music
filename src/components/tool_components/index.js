@@ -7,6 +7,7 @@ import { headerTab } from './header_tab/header_tab.js'
 import { toolModal } from './tool_modal/tool_modal.js'
 import { toolFilterSelect } from './tool_filter_select/tool_filter_select.js'
 import { toolPage } from './pagination/tool_page.js'
+import { toolComment } from './tool_comment/tool_comment.js'
 
 const components = [
   baseButton,
@@ -20,7 +21,8 @@ const components = [
   toolModal,
   clCheckbox,
   toolFilterSelect,
-  toolPage
+  toolPage,
+  toolComment
 ];
 
 
@@ -45,5 +47,6 @@ export default {
   toolModal,
   clCheckbox,
   toolFilterSelect,
-  toolPage
+  toolPage,
+  toolComment
 }

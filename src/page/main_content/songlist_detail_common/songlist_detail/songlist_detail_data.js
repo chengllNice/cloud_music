@@ -37,6 +37,14 @@ export const songlist_data = {
           // jpath: 'song.no'
         },
         {
+          title: '',
+          key: 'lastRank',
+          noshow: true,
+          width: 30,
+          jpath: 'lastRank',
+          table_slot: 'lastRank'
+        },
+        {
           title: '操作',
           type: 'operate',
           key: 'operate',
@@ -67,6 +75,14 @@ export const songlist_data = {
           jpath: 'name',
           minWidth: 270,
           table_slot: 'song_name'
+        },
+        {
+          title: '飙升率',
+          key: 'trackIds',
+          noshow: true,
+          jpath: 'trackIds',
+          minWidth: 55,
+          table_slot: 'trackIds'
         },
         {
           title: '歌手',

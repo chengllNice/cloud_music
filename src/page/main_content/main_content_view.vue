@@ -1,10 +1,8 @@
 <template>
-  <div class="main_content">
-    <common-header></common-header>
-    <div class="main_content_wrap">
-      <router-view></router-view>
-      <!--<left-nav></left-nav>
-      <div class="main_content_view" ref="mainView">
+  <div class="main_content_view">
+    <div class="main_content_view_box">
+      <left-nav></left-nav>
+      <div class="main_content_view_wrap" ref="mainView">
         <vue-scroll :ops="scroll_option" @handle-scroll="handleScroll">
           <div class="main_content_view_content">
             <router-view></router-view>
@@ -17,60 +15,58 @@
             <common-lrc></common-lrc>
           </vue-scroll>
         </div>
-      </transition>-->
+      </transition>
+      <common-footer></common-footer>
     </div>
-    <!--<common-footer></common-footer>-->
   </div>
 </template>
 
 <script>
-  import commonHeader from '../components/common_header/common_header'
-  // import commonFooter from '../components/common_footer/common_footer'
-  // import commonLrc from '../components/common_lrc/common_lrc'
-  // import leftNav from '../components/left_nav/left_nav'
-  // import BScroll from 'better-scroll'
-  // import { mapState } from 'vuex'
-
+  import commonFooter from '../components/common_footer/common_footer'
+  import commonLrc from '../components/common_lrc/common_lrc'
+  import leftNav from '../components/left_nav/left_nav'
+  import BScroll from 'better-scroll'
+  import { mapState } from 'vuex'
   export default {
-    name: "main_content",
+    name: "main_content_view",
     data() {
       return {
-        // scroll_option: {
-        //   vuescroll: {},
-        //   scrollPanel: {},
-        //   rail: {
-        //     gutterOfSide: '1px',//滚动轨道距离侧边的距离
-        //   },
-        //   bar: {
-        //     background: '#e1e1e2',
-        //     keepShow: true,
-        //     hoverStyle: {
-        //       background: '#cfcfd1'
-        //     }
-        //   }
-        // }
+        scroll_option: {
+          vuescroll: {},
+          scrollPanel: {},
+          rail: {
+            gutterOfSide: '1px',//滚动轨道距离侧边的距离
+          },
+          bar: {
+            background: '#e1e1e2',
+            keepShow: true,
+            hoverStyle: {
+              background: '#cfcfd1'
+            }
+          }
+        }
       }
     },
     computed: {
-      // ...mapState(['lrc_panal_show'])
+      ...mapState(['lrc_panal_show'])
     },
     components: {
-      commonHeader,
-      // leftNav,
-      // commonLrc,
-      // commonFooter
+      leftNav,
+      commonLrc,
+      commonFooter
     },
     created() {
     },
     mounted() {
-      // this.$nextTick(() => {
-      //   this.height_calc();
-      // });
-      // let vue = this;
-      // vue.get_device_info();
-      // window.onresize = function () {
-      //   vue.get_device_info();
-      // }
+      this.$nextTick(() => {
+        // this.height_calc();
+        // this.scroll_init();
+      });
+      let vue = this;
+      vue.get_device_info();
+      window.onresize = function () {
+        vue.get_device_info();
+      }
     },
     methods: {
       get_device_info() {
@@ -88,7 +84,7 @@
       },
       height_calc() {
         let h = $('#app').height() - 50 - 50;
-        $('.main_content_wrap').height(h);
+        $('.main_content_view_wrap').height(h);
       },
       scroll_init() {
         let vue = this;
@@ -103,19 +99,17 @@
 </script>
 
 <style lang="less" scoped>
-  .main_content {
+  .main_content_view{
     height: 100%;
-    .main_content_wrap{
-      height: calc(100% - 50px);;
-    }
-   /* .main_content_wrap {
+    .main_content_view_box {
+      height: 100%;
       position: relative;
       display: flex;
       padding-bottom: 50px;
       .left_nav {
         width: 195px;
       }
-      .main_content_view {
+      .main_content_view_wrap {
         flex: 1;
         min-width: 822px;
         background: #fafafa;
@@ -140,17 +134,17 @@
         transform: scale(0);
         transform-origin: left bottom;
       }
-    }*/
+    }
   }
 </style>
-<!--<style lang="less">-->
-  <!--.main_content{-->
-    <!--.main_content_view{-->
-      <!--.__vuescroll .__view{-->
-        <!--width: 100%!important;-->
-      <!--}-->
-    <!--}-->
+<style lang="less">
+  .main_content{
+    .main_content_view{
+      .__vuescroll .__view{
+        width: 100%!important;
+      }
+    }
 
-  <!--}-->
+  }
 
-<!--</style>-->
+</style>

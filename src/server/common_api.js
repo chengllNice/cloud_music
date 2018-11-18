@@ -37,3 +37,7 @@ export const get_simi_artist = (data) => ajax_get('/simi/artist',data);
 export const get_mv_url = (data) => ajax_get('/mv/url',data);
 // 获取mv详情
 export const get_mv_detail = (data) => ajax_get('/mv/detail',data);
+// 获取mv评论
+export const get_mv_comment = (data) => ajax_get('/comment/mv',data);
+// 获取相似mv
+export const get_mv_simi = (data) => ajax_get('/simi/mv',data);

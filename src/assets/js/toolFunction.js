@@ -298,6 +298,7 @@ export const timeFormat = (msd, type) => {
 
       let y_m = type.substring(m_i-1,m_i);
       let m_d = type.substring(d_i-1,d_i);
+      let d_d = type.substring(d_i+2,d_i+3);
 
       let h_m = type.substring(_m_i-1,_m_i);
       let m_s = type.substring(_s_i-1,_s_i);
@@ -313,6 +314,9 @@ export const timeFormat = (msd, type) => {
       if(d_i<0){
         d = ''
       }
+      if(d_d == ''){
+        d_d = ' '
+      }
       if(_h_i<0){
         _h = '';
         h_m = '';
@@ -324,7 +328,7 @@ export const timeFormat = (msd, type) => {
       if(_s_i<0){
         _s = '';
       }
-      time = `${y}${y_m}${m}${m_d}${d} ${_h}${h_m}${_m}${m_s}${_s}`;
+      time = `${y}${y_m}${m}${m_d}${d}${d_d}${_h}${h_m}${_m}${m_s}${_s}`;
     }
   }else{
     time = parseFloat(msd) / 1000;

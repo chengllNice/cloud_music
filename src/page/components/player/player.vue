@@ -38,7 +38,7 @@
              @click="playTypeChange(index)"></i>
         </div>
         <div class="play_lrc_box">词</div>
-        <div class="play_list_box">
+        <div class="play_list_box" @click="songlistHandler">
           <span class="icon_music_list">
             <i class="iconfont icon-music_list2"></i>
           </span>
@@ -193,6 +193,9 @@
           mp3: this.music_info.url
         }).jPlayer('play');
         this.playStatus = 'play';
+      },
+      songlistHandler(){
+        this.$emit('songlistClick')
       }
     },
     watch: {

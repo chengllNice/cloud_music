@@ -2,7 +2,7 @@
   <div class="base_table" :class="{'stripe_color': stripe == 'stripe'}">
     <!--<Table border :columns="data[0].t_head" :data="data[0].t_body"></Table>-->
     <!--一列表格-->
-    <div class="" v-if="config_data.colsNum == '1'" v-loading="tableData.t_body.length ? false : true">
+    <div class="" v-if="config_data.colsNum == '1'" v-loading="tableDataLen">
       <iview-table :stripe="config_data.stripe"
                    :size="config_data.size"
                    :show-header="config_data.showheader"
@@ -10,6 +10,7 @@
                    :highlight-row="config_data.highlightrow"
                    @on-current-change="currentChange"
                    @on-row-dblclick="dbClickRow"
+                   @on-row-click="clickRow"
                    :columns="tableData.t_head"
                    :data="tableData.t_body">
         <template slot="header">
@@ -33,7 +34,7 @@
 
     <!--两列表格-->
     <div class="base_table_cols_two" v-if="config_data.colsNum == '2'"
-         v-loading="(tableData.t_body[0].length && tableData.t_body[1].length) ? false : true">
+         v-loading="tableDataLen">
       <div class="base_table_cols_two_item_one">
         <iview-table :stripe="config_data.stripe"
                      :size="config_data.size"
@@ -42,6 +43,7 @@
                      :highlight-row="config_data.highlightrow"
                      @on-current-change="currentChange"
                      @on-row-dblclick="dbClickRow"
+                     @on-row-click="clickRow"
                      :columns="tableData.t_head[0]"
                      :data="tableData.t_body[0]">
 
@@ -66,6 +68,7 @@
                      :highlight-row="config_data.highlightrow"
                      @on-current-change="currentChange"
                      @on-row-dblclick="dbClickRow"
+                     @on-row-click="clickRow"
                      :columns="tableData.t_head[1]"
                      :data="tableData.t_body[1]">
           <template v-for="(slot_item, slot_index) in tableData.t_head[1]"
@@ -189,6 +192,15 @@
         }
         return result;
       },
+      tableDataLen(){
+        let result = true;
+        if(this.config_data.colsNum == '1'){
+          result = this.tableData.t_body.length ? false : true;
+        }else if(this.config_data.colsNum == '2'){
+          result = (this.tableData.t_body[0].length && this.tableData.t_body[1].length) ? false : true
+        }
+        return result;
+      },
       changePage() {
         // The simulated data is changed directly here, and the actual usage scenario should fetch the data from the server
         // this.tableData1 = this.mockTableData1();
@@ -196,7 +208,7 @@
     },
     components: {},
     created() {
-      console.log('created')
+
     },
     mounted() {
     },
@@ -204,6 +216,10 @@
       // 当前行改变
       currentChange(currentRow, oldCurrentRow) {
 
+      },
+      // 点击行
+      clickRow(data, index){
+        this.$emit('clickRow', { data: data, index: index})
       },
       dbClickRow(data, index) {
         this.oldRowData.push({data: data, index: index});

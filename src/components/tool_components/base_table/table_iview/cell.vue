@@ -1,8 +1,9 @@
 <template>
   <div :class="classes" ref="cell" v-if="!column.noshow">
     <template v-if="renderType === 'index'">
-      <span v-if="column.indexMethod">{{column.indexMethod(row)}}</span>
-      <span v-else>{{naturalIndex <= 9 ? '0'+(naturalIndex+1) : (naturalIndex + 1)}}</span>
+      <span v-if="column.indexMethod">{{column.indexMethod(row)+1}}</span>
+      <span v-else>{{naturalIndex+1}}</span>
+      <!--<span v-else>{{naturalIndex <= 9 ? '0'+(naturalIndex+1) : (naturalIndex + 1)}}</span>-->
     </template>
     <template v-if="renderType === 'operate'">
       <div class="table-cell-operate">

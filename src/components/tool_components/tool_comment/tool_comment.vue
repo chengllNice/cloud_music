@@ -92,7 +92,7 @@
 
 <script>
   export default {
-    name: "comment",
+    name: "toolComment",
     props: {
       commentAllData: {
         type: Array,
@@ -165,184 +165,185 @@
 </script>
 
 <style lang="less" scoped>
-.comment{
-  padding: 0 30px;
-  padding-top: 20px;
-  .comment_textarea{
-    background: #f0f0f2;
-    padding: 10px;
-    .textarea_box{
-      position: relative;
-      border: 1px solid #e1e1e2;
-      background: #ffffff;
-      overflow: hidden;
-      .textarea_el{
-        width: 100%;
-        overflow-x: hidden;
-        overflow-y: auto;
-        padding: 4px 10px;
-        font-size: 12px;
-        color: #666;
-        border: none;
-      }
-      .comment_limit{
-        width: 100%;
-        text-align: right;
-        font-size: 12px;
-        padding-right: 5px;
-        /*position: absolute;
-        bottom: 0;
-        right: 0;*/
-        color: #999;
-      }
-      .comment_limit_over{
-        color: #cd1818;
-      }
-    }
-    .comment_opear{
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-top: 6px;
-      .submit_comment{
-        padding: 3px 12px;
-        color: #333333;
-        background: #ffffff;
-        border-radius: 3px;
+  .comment{
+    padding: 0 30px;
+    padding-top: 20px;
+    .comment_textarea{
+      background: #f0f0f2;
+      padding: 10px;
+      .textarea_box{
+        position: relative;
         border: 1px solid #e1e1e2;
-        cursor: pointer;
-        &:hover{
-          background: #f5f5f7;
+        background: #ffffff;
+        overflow: hidden;
+        .textarea_el{
+          width: 100%;
+          overflow-x: hidden;
+          overflow-y: auto;
+          padding: 4px 10px;
+          font-size: 12px;
+          color: #666;
+          border: none;
+        }
+        .comment_limit{
+          width: 100%;
+          text-align: right;
+          font-size: 12px;
+          padding-right: 5px;
+          /*position: absolute;
+          bottom: 0;
+          right: 0;*/
+          color: #999;
+        }
+        .comment_limit_over{
+          color: #cd1818;
         }
       }
-      .comment_opear_left{
+      .comment_opear{
         display: flex;
         align-items: center;
-        &>*{
-          margin-right: 10px;
+        justify-content: space-between;
+        margin-top: 6px;
+        .submit_comment{
+          padding: 2px 10px;
+          color: #333333;
+          background: #ffffff;
+          border-radius: 3px;
+          border: 1px solid #e1e1e2;
           cursor: pointer;
-          color: #898989;
+          font-size: 13px;
           &:hover{
-            color: #333;
+            background: #f5f5f7;
           }
         }
-        .icon-at{
-          font-weight: 100;
-          font-size: 19px;
+        .comment_opear_left{
+          display: flex;
+          align-items: center;
+          &>*{
+            margin-right: 10px;
+            cursor: pointer;
+            color: #898989;
+            &:hover{
+              color: #333;
+            }
+          }
+          .icon-at{
+            font-weight: 100;
+            font-size: 19px;
+          }
+          .icon-smiling_face1{
+            font-weight: 600;
+            font-size: 16px;
+          }
+          .icon-well{
+            font-weight: 600;
+            font-size: 16px;
+          }
         }
-        .icon-smiling_face1{
-          font-weight: 600;
-          font-size: 16px;
-        }
-        .icon-well{
-          font-weight: 600;
-          font-size: 16px;
-        }
+
       }
-
     }
-  }
-  .comment_main{
-    padding-top: 20px;
-    .no_comment{
-      color: #888;
-      text-align: center;
-    }
-    .comment_hot{
-
-    }
-    .comment_all{
+    .comment_main{
       padding-top: 20px;
-    }
-    .comment_title{
-      font-size: 12px;
-      padding: 20px 0 10px 0;
-    }
-    .comment_list{
-      .comment_item{
-        border-top: 1px solid #efefef;
-        display: flex;
-        padding: 12px 0;
-        &:hover{
-          .report{
-            opacity: 1!important;
+      .no_comment{
+        color: #888;
+        text-align: center;
+      }
+      .comment_hot{
+
+      }
+      .comment_all{
+        padding-top: 20px;
+      }
+      .comment_title{
+        font-size: 12px;
+        padding: 20px 0 10px 0;
+      }
+      .comment_list{
+        .comment_item{
+          border-top: 1px solid #efefef;
+          display: flex;
+          padding: 12px 0;
+          &:hover{
+            .report{
+              opacity: 1!important;
+            }
           }
-        }
-        .comment_img{
-          width: 36px;
-          height: 36px;
-          border-radius: 50%;
-          border: 1px solid #eeefee;
-          overflow: hidden;
-          margin-right: 12px;
-          cursor: pointer;
-          img{
+          .comment_img{
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: 1px solid #eeefee;
+            overflow: hidden;
+            margin-right: 12px;
+            cursor: pointer;
+            img{
+              width: 100%;
+              height: 100%;
+            }
+          }
+          .comment_content{
             width: 100%;
-            height: 100%;
-          }
-        }
-        .comment_content{
-          width: 100%;
-          font-size: 12px;
-          .comment_info,.comment_beReplied_info{
-            .name{
-              color: #0c73c2;
-            }
-            .content{
-              color: #333333;
-            }
-          }
-          .comment_beReplied_info{
-            background: #f1f1f4;
-            padding: 8px 10px;
-          }
-          .comment_content_bottom{
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 5px;
-            .comment_time{
-              color: #999999;
-            }
-            .comment_item_opare{
-              color: #999999;
-              *{
-                cursor: pointer;
+            font-size: 12px;
+            .comment_info,.comment_beReplied_info{
+              .name{
+                color: #0c73c2;
               }
-              &>span{
-                border-right: 1px solid #ceccd4;
-                padding: 0 10px;
-                &:nth-of-type(1){
-                  opacity: 0;
-                  transition: all 0.3s;
-                }
-                &:nth-last-of-type(1){
-                  border: none;
-                }
+              .content{
+                color: #333333;
               }
-              i{
+            }
+            .comment_beReplied_info{
+              background: #f1f1f4;
+              padding: 8px 10px;
+            }
+            .comment_content_bottom{
+              width: 100%;
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              margin-top: 5px;
+              .comment_time{
                 color: #999999;
-                font-size: 14px;
+              }
+              .comment_item_opare{
+                color: #999999;
+                *{
+                  cursor: pointer;
+                }
+                &>span{
+                  border-right: 1px solid #ceccd4;
+                  padding: 0 10px;
+                  &:nth-of-type(1){
+                    opacity: 0;
+                    transition: all 0.3s;
+                  }
+                  &:nth-last-of-type(1){
+                    border: none;
+                  }
+                }
+                i{
+                  color: #999999;
+                  font-size: 14px;
+                }
               }
             }
+
           }
 
         }
-
       }
     }
   }
-}
 </style>
 <style lang="less">
-.comment{
-  textarea.ivu-input{
-    outline: none;
-    /*width: calc(100% + 7px);*/
-    max-width: none;
-    border-width: 0px;
-    border-radius: 0;
+  .comment{
+    textarea.ivu-input{
+      outline: none;
+      /*width: calc(100% + 7px);*/
+      max-width: none;
+      border-width: 0px;
+      border-radius: 0;
+    }
   }
-}
 </style>

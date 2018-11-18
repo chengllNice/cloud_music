@@ -47,11 +47,12 @@ directive.install = function (vue) {
       //   console.log(res,'res')
       //   spinner = res;
       // });
-      _uid = 'vue-directive-loading' + Date.now().toString('16') + random_fn(10);
+      let _uid = 'vue-directive-loading' + Date.now().toString('16') + random_fn(10);
 
       let _value = binding.value;
       let spinner = document.createElement('div');
       spinner.id = _uid;
+      spinner.className = 'vue-directive-loading';
       spinner.style.position = 'absolute';
       spinner.style.top = '0';
       spinner.style.left = '0';
@@ -79,19 +80,17 @@ directive.install = function (vue) {
     // 所在组件的 VNode 更新时调用，但是可能发生在其孩子的 VNode 更新之前。
     // 指令的值可能发生了改变也可能没有。但是你可以通过比较更新前后的值来忽略不必要的模板更新
     update(el, binding, vnode){
-      let spinner = document.getElementById(_uid);
-      // console.log(_uid,'_uid')
+      let spinner = el.getElementsByClassName('vue-directive-loading')[0];
       spinner.style.display = binding.value ? 'block' : 'none';
-      // el.style.height = 'auto';
       // console.log( 'update' );
     },
     // 所在组件的 VNode 及其孩子的 VNode 全部更新时调用。
-    componentUpdated(){
+    componentUpdated(el, binding, vnode){
       // console.log( 'componentUpdated' );
     },
     // 只调用一次，指令与元素解绑时调用。
     unbind(){
-      // console.log( 'unbind' );
+      console.log( 'unbind' );
     }
   });
 };

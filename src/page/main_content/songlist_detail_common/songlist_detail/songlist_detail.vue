@@ -83,6 +83,19 @@
               <span class="ellipsis_1" v-if="data.data.alia && data.data.alia.length" v-for="(item, index) in data.data.alia">({{item}})</span>
             </div>
           </template>
+          <template slot="lastRank" slot-scope="data">
+            <div class="lastRank">
+              <i class="iconfont icon-sort_new" v-if="!data.data.lastRank"></i>
+              <i v-else-if="data.data.lastRank < data.data._index" class="iconfont icon-sort_down"></i>
+              <i v-else-if="data.data.lastRank > data.data._index" class="iconfont icon-sort_up"></i>
+              <span v-else-if="data.data.lastRank == data.data._index">-</span>
+            </div>
+          </template>
+          <template slot="trackIds" slot-scope="data">
+            <div class="trackIds">
+              {{data.data.trackIds+'%'}}
+            </div>
+          </template>
           <template slot="artists" slot-scope="data">
             <div class="artists_name ellipsis_1">
               <span v-for="(item, index) in data.data.artists" :key="index">{{item.name}}</span>
@@ -96,7 +109,7 @@
         </base-table>
       </div>
       <div class="comment_tab" v-if="tab_active == '1'">
-        <comment :comment-all-data="commentData.comment" :comment-hot-data="commentData.hot" :pageData="pageData" @pageChange="pageChange" @submitComment="submitComment" :totalComment="pageData.total"></comment>
+        <tool-comment :comment-all-data="commentData.comment" :comment-hot-data="commentData.hot" :pageData="pageData" @pageChange="pageChange" @submitComment="submitComment" :totalComment="pageData.total"></tool-comment>
       </div>
       <div class="collection_tab" v-if="tab_active == '2'">
         <div class="collection_tab_item" v-for="(item, index) in songlist.data.subscribers" :key="index" @click="subscribersInfoHandler(item.userId)">
@@ -111,7 +124,6 @@
 </template>
 
 <script>
-  import comment from './comment'
   import { songlist_data} from "./songlist_detail_data";
 
   export default {
@@ -123,6 +135,7 @@
       return {
         tab_active: '0',
         songlist_id: '',
+        songlist_type: '',
         header_tab_data: [
           {
             id: '0',
@@ -154,13 +167,13 @@
       }
     },
     components: {
-      comment
     },
     computed: {
 
     },
     created(){
       this.songlist_id = this.$route.query.id || '';
+      this.songlist_type = this.$route.query.type || '';
       this.songlist = this.$deepClone(songlist_data);
     },
     mounted(){
@@ -185,6 +198,28 @@
           let text = this.$getObjectValue(data, key);
           this.songlist.data[key] = text;
         });
+        // 飙升榜up
+        if(this.songlist_type == 'up'){
+          this.songlist.data.tracks.forEach((item, index)=>{
+            item.trackIds = data.trackIds[index].ratio || ''
+          });
+          this.songlist.data.table_data.t_head.forEach(item=>{
+            if(item.key == 'trackIds'){
+              this.$setObjectValue(item, 'noshow', false)
+            }
+          })
+        }
+        if(this.songlist_type == 'lastRank'){
+          this.songlist.data.tracks.forEach((item, index)=>{
+            item.lastRank = (data.trackIds[index].lr === 0) ? '0' : (data.trackIds[index].lr || '');
+          });
+          this.songlist.data.table_data.t_head.forEach(item=>{
+            if(item.key == 'lastRank'){
+              this.$setObjectValue(item, 'noshow', false)
+            }
+          })
+        }
+
         // let format_data = this.$uiconfigFormat(this.songlist.data.tracks,this.songlist.uiconfig);
         this.$tableListInit(this.songlist.data.tracks, this.songlist.data.table_data);
         let time = this.$timeFormat(this.songlist.data.createTime, 'yy-mm-dd');
@@ -331,7 +366,7 @@
           }
         }
         .play_count_box{
-          width: 115px;
+          /*width: 115px;*/
           padding-left: 10px;
           display: flex;
           align-items: center;
@@ -558,6 +593,24 @@
       }
       span{
         color: #888888;
+      }
+    }
+    .lastRank{
+      width: 100%;
+      text-align: center;
+      color: #999;
+      i{
+        font-size: 14px;
+        &.icon-sort_down{
+          color: #2875ce;
+        }
+        &.icon-sort_up{
+          color: #cd2929;
+        }
+        &.icon-sort_new{
+          font-size: 18px;
+          color: #089c19;
+        }
       }
     }
   }
