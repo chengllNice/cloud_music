@@ -1,9 +1,12 @@
 <template>
   <div class="cl_input">
     <Input v-model="input_value"
+           :search="search"
            :placeholder="data.placeholder || ''"
            :clearable="data.clearable || false"
-           :icon="data.icon || ''"/>
+           :icon="data.icon || ''"
+           @on-enter="enter"
+           @on-click="iconClick"/>
   </div>
 </template>
 
@@ -23,6 +26,10 @@
       value: {
         type: String,
         default: ''
+      },
+      search: {
+        type: Boolean,
+        default: false
       }
     },
     data() {
@@ -42,7 +49,13 @@
         if(this.input_value != this.value){
           this.input_value = this.value;
         }
-      }
+      },
+      enter(){
+        this.$emit('enter', this.input_value)
+      },
+      iconClick(){
+        this.$emit('iconClick', this.input_value)
+      },
     },
     watch: {
       'input_value': function (new_val, old_val) {

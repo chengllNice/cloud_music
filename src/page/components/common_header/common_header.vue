@@ -11,7 +11,7 @@
           <base-tool-button type="icon" clType="icon_button" :icon-type="false" iconClass="ios-arrow-forward" height="21px"></base-tool-button>
         </div>
         <div class="search_input_box">
-          <cl-input :data="search_input"></cl-input>
+          <cl-input :data="search_input" @enter="searchHandler" @iconClick="searchHandler"></cl-input>
         </div>
       </div>
     </div>
@@ -71,6 +71,12 @@
     methods: {
       loginClick(){
         this.login_modal = true;
+      },
+      searchHandler(value){
+        this.$router.push({
+          path: '/search_page/search_song',
+          query: { value: value}
+        })
       }
     }
   }

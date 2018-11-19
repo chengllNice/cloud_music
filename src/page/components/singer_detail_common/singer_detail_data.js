@@ -215,7 +215,8 @@ export const singer_mv_data = {
   colsNum: 4,//列数
   expand: {
     cover_top: true,
-    drop_down: true
+    drop_down: true,
+    cover_bottom: true
   },
   title: {
     name: 'MV',

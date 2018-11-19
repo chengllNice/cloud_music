@@ -56,9 +56,11 @@
           format_data.forEach(item=>{
             item.width = '338';
             item.height = '189';
+            item.duration = this.$timeFormat(item.duration);
           });
           this.$unitFormat(format_data, 'playCount');
           this.mv_data.data.push(...format_data);
+          console.log(this.mv_data)
           this.is_more = res.hasMore;
           this.pageChange = true;
         }).catch(err=>{

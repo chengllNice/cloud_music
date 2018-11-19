@@ -38,6 +38,7 @@
                 <i class="iconfont icon-star" v-if="item.userType && item.userType == 200"></i>
                 <i class="iconfont icon-left_local_music1" v-if="item.userType && item.userType == 4"></i>
                 <i class="iconfont icon-wan_vip" v-if="item.userType && item.userType == 10"></i>
+                <span>{{item.duration}}</span>
               </div>
 
               <!--右下角播放图标-->
