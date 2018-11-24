@@ -84,7 +84,7 @@
         </iview-table>
       </div>
     </div>
-    <!--<toolPage></toolPage>-->
+    <toolPage v-if="tableData.t_page && tableData.t_page.page" :pageData="tableData.t_page" @pageChange="pageChange"></toolPage>
   </div>
 </template>
 
@@ -240,6 +240,9 @@
             this.tableData.t_body[0].splice(index, 1, data);
           }
         }
+      },
+      pageChange(page){
+        this.$emit('pageChange',page)
       }
     },
     destroyed() {

@@ -1,7 +1,7 @@
 <template>
   <div class="base_sing_list">
     <div class="list_box">
-      <div class="header_box" v-if="!base_data.title.noshow">
+      <div class="header_box" v-if="base_data.title && !base_data.title.noshow">
         <div class="title">{{base_data.title.name}}</div>
         <div class="other" v-if="base_data.title.more_btn">
           <span>{{base_data.title.more_btn}}</span>
@@ -295,7 +295,7 @@
         }
         .item_name{
           cursor: pointer;
-          font-size: 13px;
+          font-size: 12px;
           margin-top: 5px;
           .ellipsis(2);
           color: #333333;

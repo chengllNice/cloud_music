@@ -1,42 +1,50 @@
 <template>
-
+  <div class="search_songlrc">
+    <base-table :data="search_songlrc_data.data"
+                :config="search_songlrc_data.config"
+                @dbclick="tableClick"
+                @clickRow="clickRow"
+                @pageChange="pageChange"
+                stripe="stripe">
+      <!--<template slot="creator" slot-scope="data">-->
+      <!--</template>-->
+    </base-table>
+  </div>
 </template>
 
 <script>
-  import { get_search} from "../../../../server/search_api";
-
+  import searchPageMixin from '../search_page_mixin.vue'
   export default {
     name: "search_songlrc",
     data(){
       return {}
     },
+    mixins: [searchPageMixin],
     computed: {
 
     },
     created(){
-
+      this.search_type = '1006';
     },
     mounted(){
 
     },
     methods: {
-      get_search() {
-        let get_data = {
-          keywords: '',
-          limit: '',
-          offset: '',
-          type: '1',//1: 单曲, 10: 专辑, 100: 歌手, 1000: 歌单, 1002: 用户, 1004: MV, 1006: 歌词, 1009: 电台, 1014: 视频
-        };
-        get_search(get_data).then(res => {
+      pageChange(page){
 
-        }).catch(err => {
-          console.log('err', err)
-        })
       },
+      clickRow(data){
+
+      },
+      tableClick(data){
+
+      }
     }
   }
 </script>
 
-<style scoped>
+<style lang="less" scoped>
+.search_songlrc{
 
+}
 </style>

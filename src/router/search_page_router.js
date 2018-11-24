@@ -10,6 +10,7 @@ const search_songlist = r => require.ensure([], () => r(require('../page/main_co
 const search_dj = r => require.ensure([], () => r(require('../page/main_content/search_page/search_dj/search_dj')), 'search_dj');
 const search_user = r => require.ensure([], () => r(require('../page/main_content/search_page/search_user/search_user')), 'search_user');
 const search_songlrc = r => require.ensure([], () => r(require('../page/main_content/search_page/search_songlrc/search_songlrc')), 'search_songlrc');
+const search_video = r => require.ensure([], () => r(require('../page/main_content/search_page/search_video/search_video')), 'search_video');
 
 export default {
   path: '/',
@@ -53,6 +54,10 @@ export default {
             {
               path: '/search_page/search_user',
               component: search_user
+            },
+            {
+              path: '/search_page/search_video',
+              component: search_video
             }
           ]
         }

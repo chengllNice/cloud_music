@@ -1,43 +1,456 @@
 
 export const search_tab_data = [
   {
-    id: '0',
-    name: '单曲',
-    path: '/search_page/search_song'
-  },
-  {
     id: '1',
+    name: '单曲',
+    path: '/search_page/search_song',
+    unit: '首单曲'
+  },
+  {
+    id: '100',
     name: '歌手',
-    path: '/search_page/search_singer'
+    path: '/search_page/search_singer',
+    unit: '位歌手'
   },
   {
-    id: '2',
+    id: '10',
     name: '专辑',
-    path: '/search_page/search_album'
+    path: '/search_page/search_album',
+    unit: '张专辑'
   },
   {
-    id: '3',
+    id: '1014',
     name: '视频',
-    path: '/search_page/search_video'
+    path: '/search_page/search_video',
+    unit: '个视频'
   },
   {
-    id: '4',
+    id: '1000',
     name: '歌单',
-    path: '/search_page/search_songlist'
+    path: '/search_page/search_songlist',
+    unit: '个歌单'
   },
   {
-    id: '5',
+    id: '1006',
     name: '歌词',
-    path: '/search_page/search_songlrc'
+    path: '/search_page/search_songlrc',
+    unit: '首歌词'
   },
   {
-    id: '6',
+    id: '1009',
     name: '主播电台',
-    path: '/search_page/search_dj'
+    path: '/search_page/search_dj',
+    unit: '个电台'
   },
   {
-    id: '7',
+    id: '1002',
     name: '用户',
-    path: '/search_page/search_user'
+    path: '/search_page/search_user',
+    unit: '位用户'
   }
 ];
+
+// 单曲
+export const search_song_data = {
+  id: '',
+  name: '',
+  type: 'table',
+  weight: '1',//权值，排序优先度
+  colsNum: 1,//列数
+  slot: 'song_body',
+  title: {
+    name: '最新歌单',
+    noshow: false,
+    more_btn: '更多'
+  },
+  config: {
+    colsNum: '1',
+    showheader: true
+  },
+  data: {
+    t_head: [
+      {
+        title: '',
+        key: 'sort_num',
+        width: 35,
+        table_slot: 'sort_num'
+      },
+      {
+        title: '操作',
+        type: 'operate',
+        key: 'operate',
+        width: 60
+      },
+      {
+        title: 'id',
+        key: 'id',
+        noshow: true,
+        jpath: 'id'
+      },
+      {
+        title: 'mvid',
+        key: 'mvid',
+        noshow: true,
+        jpath: 'mv'
+      },
+      {
+        title: '别名',
+        key: 'alias',
+        noshow: true,
+        jpath: 'alia'
+      },
+      {
+        title: '音乐标题',
+        key: 'song_name',
+        noshow: false,
+        jpath: 'name',
+        minWidth: 200,
+        table_slot: 'song_name'
+      },
+      {
+        title: '歌手',
+        key: 'artists',
+        noshow: false,
+        minWidth: 90,
+        jpath: 'ar',
+        table_slot: 'artists'
+      },
+      {
+        title: '专辑',
+        key: 'album_name',
+        noshow: false,
+        minWidth: 150,
+        maxWidth: 200,
+        jpath: 'al',
+        table_slot: 'album_name',
+      },
+      {
+        title: '时长',
+        key: 'duration',
+        noshow: false,
+        minWidth: 60,
+        maxWidth: 80,
+        jpath: 'dt'
+      },
+      {
+        title: '最大码率',
+        key: 'maxbr',
+        noshow: true,
+        jpath: 'privilege.maxbr'
+      },
+      {
+        title: '热度',
+        key: 'pop',
+        noshow: false,
+        width: 150,
+        jpath: 'pop',
+        table_slot: 'pop',
+      },
+    ],
+    t_body: [],
+    t_page: {
+      page: 1,
+      total: 0,
+      pageSize: 100
+    }
+  },
+};
+// 歌手
+export const search_singer_data = {
+  id: '',
+  name: '',
+  type: 'table',
+  weight: '1',//权值，排序优先度
+  colsNum: 1,//列数
+  slot: 'song_body',
+  title: {
+    name: '最新歌单',
+    noshow: false,
+    more_btn: '更多'
+  },
+  config: {
+    colsNum: '1',
+    showheader: false
+  },
+  data: {
+    t_head: [
+      {
+        title: 'id',
+        key: 'id',
+        noshow: true,
+        jpath: 'id'
+      },
+      {
+        title: 'accountId',
+        key: 'accountId',
+        noshow: true,
+        jpath: 'accountId'
+      },
+      {
+        title: '别名',
+        key: 'alias',
+        noshow: true,
+        jpath: 'alia'
+      },
+      {
+        title: '歌手',
+        key: 'name',
+        noshow: false,
+        jpath: 'name',
+        table_slot: 'name'
+      },
+      {
+        title: '歌手',
+        key: 'picUrl',
+        noshow: true,
+        jpath: 'picUrl',
+      },
+    ],
+    t_body: [],
+    t_page: {
+      page: 1,
+      total: 0,
+      pageSize: 20
+    }
+  },
+};
+// 专辑
+export const search_album_data = {
+  id: '',
+  name: '',
+  type: 'table',
+  weight: '1',//权值，排序优先度
+  colsNum: 1,//列数
+  slot: 'song_body',
+  title: {
+    name: '最新歌单',
+    noshow: false,
+    more_btn: '更多'
+  },
+  config: {
+    colsNum: '1',
+    showheader: false
+  },
+  data: {
+    t_head: [
+      {
+        title: 'id',
+        key: 'id',
+        noshow: true,
+        jpath: 'id'
+      },
+      {
+        title: 'picUrl',
+        key: 'picUrl',
+        noshow: false,
+        width: 90,
+        jpath: 'picUrl',
+        table_slot: 'picUrl_content',
+      },
+      {
+        title: 'name',
+        key: 'name',
+        noshow: false,
+        jpath: 'name',
+        table_slot: 'name_content'
+      },
+      {
+        title: 'publishTime',
+        key: 'publishTime',
+        noshow: true,
+        jpath: 'publishTime',
+        table_slot: 'publishTime'
+      },
+      {
+        title: 'artist',
+        key: 'artist',
+        noshow: false,
+        jpath: 'artist',
+        table_slot: 'artist'
+      },
+      {
+        title: 'time',
+        key: 'time',
+        noshow: false,
+        width: 180
+      },
+    ],
+    t_body: [],
+    t_page: {
+      page: 1,
+      total: 0,
+      pageSize: 20
+    }
+  },
+};
+//视频
+export const search_video_data = {
+  id: '',
+  name: '',
+  type: 'mv',
+  weight: '3',//权值，排序优先度
+  colsNum: 4,//列数
+  expand: {
+    cover_top: true,
+    drop_down: true,
+    cover_bottom: true
+  },
+  title: {
+    name: 'MV',
+    noshow: true,
+    more_btn: '更多'
+  },
+  uiconfig: {
+    id: 'id',
+    name: 'title',
+    picUrl: 'coverUrl',//封面
+    playCount: 'playTime',//播放量
+    artists: 'creator',//歌手组
+    duration: 'durationms',//喜欢
+  },
+  data: [],
+  page: {
+    page: 1,
+    pageSize: 20,
+    total: 0
+  }
+};
+// 歌单
+export const search_songlist_data = {
+  id: '',
+  name: '',
+  type: 'table',
+  weight: '1',//权值，排序优先度
+  colsNum: 1,//列数
+  slot: 'song_body',
+  title: {
+    name: '最新歌单',
+    noshow: false,
+    more_btn: '更多'
+  },
+  config: {
+    colsNum: '1',
+    showheader: false
+  },
+  data: {
+    t_head: [
+      {
+        title: 'id',
+        key: 'id',
+        noshow: true,
+        jpath: 'id'
+      },
+      {
+        title: 'picUrl',
+        key: 'picUrl',
+        noshow: true,
+        jpath: 'coverImgUrl',
+      },
+      {
+        title: 'name',
+        key: 'name',
+        noshow: false,
+        minWidth: 260,
+        jpath: 'name',
+        table_slot: 'name_content'
+      },
+      {
+        title: 'trackCount',
+        key: 'trackCount',
+        noshow: false,
+        jpath: 'trackCount',
+        table_slot: 'trackCount'
+      },
+      {
+        title: 'creator',
+        key: 'creator',
+        noshow: false,
+        jpath: 'creator',
+        table_slot: 'creator'
+      },
+    ],
+    t_body: [],
+    t_page: {
+      page: 1,
+      total: 0,
+      pageSize: 20
+    }
+  },
+};
+// 歌词
+export const search_songlrc_data = {
+  id: '',
+  name: '',
+  type: 'table',
+  weight: '1',//权值，排序优先度
+  colsNum: 1,//列数
+  slot: 'song_body',
+  title: {
+    name: '最新歌单',
+    noshow: false,
+    more_btn: '更多'
+  },
+  config: {
+    colsNum: '1',
+    showheader: false
+  },
+  data: {
+    t_head: [
+      {
+        title: 'id',
+        key: 'id',
+        noshow: true,
+        jpath: 'id'
+      },
+      {
+        title: 'name',
+        key: 'name',
+        noshow: false,
+        minWidth: 260,
+        jpath: 'name',
+        table_slot: 'name_content'
+      },
+      {
+        title: 'lyrics',
+        key: 'lyrics',
+        noshow: true,
+        jpath: 'lyrics',
+      },
+      {
+        title: 'artists',
+        key: 'artists',
+        noshow: false,
+        jpath: 'ar',
+        table_slot: 'artists'
+      },
+      {
+        title: 'album_name',
+        key: 'album_name',
+        noshow: false,
+        jpath: 'al',
+        table_slot: 'album_name'
+      },
+      {
+        title: '时长',
+        key: 'duration',
+        noshow: false,
+        minWidth: 60,
+        maxWidth: 80,
+        jpath: 'dt'
+      },
+      {
+        title: '热度',
+        key: 'pop',
+        noshow: false,
+        jpath: 'pop',
+        table_slot: 'pop'
+      },
+    ],
+    t_body: [],
+    t_page: {
+      page: 1,
+      total: 0,
+      pageSize: 20
+    }
+  },
+};
