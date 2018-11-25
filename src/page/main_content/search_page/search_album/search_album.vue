@@ -3,6 +3,7 @@
     <base-table :data="search_album_data.data"
                 :config="search_album_data.config"
                 @dbclick="tableClick"
+                @clickRow="clickRow"
                 @pageChange="pageChange"
                 stripe="stripe">
       <template slot="picUrl_content" slot-scope="data">
@@ -46,6 +47,12 @@
       tableClick(data){
 
       },
+      clickRow(data){
+        this.$router.push({
+          path: '/album_detail_common',
+          query: { id: data.data.id}
+        });
+      },
       pageChange(page){
         this.search_album_data.data.t_body = [];
         this.pageData.page = this.search_album_data.data.t_page.page = page;
@@ -83,4 +90,11 @@
     }
   }
 }
+</style>
+<style lang="less">
+  .search_album{
+    tr{
+      cursor: pointer;
+    }
+  }
 </style>

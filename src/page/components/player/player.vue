@@ -42,7 +42,7 @@
           <span class="icon_music_list">
             <i class="iconfont icon-music_list2"></i>
           </span>
-          <span class="music_list_total">99</span>
+          <span class="music_list_total">{{play_music_list.length}}</span>
         </div>
       </div>
     </div>
@@ -86,7 +86,7 @@
       }
     },
     computed: {
-      ...mapState(['music_info'])
+      ...mapState(['music_info', 'play_music_list'])
     },
     components: {},
     created() {

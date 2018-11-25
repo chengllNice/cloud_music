@@ -168,12 +168,13 @@
     }
   }
   .icon_button{
-    color: #d15858!important;
+    /*color: #d15858!important;*/
     border: 1px solid #a82828!important;
     background: rgba(0,0,0,0)!important;
     font-size: 20px!important;
     padding: 0 3px;
     line-height: 0;
+    cursor: pointer;
   }
   .play_music_icon_button{
     border: 1px solid #c73333!important;

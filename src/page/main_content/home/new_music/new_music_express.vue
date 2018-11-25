@@ -10,6 +10,7 @@
     <base-table :data="table_data.data"
                 :config="table_data.config"
                 @dbclick="tableClick"
+                type="music"
                 stripe="stripe">
       <template slot="header" slot-scope="data">
         <div class="table_header">

@@ -33,7 +33,10 @@
       return {
         scroll_option: {
           vuescroll: {},
-          scrollPanel: {},
+          scrollPanel: {
+            scrollingX: false,
+            scrollingY: true,
+          },
           rail: {
             gutterOfSide: '1px',//滚动轨道距离侧边的距离
           },
@@ -60,7 +63,6 @@
     mounted() {
       this.$nextTick(() => {
         // this.height_calc();
-        // this.scroll_init();
       });
       let vue = this;
       vue.get_device_info();
@@ -86,14 +88,6 @@
         let h = $('#app').height() - 50 - 50;
         $('.main_content_view_wrap').height(h);
       },
-      scroll_init() {
-        let vue = this;
-        let scroll = new BScroll(vue.$refs.mainView, {
-          click: true,
-          mouseWheel: true,
-          scrollY: true,
-        });
-      }
     }
   }
 </script>

@@ -34,10 +34,10 @@ const state = {
     volume: '',//音量
     loop: '',//循环方式
   },
-  // 播放列表
-  music_list: [
-    {}
-  ],
+  // 播放列表id
+  play_music_list: [],
+  // 播放历史
+  history_music_list: [],
 
   device_info: {},
   scroll_info: {},//滚动条相关信息,

@@ -16,7 +16,7 @@
       <div class="left">本周新碟</div>
       <base-sing-list class=""
                       :list-data="new_album_data"
-                      :cols-num="new_album_data.colsNum"></base-sing-list>
+                      :cols-num="new_album_data.colsNum" @songlistClick="songlistClick"></base-sing-list>
     </div>
 
 
@@ -99,6 +99,12 @@
         }else{
           this.new_album_data.colsNum = 4
         }
+      },
+      songlistClick(data){
+        this.$router.push({
+          path: '/album_detail_common',
+          query: { id: data.id}
+        })
       }
     },
     watch: {

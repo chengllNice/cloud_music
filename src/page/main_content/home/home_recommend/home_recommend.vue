@@ -6,7 +6,7 @@
       <base-sing-list class="home_list" :list-data="item"
                       :cols-num="item.colsNum" @songlistClick="songlistClickHandler" @moreClick="moreClick">
         <template v-if="item.slot && item.slot == 'song_body'" slot="song_body">
-          <base-table :data="item.data" :config="item.config" @dbclick="tableClick" v-if="item.type == 'table'">
+          <base-table :data="item.data" :config="item.config" type="music" @dbclick="tableClick" v-if="item.type == 'music'">
             <template slot="content" slot-scope="data">
               <!--{{data}}-->
               <div class="new_song_content">
@@ -239,7 +239,6 @@
         })
       },
       tableClick(data){
-        console.log(data)
         let get_data = {
           id: data.data.id
         };

@@ -114,7 +114,7 @@
     },
     watch: {
       '$route': function (to, from) {
-        // this.router_changeMatch();
+        this.router_changeMatch();
       }
     }
   }
@@ -131,9 +131,10 @@
       padding: 3px 30px;
       background: #ffffff;
       color: rgba(136,136,136,1);
+      border-width: 0px!important;
       border-color: rgba(229,229,229,1);
       outline: none;
-      box-shadow: 0 0 0 transparent!important;
+      box-shadow: 0 0 2px rgba(229,229,229,1)!important;
       &:nth-of-type(1){
         border-right: none!important;
       }
@@ -144,7 +145,6 @@
         background: #f5f5f7;
         color: rgba(102,102,102,1);
         border-color: rgba(220,220,221,1);
-        padding: 3px 30px;
       }
       &.tab_active{
         background: rgba(124,125,133,1);
@@ -243,4 +243,9 @@
     align-items: center;
   }
 }
+</style>
+<style lang="less">
+  .sub_header_nav{
+
+  }
 </style>

@@ -30,7 +30,7 @@ export const up_music_list_data = {
         title: 'trackIds',
         key: 'trackIds',
         noshow: false,
-        width: 40,
+        width: 45,
         jpath: 'trackIds',
         table_slot: 'trackIds'
       },

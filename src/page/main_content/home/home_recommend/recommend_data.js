@@ -290,7 +290,7 @@ export const exclusive_data = {
 export const new_song_data = {
   id: 'new_song',
   name: '',
-  type: 'table',
+  type: 'music',
   weight: '2',//权值，排序优先度
   colsNum: 1,//列数
   slot: 'song_body',

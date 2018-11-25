@@ -1,35 +1,38 @@
 <template>
   <div class="left_nav">
-    <div class="list_box" ref="leftNav">
-      <div class="left_nav_list">
-        <div class="left_nav_item" v-for="(item, index) in left_nav_data" :key="index">
-          <div class="header">
-            <div class="name">{{item.title.name}}</div>
-            <div class="opare_box" v-if="item.title.new_item_btn || item.title.down_btn">
-              <div class="add" v-if="item.title.new_item_btn">
-                <base-tool-button type="icon" iconClass="icon-plus_add" border-width="0px" fontColor="#cfcfd1" fontSize="14px" backgroundColor="rgba(0,0,0,0)" color="#eec1c1" font-size="12px"></base-tool-button>
-              </div>
-              <div class="dropdown" v-if="item.title.down_btn">
-                <base-tool-button type="icon" iconClass="icon-arrow_drop_down" border-width="0px" fontColor="#cfcfd1" fontSize="12px" backgroundColor="rgba(0,0,0,0)" color="#eec1c1" font-size="12px"></base-tool-button>
-              </div>
-            </div>
-          </div>
-          <div class="body">
-            <div class="body_list">
-              <div class="body_item" v-for="(body_item, body_index) in item.data" :key="body_index" @click="songlistClick(body_item)" :class="{'nav_active': nav_active == body_item.id}">
-                <div class="left_icon">
-                  <i class="iconfont" :class="body_item.icon.name"
-                     :style="{'font-size': body_item.icon.fontSize, 'font-weight': body_item.icon.fontWeight}">
-                  </i>
+    <div class="nav_main">
+      <vue-scroll class="left_nav_scroll" :ops="scroll_option">
+        <div class="list_box" ref="leftNav">
+          <div class="left_nav_list">
+            <div class="left_nav_item" v-for="(item, index) in left_nav_data" :key="index">
+              <div class="header">
+                <div class="name">{{item.title.name}}</div>
+                <div class="opare_box" v-if="item.title.new_item_btn || item.title.down_btn">
+                  <div class="add" v-if="item.title.new_item_btn">
+                    <base-tool-button type="icon" iconClass="icon-plus_add" border-width="0px" fontColor="#cfcfd1" fontSize="14px" backgroundColor="rgba(0,0,0,0)" color="#eec1c1" font-size="12px"></base-tool-button>
+                  </div>
+                  <div class="dropdown" v-if="item.title.down_btn">
+                    <base-tool-button type="icon" iconClass="icon-arrow_drop_down" border-width="0px" fontColor="#cfcfd1" fontSize="12px" backgroundColor="rgba(0,0,0,0)" color="#eec1c1" font-size="12px"></base-tool-button>
+                  </div>
                 </div>
-                <div class="left_name ellipsis_1">{{body_item.name}}</div>
+              </div>
+              <div class="body">
+                <div class="body_list">
+                  <div class="body_item" v-for="(body_item, body_index) in item.data" :key="body_index" @click="songlistClick(body_item)" :class="{'nav_active': nav_active == body_item.id}">
+                    <div class="left_icon">
+                      <i class="iconfont" :class="body_item.icon.name"
+                         :style="{'font-size': body_item.icon.fontSize, 'font-weight': body_item.icon.fontWeight}">
+                      </i>
+                    </div>
+                    <div class="left_name ellipsis_1">{{body_item.name}}</div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      </vue-scroll>
     </div>
-
     <div class="play_music_box" v-if="music_info.id">
       <div class="left">
         <div class="music_cover_img" @click="lrc_cover_show">
@@ -61,7 +64,6 @@
 
 <script>
   import { left_nav_data} from "./left_nav_data";
-  import BScroll from 'better-scroll'
   import { mapState } from 'vuex'
   import { get_user_playlist} from "../../../server/common_api";
 
@@ -70,7 +72,24 @@
     data(){
       return {
         left_nav_data: null,
-        nav_active: 'find_music'
+        nav_active: 'find_music',
+        scroll_option: {
+          vuescroll: {},
+          scrollPanel: {
+            scrollingX: false,
+            scrollingY: true,
+          },
+          rail: {
+            gutterOfSide: '1px',//滚动轨道距离侧边的距离
+          },
+          bar: {
+            background: '#e1e1e2',
+            keepShow: true,
+            hoverStyle: {
+              background: '#cfcfd1'
+            }
+          }
+        }
       }
     },
     computed: {
@@ -82,9 +101,6 @@
     mounted(){
       let vue = this;
       this.$nextTick(()=>{
-        setTimeout(()=>{
-          vue.scroll_init();
-        },20)
         this.nav_active_handler();
         if(this.user_info.id){
           this.get_user_playlist();
@@ -96,17 +112,6 @@
         if(this.$route.query.id){
           this.nav_active = this.$route.query.id;
         }
-      },
-      scroll_init(){
-        let vue = this;
-        let scroll = new BScroll(vue.$refs.leftNav,{
-          click: true,
-          mouseWheel: true,
-          scrollY: true,
-          // disableTouch: true,
-          // disableMouse: false,
-        });
-        // scroll.disable();
       },
       lrc_cover_show(){
         this.$store.commit('set_lrc_panal_show', true)
@@ -197,15 +202,21 @@
   background: #f5f5f7;
   position: relative;
   border-right: 1px solid #e2e2e3;
-  overflow: hidden;
+  /*overflow: hidden;*/
   z-index: 20;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  .nav_main{
+    flex: 1;
+    overflow: hidden;
+  }
   .list_box{
-    height: 100%;
+    /*height: 100%;*/
     /*overflow: hidden;*/
   }
   .left_nav_list{
     /*height: 100%;*/
-    padding-bottom: 57px;
     .left_nav_item{
       padding-bottom: 10px;
       .header{
@@ -285,9 +296,9 @@
   }
 
   .play_music_box{
-    position: absolute;
-    bottom: 0;
-    left: 0;
+    /*position: absolute;*/
+    /*bottom: 0;*/
+    /*left: 0;*/
     width: 100%;
     height: 57px;
     border-top: 1px solid #e2e2e3;

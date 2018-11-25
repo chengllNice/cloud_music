@@ -114,10 +114,16 @@
       stripe: {
         type: String,
         default: ''
+      },
+      //table类型
+      type: {
+        type: String,
+        default: ''
       }
     },
     data() {
       return {
+        ids_list: [],
         oldRowData: [],
         config_default: {
           colsNum: '1',
@@ -131,7 +137,7 @@
       }
     },
     computed: {
-      ...mapState(['music_info']),
+      ...mapState(['music_info','play_music_list','history_music_list']),
       config_data() {
         let config = this.config_default;
         let arr = Object.keys(this.config);
@@ -149,29 +155,25 @@
         let t_head = result.t_head;
         let t_body = result.t_body;
         let t_page = result.t_page || {};
+        this.ids_list = [];
         if (t_head.length && this.config.colsNum == '2') {
-          t_head.forEach(head_item => {
+          t_head.forEach((head_item, head_index) => {
             head_item.forEach((item, index) => {
               if (item.key == 'sort_num' && item.table_slot == 'sort_num') {
-                t_body.forEach((body_item, body_index) => {
-                  let len = body_item.length;
-                  body_item.forEach((body_item_01, body_index_01) => {
-                    if (this.$typeOf(body_item_01) == 'object' && !body_item_01.sort_num) {
-                      let sort_num = (body_index * len) + (body_index_01 + 1);
-                      if(t_page.page && t_page.pageSize){
-                        sort_num = (t_page.page-1)*t_page.pageSize + sort_num
-                      }
-                      if (sort_num < 10) {
-                        sort_num = '0' + sort_num;
-                      }
-                      body_item_01.sort_num = sort_num;
+                t_body[head_index].forEach((body_item_01, body_index_01) => {
+                  if (this.$typeOf(body_item_01) == 'object' && !body_item_01.sort_num) {
+                    let sort_num = (head_index * t_body[head_index].length) + (body_index_01 + 1);
+                    if(t_page.page && t_page.pageSize){
+                      sort_num = (t_page.page-1)*t_page.pageSize + sort_num
                     }
-                    body_item_01.playStatus = !body_item_01.playStatus ? '' : body_item_01.playStatus;
-                    // if (this.music_info.id == body_item.id) {
-                    //   body_item.playStatus = this.music_info.playStatus;
-                    // }
-                  })
-                });
+                    if (sort_num < 10) {
+                      sort_num = '0' + sort_num;
+                    }
+                    body_item_01.sort_num = sort_num;
+                  }
+                  this.ids_list.push(body_item_01.id || '');
+                  body_item_01.playStatus = !body_item_01.playStatus ? '' : body_item_01.playStatus;
+                })
               }
             });
           });
@@ -189,10 +191,8 @@
                   }
                   body_item.sort_num = sort_num;
                 }
+                this.ids_list.push(body_item.id || '');
                 body_item.playStatus = !body_item.playStatus ? '' : body_item.playStatus;
-                // if (this.music_info.id == body_item.id) {
-                //   body_item.playStatus = this.music_info.playStatus;
-                // }
               });
             }
           })
@@ -229,11 +229,24 @@
         this.$emit('clickRow', { data: data, index: index})
       },
       dbClickRow(data, index) {
-        this.oldRowData.push({data: data, index: index});
-        if (this.oldRowData.length >= 3) {
-          this.oldRowData.splice(0, 1)
+        if(this.type == 'music'){
+          // 播放列表
+          if(JSON.stringify(this.play_music_list) != JSON.stringify(this.ids_list)){
+            this.$store.state.play_music_list = this.ids_list
+          }
+          // 播放历史
+          if(this.history_music_list.indexOf(data.id) == -1){
+            if(this.history_music_list.length >= 100){
+              this.$store.state.history_music_list.pop();
+            }
+            this.$store.state.history_music_list.unshift(data.id);
+          }
+          this.oldRowData.push({data: data, index: index});
+          if (this.oldRowData.length >= 3) {
+            this.oldRowData.splice(0, 1)
+          }
+          this.playStatusChange(data, index, 'play');
         }
-        this.playStatusChange(data, index, 'play');
         this.$emit('dbclick', {data: data, index: index});
       },
       playStatusChange(data, index, status) {

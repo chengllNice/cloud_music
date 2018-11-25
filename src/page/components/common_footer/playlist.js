@@ -19,20 +19,6 @@ export const playlist_data = {
   data: {
     t_head: [
       {
-        title: '歌曲排序',
-        key: 'sort_num',
-        width: 35,
-        table_slot: 'sort_num'
-      },
-      {
-        title: '',
-        key: 'content',
-        minWidth: 300,
-        // tooltip: true,
-        // ellipsis: true,
-        table_slot: 'content'
-      },
-      {
         title: 'id',
         key: 'id',
         noshow: true,
@@ -42,48 +28,28 @@ export const playlist_data = {
         title: 'mvid',
         key: 'mvid',
         noshow: true,
-        jpath: 'mvid'
+        jpath: 'mv'
       },
       {
         title: '别名',
         key: 'alias',
         noshow: true,
-        jpath: 'alias'
-      },
-      {
-        title: '音乐链接地址',
-        key: 'mp3Url',
-        noshow: true,
-        jpath: 'mp3Url'
-      },
-      {
-        title: '音乐封面',
-        key: 'picUrl',
-        noshow: true,
-        jpath: 'album.picUrl'
+        jpath: 'alia'
       },
       {
         title: '歌名',
         key: 'song_name',
-        noshow: true,
-        jpath: 'name'
+        noshow: false,
+        jpath: 'name',
+        table_slot: 'song_name'
       },
       {
         title: '歌手',
         key: 'artists',
         noshow: false,
-        minWidth: 90,
-        jpath: 'artists',
+        width: 120,
+        jpath: 'ar',
         table_slot: 'artists'
-      },
-      {
-        title: '专辑',
-        key: 'album_name',
-        noshow: false,
-        minWidth: 150,
-        maxWidth: 200,
-        jpath: 'album',
-        table_slot: 'album_name',
       },
       {
         title: '时长',
@@ -91,7 +57,7 @@ export const playlist_data = {
         noshow: false,
         minWidth: 60,
         maxWidth: 80,
-        jpath: 'duration'
+        jpath: 'dt'
       },
       {
         title: '最大码率',

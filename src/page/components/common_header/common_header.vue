@@ -7,8 +7,8 @@
       </div>
       <div class="search">
         <div class="back_button">
-          <base-tool-button type="icon" clType="icon_button" :icon-type="false" iconClass="ios-arrow-back" height="21px"></base-tool-button>
-          <base-tool-button type="icon" clType="icon_button" :icon-type="false" iconClass="ios-arrow-forward" height="21px"></base-tool-button>
+          <base-tool-button type="icon" clType="icon_button" :icon-type="false" iconClass="ios-arrow-back" :font-color="is_history > 1 ? '#ffffff' : '#d15858'" height="21px" @click="historyHandler('history')"></base-tool-button>
+          <base-tool-button type="icon" clType="icon_button" :icon-type="false" iconClass="ios-arrow-forward" :font-color="is_history > 1 ? '#ffffff' : '#d15858'" height="21px" @click="historyHandler('forward')"></base-tool-button>
         </div>
         <div class="search_input_box">
           <cl-input :data="search_input" @enter="searchHandler" @iconClick="searchHandler"></cl-input>
@@ -52,6 +52,7 @@
     data() {
       return {
         login_modal: false,
+        is_history: 1,
         search_input: {
           icon: 'ios-search-outline',
           placeholder: '搜索音乐，视频，歌词，电台'
@@ -65,6 +66,7 @@
       login
     },
     created() {
+      this.is_history = window.history.length;
     },
     mounted() {
     },
@@ -72,14 +74,29 @@
       loginClick(){
         this.login_modal = true;
       },
+      historyHandler(type){
+        if(type == 'history'){
+          if(this.is_history > 1){
+            this.$router.go(-1)
+          }
+        }else{
+          this.$router.go(1)
+        }
+      },
       searchHandler(value){
         if(!value){
           return
         }
+        this.$store.commit('set_lrc_panal_show', false);//关闭歌词展示
         this.$router.push({
           path: '/search_page/search_song',
           query: { value: value}
         })
+      }
+    },
+    watch: {
+      '$route': function (new_val, old_val) {
+        this.is_history = window.history.length;
       }
     }
   }
