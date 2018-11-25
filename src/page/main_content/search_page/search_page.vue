@@ -1,7 +1,7 @@
 <template>
   <div class="search_page">
     <div class="search_result_total">
-      搜索{{search_word}}，找到
+      搜索 <span class="search_word">"{{search_word}}"</span>，找到
       <span>{{pageData.total}}</span>
       <span>{{unit}}</span>
     </div>
@@ -59,5 +59,14 @@
 </script>
 
 <style lang="less" scoped>
-
+.search_page{
+  .search_result_total{
+    font-size: 12px;
+    color: #333333;
+    padding: 30px;
+    .search_word{
+      color: #0c73c2;
+    }
+  }
+}
 </style>

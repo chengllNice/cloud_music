@@ -148,6 +148,7 @@
         let result = this.data;
         let t_head = result.t_head;
         let t_body = result.t_body;
+        let t_page = result.t_page || {};
         if (t_head.length && this.config.colsNum == '2') {
           t_head.forEach(head_item => {
             head_item.forEach((item, index) => {
@@ -157,6 +158,9 @@
                   body_item.forEach((body_item_01, body_index_01) => {
                     if (this.$typeOf(body_item_01) == 'object' && !body_item_01.sort_num) {
                       let sort_num = (body_index * len) + (body_index_01 + 1);
+                      if(t_page.page && t_page.pageSize){
+                        sort_num = (t_page.page-1)*t_page.pageSize + sort_num
+                      }
                       if (sort_num < 10) {
                         sort_num = '0' + sort_num;
                       }
@@ -177,6 +181,9 @@
               t_body.forEach((body_item, body_index) => {
                 if (this.$typeOf(body_item) == 'object' && !body_item.sort_num) {
                   let sort_num = (body_index + 1);
+                  if(t_page.page && t_page.pageSize){
+                    sort_num = (t_page.page-1)*t_page.pageSize + sort_num
+                  }
                   if (sort_num < 10) {
                     sort_num = '0' + sort_num;
                   }

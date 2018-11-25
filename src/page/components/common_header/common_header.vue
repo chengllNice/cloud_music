@@ -73,6 +73,9 @@
         this.login_modal = true;
       },
       searchHandler(value){
+        if(!value){
+          return
+        }
         this.$router.push({
           path: '/search_page/search_song',
           query: { value: value}

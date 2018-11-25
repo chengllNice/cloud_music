@@ -113,17 +113,10 @@
       },
       songlistClick(data){
         this.nav_active = data.id;
-        if(data.type == 'songlist'){
-          this.$router.push({
-            path: '/songlist_detail_common',
-            query: { id: data.id}
-          })
-        }
-        if(data.id == 'find_music'){
-          this.$router.push({
-            path: '/home/home_recommend',
-          })
-        }
+        this.$router.push({
+          path: data.path,
+          query: { id: data.id}
+        })
       },
       get_user_playlist(){
         let get_data = {
@@ -138,6 +131,7 @@
               let name = item.name;
               let obj = {};
               if(name.indexOf(this.user_info.name) != -1){
+                // 我喜欢的音乐
                 name = '我喜欢的音乐';
                 obj = {
                   type: 'songlist',
@@ -149,8 +143,10 @@
                     fontSize: '18px',
                     fontWeight: '600'
                   },
+                  path: '/songlist_detail_common'
                 }
               }else{
+                // 我创建的歌单
                 obj = {
                   type: 'songlist',
                   name: name,
@@ -161,10 +157,12 @@
                     fontSize: '17px',
                     fontWeight: '400'
                   },
+                  path: '/songlist_detail_common'
                 }
               }
               this.left_nav_data[2].data.push(obj);
             }else{
+              // 我收藏的歌单
               let name = item.name;
               let obj = {};
               obj = {
@@ -177,6 +175,7 @@
                   fontSize: '17px',
                   fontWeight: '400'
                 },
+                path: '/songlist_detail_common'
               };
               this.left_nav_data[3].data.push(obj);
             }

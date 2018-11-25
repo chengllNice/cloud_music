@@ -1,3 +1,4 @@
+import expandLrc from './search_songlrc/expand_lrc.vue'
 
 export const search_tab_data = [
   {
@@ -72,7 +73,7 @@ export const search_song_data = {
       {
         title: '',
         key: 'sort_num',
-        width: 35,
+        width: 45,
         table_slot: 'sort_num'
       },
       {
@@ -301,7 +302,8 @@ export const search_video_data = {
     more_btn: '更多'
   },
   uiconfig: {
-    id: 'id',
+    id: 'vid',
+    video_type: 'type',
     name: 'title',
     picUrl: 'coverUrl',//封面
     playCount: 'playTime',//播放量
@@ -392,10 +394,22 @@ export const search_songlrc_data = {
   },
   config: {
     colsNum: '1',
-    showheader: false
+    showheader: true
   },
   data: {
     t_head: [
+      {
+        title: '',
+        key: 'sort_num',
+        width: 45,
+        table_slot: 'sort_num'
+      },
+      {
+        title: '操作',
+        type: 'operate',
+        key: 'operate',
+        width: 60
+      },
       {
         title: 'id',
         key: 'id',
@@ -403,28 +417,28 @@ export const search_songlrc_data = {
         jpath: 'id'
       },
       {
-        title: 'name',
-        key: 'name',
+        title: '音乐标题',
+        key: 'song_name',
         noshow: false,
-        minWidth: 260,
+        minWidth: 150,
         jpath: 'name',
-        table_slot: 'name_content'
+        table_slot: 'song_name'
       },
       {
-        title: 'lyrics',
-        key: 'lyrics',
-        noshow: true,
-        jpath: 'lyrics',
-      },
-      {
-        title: 'artists',
+        title: '歌手',
         key: 'artists',
         noshow: false,
         jpath: 'ar',
         table_slot: 'artists'
       },
       {
-        title: 'album_name',
+        title: '别名',
+        key: 'alias',
+        noshow: true,
+        jpath: 'alia',
+      },
+      {
+        title: '专辑',
         key: 'album_name',
         noshow: false,
         jpath: 'al',
@@ -441,9 +455,122 @@ export const search_songlrc_data = {
       {
         title: '热度',
         key: 'pop',
+        width: 150,
         noshow: false,
         jpath: 'pop',
         table_slot: 'pop'
+      },
+      {
+        title: 'lyrics',
+        key: 'lyrics',
+        noshow: true,
+        jpath: 'lyrics',
+      },
+      {
+        title: '最大码率',
+        key: 'maxbr',
+        noshow: true,
+        jpath: 'privilege.maxbr'
+      },
+      {
+        type:'expand',
+        width: 40,
+        render: (h, params) => {
+          return h(expandLrc, {
+            props: {
+              row: params.row
+            }
+          })
+        }
+      },
+    ],
+    t_body: [],
+    t_page: {
+      page: 1,
+      total: 0,
+      pageSize: 20
+    }
+  },
+};
+// 电台
+export const search_dj_data = {
+  id: '',
+  name: '',
+  type: 'album',
+  weight: '3',//权值，排序优先度
+  colsNum: 5,//列数
+  expand: {
+    cover_top: false,
+    drop_down: false,
+    cover_bottom: false
+  },
+  title: {
+    name: '主播电台',
+    noshow: true,
+    more_btn: '更多'
+  },
+  uiconfig: {
+    id: 'id',
+    name: 'name',
+    picUrl: 'picUrl',//封面
+    artists: 'dj.nickname',
+  },
+  data: [],
+  page: {
+    page: 1,
+    pageSize: 20,
+    total: 0
+  }
+};
+// 用户
+export const search_user_data = {
+  id: '',
+  name: '',
+  type: 'table',
+  weight: '1',//权值，排序优先度
+  colsNum: 1,//列数
+  slot: 'song_body',
+  title: {
+    name: '最新歌单',
+    noshow: false,
+    more_btn: '更多'
+  },
+  config: {
+    colsNum: '1',
+    showheader: false
+  },
+  data: {
+    t_head: [
+      {
+        title: 'id',
+        key: 'id',
+        noshow: true,
+        jpath: 'userId'
+      },
+      {
+        title: '用户名',
+        key: 'name',
+        noshow: false,
+        jpath: 'nickname',
+        table_slot: 'name'
+      },
+      {
+        title: '头像',
+        key: 'avatarUrl',
+        noshow: true,
+        jpath: 'avatarUrl',
+      },
+      {
+        title: '性别',
+        key: 'gender',
+        noshow: true,
+        jpath: 'gender',
+      },
+      {
+        title: '签名',
+        key: 'signature',
+        noshow: true,
+        jpath: 'signature',
       },
     ],
     t_body: [],

@@ -45,7 +45,14 @@
           console.log('err', err)
         })
       }
-    }
+    },
+    watch: {
+      '$route.query.id': function (new_val, old_val) {
+        if(new_val){
+          this.init();
+        }
+      }
+    },
   }
 </script>
 

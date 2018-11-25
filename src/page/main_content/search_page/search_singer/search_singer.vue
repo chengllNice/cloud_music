@@ -8,7 +8,7 @@
       <template slot="name" slot-scope="data">
         <div class="singer_box">
           <div class="singer_img">
-            <img :src="data.data.picUrl+'param=512y512'" alt="">
+            <img :src="data.data.picUrl+'?param=512y512'" alt="">
           </div>
           <div class="singer_info">
             <span class="name">{{data.data.name}}</span>

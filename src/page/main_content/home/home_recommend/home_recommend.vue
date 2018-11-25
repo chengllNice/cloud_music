@@ -4,7 +4,7 @@
 
     <div class="" v-for="(item, index) in all_data" :key="index">
       <base-sing-list class="home_list" :list-data="item"
-                      :cols-num="item.colsNum" @songlistClick="songlistClickHandler">
+                      :cols-num="item.colsNum" @songlistClick="songlistClickHandler" @moreClick="moreClick">
         <template v-if="item.slot && item.slot == 'song_body'" slot="song_body">
           <base-table :data="item.data" :config="item.config" @dbclick="tableClick" v-if="item.type == 'table'">
             <template slot="content" slot-scope="data">
@@ -267,6 +267,9 @@
           path: '/songlist_detail_common',
           query: { id: data.id}
         })
+      },
+      moreClick(data){
+
       }
     },
     watch: {

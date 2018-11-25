@@ -17,7 +17,7 @@ export const left_nav_data = [
           fontWeight: '400'
         },
         name: '发现音乐',
-        path: '',
+        path: '/home/home_recommend',
       },
       {
         id: 'private_FM',
@@ -39,7 +39,7 @@ export const left_nav_data = [
           fontWeight: 'bolder'
         },
         name: '视频',
-        path: '',
+        path: '/video/video',
       },
       {
         id: 'friend',

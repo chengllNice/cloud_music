@@ -29,6 +29,8 @@ export const get_artist_desc = (data) => ajax_get('/artist/desc',data);
 export const get_artist_album = (data) => ajax_get('/artist/album',data);
 // 获取专辑内容
 export const get_album = (data) => ajax_get('/album',data);
+// 获取专辑评论
+export const get_album_comment = (data) => ajax_get('/comment/album',data);
 // 获取歌手mv
 export const get_artist_mv = (data) => ajax_get('/artist/mv',data);
 // 相似歌手
@@ -41,3 +43,13 @@ export const get_mv_detail = (data) => ajax_get('/mv/detail',data);
 export const get_mv_comment = (data) => ajax_get('/comment/mv',data);
 // 获取相似mv
 export const get_mv_simi = (data) => ajax_get('/simi/mv',data);
+// 获取视频地址
+export const get_video_url = (data) => ajax_get('/video/url',data);
+// 视频详情
+export const get_video_detail = (data) => ajax_get('/video/detail',data);
+// 视频评论
+export const get_video_comment = (data) => ajax_get('/comment/video',data);
+// 获取相似视频
+export const get_video_simi = (data) => ajax_get('/related/allvideo',data);
+// 给资源点赞
+export const post_resource_like = (data) => ajax_get('/resource/like',data);

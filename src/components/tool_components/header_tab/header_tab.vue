@@ -102,9 +102,11 @@
       },
       navClick(item, index){
         this.active_tab = index;
+        let query = this.$route.query;
         if(item.path){
           this.$router.push({
-            path: item.path
+            path: item.path,
+            query: query
           });
         }
         this.$emit('tabClick', item);

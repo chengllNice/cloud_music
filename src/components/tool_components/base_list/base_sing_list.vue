@@ -3,7 +3,7 @@
     <div class="list_box">
       <div class="header_box" v-if="base_data.title && !base_data.title.noshow">
         <div class="title">{{base_data.title.name}}</div>
-        <div class="other" v-if="base_data.title.more_btn">
+        <div class="other" v-if="base_data.title.more_btn" @click="moreClick(base_data)">
           <span>{{base_data.title.more_btn}}</span>
           <i class="iconfont icon-right"></i>
           <!--<slot name="header_right"></slot>-->
@@ -69,7 +69,7 @@
               <span v-if="item.alias && item.alias.length" v-for="(alias_item, alias_index) in item.alias" :key="alias_index">({{alias_item}})</span>
             </div>
 
-            <div v-if="item.artists">
+            <div class="artists" v-if="item.artists">
               <span v-if="item.artists.name">{{item.artists.name}}</span>
               <span v-else-if="item.artists.length" v-for="(singer_item, singer_index) in item.artists" :key="singer_index">
                 <span v-if="singer_index != 0">/ </span> {{singer_item.name}}
@@ -137,6 +137,14 @@
       },
       pageChange(page){
         this.$emit('pageChange', page)
+      },
+      moreClick(data){
+        if(data.title && data.title.path){
+          this.$router.push({
+            path: path
+          })
+        }
+        this.$emit('moreClick', data)
       }
     }
   }
@@ -295,7 +303,7 @@
         }
         .item_name{
           cursor: pointer;
-          font-size: 12px;
+          font-size: 13px;
           margin-top: 5px;
           .ellipsis(2);
           color: #333333;
@@ -307,6 +315,9 @@
           }
           div{
             color: #888888;
+          }
+          .artists{
+            font-size: 12px;
           }
         }
       }

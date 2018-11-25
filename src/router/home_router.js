@@ -16,6 +16,8 @@ const new_music_album = r => require.ensure([], () => r(require('../page/main_co
 
 // 歌单详情
 const songlist_detail_common = r => require.ensure([], () => r(require('../page/main_content/songlist_detail_common/songlist_detail_common')), 'songlist_detail_common');
+// 专辑详情
+const album_detail_common = r => require.ensure([], () => r(require('../page/components/album_detail_common/album_detail_common')), 'album_detail_common');
 // 歌手详情
 const singer_detail_common = r => require.ensure([], () => r(require('../page/components/singer_detail_common/singer_detail_common')), 'singer_detail_common');
 
@@ -83,6 +85,11 @@ export default {
           path: '/songlist_detail_common',
           name: 'songlist_detail_common',
           component: songlist_detail_common,
+        },
+        {
+          path: '/album_detail_common',
+          name: 'album_detail_common',
+          component: album_detail_common,
         },
         {
           path: '/singer_detail_common',

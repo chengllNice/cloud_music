@@ -1,5 +1,5 @@
 <template>
-  <div class="playlist">
+  <div class="video_video">
     <div class="playlist_cat_box">
       <div class="playlist_cat_all">
         <div class="current_select_cat" @click="select_cat_handler">
@@ -38,28 +38,13 @@
       <div class="playlist_cat_hot">
         <tool-filter-select :data="cat_hot_data" @click="subCatClick"></tool-filter-select>
       </div>
-      <!--<div class="playlist_cat_hot">-->
-        <!--<div class="hot_label">热门标签 : </div>-->
-        <!--<div class="hot_item" v-for="(hot_item, hot_index) in cat_hot_data" :key="hot_index">-->
-          <!--<span class="line" v-if="hot_index != '0'"></span>-->
-          <!--<span class="name" @click="subCatClick(hot_item.name)">{{hot_item.name}}</span>-->
-        <!--</div>-->
-      <!--</div>-->
-    </div>
-    <div class="playlist_main" v-loading="loading">
-      <base-sing-list class="playlist_main_wrap" :list-data="playlist_data"
-                      :cols-num="playlist_data.colsNum" @songlistClick="songlistClickHandler" @pageChange="pageChange">
-      </base-sing-list>
     </div>
   </div>
 </template>
 
 <script>
-  import { playlist_data} from "./playlist_data";
-  import { get_playlist_catlist, get_playlist_hot, get_top_playlist} from "../../../../server/home";
-
   export default {
-    name: "playlist",
+    name: "video_video",
     data() {
       return {
         playlist_data: {},
@@ -76,96 +61,10 @@
     computed: {},
     components: {},
     created() {
-      this.playlist_data = this.$deepClone(playlist_data);
     },
     mounted() {
-      this.init();
     },
     methods: {
-      init(){
-        this.get_playlist_catlist();
-        this.get_playlist_hot();
-        this.get_top_playlist();
-      },
-      get_top_playlist(){
-        this.loading=true;
-        let get_data = {
-          offset: (this.playlist_data.page.page - 1) * this.playlist_data.page.pageSize,
-          limit: this.playlist_data.page.pageSize,
-          cat: this.current_select_cat
-        };
-        this.playlist_data.data = [];
-        get_top_playlist(get_data).then(res=>{
-          let format_data = this.$uiconfigFormat(res.playlists,this.playlist_data.uiconfig);
-          this.playlist_data.data = format_data;
-          this.$unitFormat(this.playlist_data.data, 'playCount');
-          this.playlist_data.page.total = res.total;
-          this.loading = false;
-        }).catch(err=>{
-          console.log('err',err)
-        })
-      },
-      get_playlist_catlist(){
-        get_playlist_catlist().then(res=>{
-          let all = res.all;
-          let categories = res.categories;
-          let sub = res.sub;
-          this.format_cat(categories,sub);
-          // this.cat_all_data = res
-        }).catch(err=>{
-          console.log('err',err)
-        })
-      },
-      get_playlist_hot(){
-        get_playlist_hot().then(res=>{
-          this.cat_hot_data.data = res.tags;
-        }).catch(err=>{
-          console.log('err',err)
-        })
-      },
-      format_cat(categories,sub){
-        let data = [];
-        Object.keys(categories).forEach(key=>{
-          let icon = '';
-          switch (key) {
-            case '0':
-              icon = 'icon-style';
-              break;
-            case '1':
-              icon = 'icon-yuzhong';
-              break;
-            case '2':
-              icon = 'icon-scene';
-              break;
-            case '3':
-              icon = 'icon-smiling_face1';
-              break;
-            case '4':
-              icon = 'icon-theme';
-              break;
-          }
-          let obj = {
-            icon: icon,
-            name: categories[key],
-            data: []
-          };
-          sub.forEach(sub_item=>{
-            if(sub_item.category == key){
-              obj.data.push({
-                sub_name: sub_item.name,
-                sub_hot: sub_item.hot
-              })
-            }
-          });
-          this.cat_all_data.push(obj);
-        });
-      },
-      songlistClickHandler(data){
-        this.$router.push({
-          path: '/songlist_detail_common',
-          query: { id: data.id}
-        })
-      },
       select_cat_handler(){
         this.cat_toggle = !this.cat_toggle;
       },
@@ -176,17 +75,12 @@
         this.playlist_data.page.page = 1;
         this.get_top_playlist();
       },
-      pageChange(page){
-        this.playlist_data.page.page = page;
-        this.get_top_playlist();
-      }
     }
   }
 </script>
 
 <style lang="less" scoped>
-.playlist{
-  padding-bottom: 20px;
+.video_video{
   .playlist_cat_box{
     .playlist_cat_all{
       position: relative;
@@ -374,9 +268,6 @@
     .playlist_cat_hot{
       margin: 8px 0 15px 0;
     }
-  }
-  .playlist_main{
-
   }
 }
 </style>

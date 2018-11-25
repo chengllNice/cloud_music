@@ -57,10 +57,10 @@
       </div>
 
       <div class="singer_album">
-        <album-info v-show="tab_active == '0'" :tab_active="tab_active" :album_icon_active="album_icon_active"></album-info>
-        <mv-info v-show="tab_active == '1'" :tab_active="tab_active"></mv-info>
-        <detail-info v-show="tab_active == '2'"></detail-info>
-        <simi-singer-info v-show="tab_active == '3'"></simi-singer-info>
+        <album-info v-if="tab_active == '0'" :tab_active="tab_active" :album_icon_active="album_icon_active"></album-info>
+        <mv-info v-if="tab_active == '1'" :tab_active="tab_active"></mv-info>
+        <detail-info v-if="tab_active == '2'"></detail-info>
+        <simi-singer-info v-if="tab_active == '3'"></simi-singer-info>
       </div>
     </div>
   </div>
@@ -139,7 +139,11 @@
       },
     },
     watch: {
-
+      '$route.query.id': function (new_val, old_val) {
+        if(new_val){
+          this.init();
+        }
+      }
     }
   }
 </script>

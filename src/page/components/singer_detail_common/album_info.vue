@@ -3,12 +3,14 @@
     <div class="album_info_item" v-show="album_icon_active == 'theme'">
       <base-sing-list class=""
                       :list-data="singer_album_theme_data"
-                      :cols-num="singer_album_theme_data.colsNum"></base-sing-list>
+                      :cols-num="singer_album_theme_data.colsNum"
+                      @songlistClick="go_album_detail"></base-sing-list>
     </div>
 
     <div class="album_info_item album_info_list" v-show="album_icon_active == 'list'">
       <base-table :data="singer_album_list_data.data"
-                  :config="singer_album_list_data.config">
+                  :config="singer_album_list_data.config"
+                  @clickRow="go_album_detail">
         <template slot="picUrl_content" slot-scope="data">
           <div class="album_picUrl">
             <img :src="data.data.picUrl" alt="">
@@ -26,7 +28,7 @@
     <div class="album_info_item" v-show="album_icon_active == 'theme_list'">
       <div class="album_theme_list_box" v-for="(album_item, album_index) in singer_album_theme_list_data_arr" :key="album_index">
         <div class="album_coverimg">
-          <div class="pic">
+          <div class="pic" @click="go_album_detail(album_item)">
             <img :src="album_item.album_info.picUrl" alt="">
           </div>
           <div class="publishTime">{{album_item.album_info.publishTime}}</div>
@@ -38,7 +40,7 @@
                       @dbclick="tableClick">
             <template slot="header" slot-scope="data">
               <div class="table_header">
-                <div class="play_all">
+                <div class="play_all" @click="go_album_detail(album_item)">
                   {{album_item.album_info.name}}
                 </div>
                 <div class="play_opare">
@@ -55,7 +57,7 @@
             </template>
             <template slot="footer" slot-scope="data">
               <div class="table_footer" v-if="album_item.album_info.songs_len>10">
-                <span>查看全部 {{album_item.album_info.songs_len}} 首 <i class="iconfont icon-right"></i></span>
+                <span @click="go_album_detail(album_item)">查看全部 {{album_item.album_info.songs_len}} 首 <i class="iconfont icon-right"></i></span>
               </div>
             </template>
           </base-table>
@@ -263,8 +265,23 @@
           console.log('err',err)
         });
       },
+      go_album_detail(data){
+        console.log(data)
+        let id = data.id?data.id:(data.album_info?data.album_info.id:data.data.id);
+        this.$router.push({
+          path: '/album_detail_common',
+          query: { id: id}
+        })
+      }
     },
     watch: {
+      watch: {
+        '$route.query.id': function (new_val, old_val) {
+          if(new_val){
+            this.init();
+          }
+        }
+      },
       'scroll_info.process': function (new_val, old_val) {
         if(new_val >= 0.98 && this.pageChange && this.is_more && this.tab_active == '0'){
           this.pageChange = false;
@@ -367,6 +384,7 @@
       width: 100%;
       .album_coverimg{
         width: 210px;
+        cursor: pointer;
         .pic{
           width: 180px;
           height: 150px;
@@ -399,7 +417,7 @@
         line-height: 1;
         padding-bottom: 5px;
         .play_all{
-
+          cursor: pointer;
         }
         .play_opare{
           display: flex;

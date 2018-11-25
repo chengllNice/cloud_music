@@ -1,6 +1,6 @@
 <template>
   <div class="simi_singer_info">
-    <div class="singer_info" v-for="(item, index) in data" :key="index">
+    <div class="singer_info" v-for="(item, index) in data" :key="index" @click="singerInfoHandler(item)">
       <div class="avatar">
         <img :src="item.picUrl+'?param=500y500'" alt="">
       </div>
@@ -39,8 +39,21 @@
         }).catch(err=>{
           console.log('err',err)
         })
+      },
+      singerInfoHandler(data){
+        this.$router.push({
+          path: '/singer_detail_common',
+          query: { id: data.id}
+        })
       }
-    }
+    },
+    watch: {
+      '$route.query.id': function (new_val, old_val) {
+        if(new_val){
+          this.init();
+        }
+      }
+    },
   }
 </script>
 

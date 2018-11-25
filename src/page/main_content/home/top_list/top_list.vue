@@ -107,7 +107,7 @@
             </template>
             <template slot="footer" slot-scope="data">
               <div class="seen_all">
-                <span @click="songlist_all(new_music_list.songlist_id, 'new')">查看全部></span>
+                <span @click="songlist_all(new_music_list.songlist_id, 'lastRank')">查看全部></span>
               </div>
             </template>
           </base-table>
@@ -163,7 +163,7 @@
             </template>
             <template slot="footer" slot-scope="data">
               <div class="seen_all">
-                <span @click="songlist_all(origin_music_list.songlist_id, 'origin')">查看全部></span>
+                <span @click="songlist_all(origin_music_list.songlist_id, 'lastRank')">查看全部></span>
               </div>
             </template>
           </base-table>
@@ -219,7 +219,7 @@
             </template>
             <template slot="footer" slot-scope="data">
               <div class="seen_all">
-                <span @click="songlist_all(hot_music_list.songlist_id, 'hot')">查看全部></span>
+                <span @click="songlist_all(hot_music_list.songlist_id, 'lastRank')">查看全部></span>
               </div>
             </template>
           </base-table>
@@ -429,7 +429,7 @@
       songlist_all(id, type){
         this.$router.push({
           path: '/songlist_detail_common',
-          query: { id: id, type: 'lastRank'}
+          query: { id: id, type: type}
         })
       },
       // 歌手榜点击

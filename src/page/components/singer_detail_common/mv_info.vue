@@ -75,6 +75,13 @@
       },
     },
     watch: {
+      watch: {
+        '$route.query.id': function (new_val, old_val) {
+          if(new_val){
+            this.init();
+          }
+        }
+      },
       'scroll_info.process': function (new_val, old_val) {
         if(new_val >= 0.98 && this.pageChange && this.is_more && this.tab_active == '1'){
           this.pageChange = false;

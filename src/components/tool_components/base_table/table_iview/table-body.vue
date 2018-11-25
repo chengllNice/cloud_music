@@ -34,6 +34,9 @@
           </Cell>
         </td>
       </table-tr>
+      <!--<tr v-if="">-->
+        <!--<td :colspan="columns.length">11111111111</td>-->
+      <!--</tr>-->
       <tr v-if="rowExpanded(row._index)" :class="{[prefixCls + '-expanded-hidden']: fixed}">
         <td :colspan="columns.length" :class="prefixCls + '-expanded-cell'">
           <Expand :key="row._rowKey" :row="row" :render="expandRender" :index="row._index"></Expand>
@@ -74,6 +77,8 @@
         for (let i = 0; i < this.columns.length; i++) {
           const column = this.columns[i];
           if (column.type && column.type === 'expand') {
+            console.log(column,'columncolumncolumncolumn')
+
             if (column.render) render = column.render;
           }
         }

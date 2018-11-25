@@ -28,8 +28,11 @@
         this.pageData.page = this.search_video_data.page.page = page;
         this.get_search();
       },
-      songlistClickHandler(){
-
+      songlistClickHandler(data){
+        this.$router.push({
+          path: '/play_mv',
+          query: { id: data.id, type: data.video_type}
+        })
       }
     }
   }

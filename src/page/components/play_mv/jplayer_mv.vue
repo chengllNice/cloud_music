@@ -90,11 +90,11 @@
 
                 <div class="br_box" @click="br_select_toggle=!br_select_toggle">
                   <i class="iconfont icon-screen"></i>
-                  <span>{{br_data[br_active].name}}</span>
+                  <span v-for="(item, index) in br_data" :key="index" v-if="br_data.length && item.id == br_active">{{item.name}}</span>
 
-                  <div class="br_select" v-if="br_select_toggle">
+                  <div class="br_select" v-if="br_select_toggle && br_data.length">
                     <div class="br_item" v-for="(item, index) in br_data" :key="index" @click="change_br(item, index)">
-                      <span class="br_icon"><i class="iconfont icon-right-slim1" v-if="index == br_active"></i></span>
+                      <span class="br_icon"><i class="iconfont icon-right-slim1" v-if="item.id == br_active"></i></span>
                       <span>{{item.name}}</span>
                     </div>
                   </div>
@@ -151,29 +151,67 @@
           left: '',
           text: ''
         },
-        br_data: [
-          {
-            id: '1080',
-            name: '1080P',
-          },
-          {
-            id: '720',
-            name: '超清',
-          },
-          {
-            id: '480',
-            name: '高清',
-          },
-          {
-            id: '240',
-            name: '标清',
-          }
-        ],
+        // br_data: [
+        //   {
+        //     id: '1080',
+        //     name: '1080P',
+        //   },
+        //   {
+        //     id: '720',
+        //     name: '超清',
+        //   },
+        //   {
+        //     id: '480',
+        //     name: '高清',
+        //   },
+        //   {
+        //     id: '240',
+        //     name: '标清',
+        //   }
+        // ],
         br_select_toggle: false,
-        br_active: 2
+        br_active: '480'
       }
     },
-    computed: {},
+    computed: {
+      br_data(){
+        let result = [];
+        if(this.data.brs && this.data.brs.length){
+          this.data.brs.forEach(item=>{
+            let obj = {};
+            if(item.br == '240'){
+              obj = {
+                id: '240',
+                name: '标清'
+              }
+            }
+            if(item.br == '480'){
+              obj = {
+                id: '480',
+                name: '高清'
+              }
+            }
+            if(item.br == '720'){
+              obj = {
+                id: '720',
+                name: '超清'
+              }
+            }
+            if(item.br == '1080'){
+              obj = {
+                id: '1080',
+                name: '1080P'
+              }
+            }
+            result.push(obj)
+          });
+        }
+        result.sort(function (a,b) {
+          return b.id-a.id;
+        });
+        return result;
+      }
+    },
     components: {},
     created() {
     },
@@ -333,7 +371,7 @@
       },
       // 切换清晰度
       change_br(data, index){
-        this.br_active = index;
+        this.br_active = data.id;
         this.$emit('changeBr', data);
       },
       fullScreenHandler(){
@@ -731,7 +769,7 @@
             .br_select{
               width: 70px;
               position: absolute;
-              top: -130px;
+              bottom: 46px;
               left: -15px;
               z-index: 10;
               background: rgba(0,0,0,0.5);

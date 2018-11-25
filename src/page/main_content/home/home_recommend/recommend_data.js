@@ -60,7 +60,7 @@ export const banner_data = [
 
 //推荐歌单
 export const recommend_sing_data = {
-  id: '',
+  id: 'recommend_sing',
   name: '',
   type: '',
   weight: '0',//权值，排序优先度
@@ -73,7 +73,8 @@ export const recommend_sing_data = {
   title: {
     name: '推荐歌单',
     noshow: false,
-    more_btn: '更多'
+    more_btn: '更多',
+    path: '/home/playlist'
   },
   uiconfig: {
     id: 'id',
@@ -213,7 +214,7 @@ export const recommend_sing_data = {
 
 //独家放送
 export const exclusive_data = {
-  id: '',
+  id: 'exclusive',
   name: '',
   type: '',
   weight: '1',//权值，排序优先度
@@ -287,7 +288,7 @@ export const exclusive_data = {
 
 //最新音乐
 export const new_song_data = {
-  id: '',
+  id: 'new_song',
   name: '',
   type: 'table',
   weight: '2',//权值，排序优先度
@@ -296,7 +297,8 @@ export const new_song_data = {
   title: {
     name: '最新音乐',
     noshow: false,
-    more_btn: '更多'
+    more_btn: '更多',
+    path:'/home/new_music/express'
   },
   config: {
     colsNum: '2',
@@ -550,7 +552,7 @@ export const new_song_data = {
 
 //推荐mv
 export const recommend_mv_data = {
-  id: '',
+  id: 'recommend_mv',
   name: '',
   type: 'mv',
   weight: '3',//权值，排序优先度
@@ -595,7 +597,7 @@ export const recommend_mv_data = {
 
 //主播电台
 export const radio_station_data = {
-  id: '',
+  id: 'radio_station',
   name: '',
   type: '',
   weight: '4',//权值，排序优先度
