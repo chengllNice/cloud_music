@@ -38,13 +38,6 @@
       <div class="playlist_cat_hot">
         <tool-filter-select :data="cat_hot_data" @click="subCatClick"></tool-filter-select>
       </div>
-      <!--<div class="playlist_cat_hot">-->
-        <!--<div class="hot_label">热门标签 : </div>-->
-        <!--<div class="hot_item" v-for="(hot_item, hot_index) in cat_hot_data" :key="hot_index">-->
-          <!--<span class="line" v-if="hot_index != '0'"></span>-->
-          <!--<span class="name" @click="subCatClick(hot_item.name)">{{hot_item.name}}</span>-->
-        <!--</div>-->
-      <!--</div>-->
     </div>
     <div class="playlist_main" v-loading="loading">
       <base-sing-list class="playlist_main_wrap" :list-data="playlist_data"
@@ -57,6 +50,7 @@
 <script>
   import { playlist_data} from "./playlist_data";
   import { get_playlist_catlist, get_playlist_hot, get_top_playlist} from "../../../../server/home";
+  import { mapState} from 'vuex'
 
   export default {
     name: "playlist",
@@ -73,7 +67,9 @@
         loading: true
       }
     },
-    computed: {},
+    computed: {
+      ...mapState(['device_info'])
+    },
     components: {},
     created() {
       this.playlist_data = this.$deepClone(playlist_data);
@@ -83,6 +79,7 @@
     },
     methods: {
       init(){
+        this.device_change();
         this.get_playlist_catlist();
         this.get_playlist_hot();
         this.get_top_playlist();
@@ -179,6 +176,18 @@
       pageChange(page){
         this.playlist_data.page.page = page;
         this.get_top_playlist();
+      },
+      device_change(){
+        if(this.device_info.clientWidth >= 1304){
+          this.playlist_data.colsNum = 5;
+        }else{
+          this.playlist_data.colsNum = 4;
+        }
+      }
+    },
+    watch: {
+      'device_info.clientWidth': function (new_val, old_val) {
+        this.device_change()
       }
     }
   }

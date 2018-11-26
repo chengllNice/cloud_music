@@ -76,7 +76,7 @@
         <header-tab class="home_header_tab" tab-type="iview_tab_song" :data="header_tab_data" @tabClick="tabClick"></header-tab>
       </div>
       <div class="table_box" v-if="tab_active == '0'">
-        <base-table @dbclick="tableClick" :data="songlist.data.table_data">
+        <base-table @dbclick="tableClick" type="music" :data="songlist.data.table_data">
           <template slot="song_name" slot-scope="data">
             <div class="song_name ellipsis_1">
               <div class="ellipsis_1">{{data.data.song_name}}</div>

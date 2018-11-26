@@ -10,19 +10,21 @@
 
 <script>
   import searchPageMixin from '../search_page_mixin.vue'
-
+  import { mapState} from 'vuex'
   export default {
     name: "search_dj",
     data() {
       return {}
     },
     mixins: [searchPageMixin],
-    computed: {},
+    computed: {
+      ...mapState(['device_info'])
+    },
     created() {
       this.search_type = '1009';
     },
     mounted() {
-
+      this.device_change();
     },
     methods: {
       pageChange(page){
@@ -32,6 +34,22 @@
       },
       songlistClickHandler(){
 
+      },
+      device_change(){
+        if(this.device_info.clientWidth >= 1408){
+          this.search_dj_data.colsNum = 8;
+        }else if(this.device_info.clientWidth >= 1304){
+          this.search_dj_data.colsNum = 7;
+        }else if(this.device_info.clientWidth >= 1211){
+          this.search_dj_data.colsNum = 6;
+        }else{
+          this.search_dj_data.colsNum = 5;
+        }
+      }
+    },
+    watch: {
+      'device_info.clientWidth': function (new_val, old_val) {
+        this.device_change()
       }
     }
   }

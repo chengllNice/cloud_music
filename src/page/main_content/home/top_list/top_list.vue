@@ -4,7 +4,7 @@
       <div class="title">官方榜</div>
       <div class=content>
         <div class="up_music_list">
-          <base-table :data="up_music_list.data"
+          <base-table type="music" :data="up_music_list.data"
                       :config="up_music_list.config"
                       @dbclick="tableClick"
                       stripe="stripe">
@@ -58,6 +58,7 @@
         </div>
         <div class="new_music_list">
           <base-table :data="new_music_list.data"
+                      type="music"
                       :config="new_music_list.config"
                       @dbclick="tableClick"
                       stripe="stripe">
@@ -114,6 +115,7 @@
         </div>
         <div class="origin_music_list">
           <base-table :data="origin_music_list.data"
+                      type="music"
                       :config="origin_music_list.config"
                       @dbclick="tableClick"
                       stripe="stripe">
@@ -171,6 +173,7 @@
         <div class="hot_music_list">
           <base-table :data="hot_music_list.data"
                       :config="hot_music_list.config"
+                      type="music"
                       @dbclick="tableClick"
                       stripe="stripe">
             <template slot="header" slot-scope="data">
@@ -227,6 +230,7 @@
         <div class="singer_list">
           <base-table :data="singer_list.data"
                       :config="singer_list.config"
+                      type="music"
                       @clickRow="clickRow"
                       stripe="stripe">
             <template slot="header" slot-scope="data">

@@ -1,6 +1,6 @@
 <template>
   <div class="album_songlist">
-    <base-table @dbclick="tableClick" :data="data.data" :config="data.config">
+    <base-table type="music" @dbclick="tableClick" :data="data.data" :config="data.config">
       <template slot="song_name" slot-scope="data">
         <div class="song_name ellipsis_1">
           <div class="ellipsis_1">{{data.data.song_name}}</div>

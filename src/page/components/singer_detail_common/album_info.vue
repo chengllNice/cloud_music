@@ -36,6 +36,7 @@
         <div class="album_table">
           <base-table :data="album_item.data"
                       :config="album_item.config"
+                      type="music"
                       stripe="stripe"
                       @dbclick="tableClick">
             <template slot="header" slot-scope="data">
@@ -124,6 +125,7 @@
     },
     methods: {
       async init(){
+        this.device_change();
         this.get_artist_album_theme();
         this.get_artist_album_list();
         this.get_artist_album_theme_list();
@@ -272,15 +274,25 @@
           path: '/album_detail_common',
           query: { id: id}
         })
+      },
+      device_change(){
+        if(this.device_info.clientWidth >= 1408){
+          this.singer_album_theme_data.colsNum = 6;
+        }else if(this.device_info.clientWidth >= 1211){
+          this.singer_album_theme_data.colsNum = 5;
+        }else{
+          this.singer_album_theme_data.colsNum = 4;
+        }
       }
     },
     watch: {
-      watch: {
-        '$route.query.id': function (new_val, old_val) {
-          if(new_val){
-            this.init();
-          }
+      '$route.query.id': function (new_val, old_val) {
+        if(new_val){
+          this.init();
         }
+      },
+      'device_info.clientWidth': function (new_val, old_val) {
+        this.device_change()
       },
       'scroll_info.process': function (new_val, old_val) {
         if(new_val >= 0.98 && this.pageChange && this.is_more && this.tab_active == '0'){
@@ -447,6 +459,21 @@
     .singer_album{
       .item_img{
         padding-right: 32px;
+      }
+    }
+    .album_info_item{
+      .item_img{
+        padding-right: 32px;
+        img{
+          border: 1px solid #dee1de;
+          border-right: none;
+        }
+      }
+      .item_img_cover{
+        box-shadow: 0 0 0 transparent!important;
+      }
+      .play_circle_icon{
+        right: 40px!important;
       }
     }
     .album_theme_list_box{

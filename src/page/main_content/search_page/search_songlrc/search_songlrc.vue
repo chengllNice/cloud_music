@@ -2,6 +2,7 @@
   <div class="search_songlrc">
     <base-table :data="search_songlrc_data.data"
                 :config="search_songlrc_data.config"
+                type="music"
                 @dbclick="tableClick"
                 @clickRow="clickRow"
                 @pageChange="pageChange"

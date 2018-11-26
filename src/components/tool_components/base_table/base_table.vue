@@ -240,6 +240,9 @@
               this.$store.state.history_music_list.pop();
             }
             this.$store.state.history_music_list.unshift(data.id);
+          }else{
+            this.history_music_list.remove(data.id);
+            this.$store.state.history_music_list.unshift(data.id);
           }
           this.oldRowData.push({data: data, index: index});
           if (this.oldRowData.length >= 3) {

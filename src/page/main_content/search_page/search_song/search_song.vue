@@ -3,6 +3,7 @@
 
     <base-table :data="search_song_data.data"
                 :config="search_song_data.config"
+                type="music"
                 @dbclick="tableClick"
                 @pageChange="pageChange"
                 stripe="stripe">

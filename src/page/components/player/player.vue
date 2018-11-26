@@ -99,6 +99,7 @@
     methods: {
       init(){
         this.jplayer_init();
+        this.get_song_url();
       },
       jplayer_init(){
         let vue = this;
@@ -116,7 +117,11 @@
           // remainingDuration: true,//是否显示剩余时间
           // useStateClassSkin: true,//是否使用皮肤
         });
+        this.jplayer_listen();
+      },
+      jplayer_listen(){
         this.timeUpdate();
+        this.mv_end();
       },
       timeUpdate(){
         $('#jplayerEl').bind($.jPlayer.event.timeupdate, (e) => {
@@ -129,6 +134,20 @@
           // let v = this.$localStorage.getStore('volume');
           this.volume = (this.$typeOf(e.jPlayer.status.volume) === 'undefined' ? this.volume : e.jPlayer.status.volume*100);
           this.$store.commit('get_music_info', {currentTime: this.currentTime.m});
+        });
+      },
+      mv_end(){
+        let vue = this;
+        $('#jplayerEl').bind($.jPlayer.event.ended, (e) => {
+          // vue.$store.state.music_info.id = vue.play_music_list[];
+          let index = vue.play_music_list.indexOf(Number(vue.music_info.id));
+          let id = '';
+          if(index >= vue.play_music_list.length-1){
+            id = vue.play_music_list[0]
+          }else{
+            id = vue.play_music_list[index+1]
+          }
+          this.$store.commit('get_music_info',{id: id});
         });
       },
       progress_control(e){
@@ -187,6 +206,42 @@
           i = 0
         }
         this.playTypeActive = i;
+      },
+      get_song_detail(){
+        let ids = this.music_info.id;
+        let get_data = {
+          ids: ids
+        };
+        this.$commonApi.getSongDetail(get_data).then(res=>{
+          let data = res.songs[0];
+          let info = {
+            id: data.data.id,
+            picUrl: data.al.picUrl,
+            song_name: data.name,
+            artists: data.ar,
+            album: data.al,
+            alias: data.alia
+          };
+          this.$store.commit('get_music_info',info);
+        }).catch(err=>{
+          console.log('err',err)
+        })
+      },
+      get_song_url(){
+        let id = this.music_info.id;
+        let get_data = {
+          id: id
+        };
+        this.$commonApi.getSongDetail(get_data).then(res=>{
+          let url = res.data[0].url;
+          let info = {
+            url: url,
+            playStatus: 'play',
+          };
+          this.$store.commit('get_music_info',info);
+        }).catch(err=>{
+          console.log('err',err)
+        })
       },
       againPlay(){
         $('#jplayerEl').jPlayer('setMedia',{
