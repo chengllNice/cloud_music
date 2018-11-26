@@ -232,17 +232,8 @@
         if(this.type == 'music'){
           // 播放列表
           if(JSON.stringify(this.play_music_list) != JSON.stringify(this.ids_list)){
-            this.$store.state.play_music_list = this.ids_list
-          }
-          // 播放历史
-          if(this.history_music_list.indexOf(data.id) == -1){
-            if(this.history_music_list.length >= 100){
-              this.$store.state.history_music_list.pop();
-            }
-            this.$store.state.history_music_list.unshift(data.id);
-          }else{
-            this.history_music_list.remove(data.id);
-            this.$store.state.history_music_list.unshift(data.id);
+            this.$store.state.play_music_list = this.ids_list;
+            this.$localStorage.setStore('play_music_list', this.ids_list);
           }
           this.oldRowData.push({data: data, index: index});
           if (this.oldRowData.length >= 3) {

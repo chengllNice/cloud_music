@@ -1,10 +1,10 @@
 <template>
   <div class="common_footer">
     <player @songlistClick="songlistClick"></player>
-    <div class="songlist_box" v-if="playlist_show">
+    <div @click.stop="playlist_show = true" class="songlist_box" v-if="playlist_show">
       <div class="songlist_tab">
         <header-tab :data="tab_data" tab-type="iview_tab" @tabClick="tabClick"></header-tab>
-        <div class="close_list"><i class="iconfont icon-close"></i></div>
+        <div class="close_list" @click.stop="playlist_show = false"><i class="iconfont icon-add1"></i></div>
       </div>
 
       <div class="play_list_info">
@@ -37,6 +37,7 @@
         <base-table v-if="tab_tabel_active == 'playlist'"
                     :data="playlist_data.data"
                     :config="playlist_data.config"
+                    type="music"
                     @dbclick="tableClick"
                     stripe="stripe">
           <template slot="song_name" slot-scope="data">
@@ -65,6 +66,7 @@
         <base-table v-if="tab_tabel_active == 'history'"
                     :data="history_data.data"
                     :config="history_data.config"
+                    type="music"
                     @dbclick="tableClick"
                     stripe="stripe">
           <template slot="song_name" slot-scope="data">
@@ -135,13 +137,37 @@
     mounted() {
       this.get_play_music_list();
       this.get_history_music_list();
+      let vue = this;
+      $('body').click(function () {
+        vue.playlist_show = false;
+      })
     },
     methods: {
       songlistClick(){
         this.playlist_show = !this.playlist_show;
       },
-      tableClick(){
-
+      tableClick(data){
+        let get_data = {
+          id: data.data.id
+        };
+        this.$commonApi.getSongUrl(get_data).then(res=>{
+          if(res.data && res.data.length){
+            let url = res.data[0].url;
+            let info = {
+              id: data.data.id,
+              url: url,
+              playStatus: 'play',
+//              picUrl: data.data.picUrl,
+//              song_name: data.data.song_name,
+//              artists: data.data.artists,
+//              album: data.data.album_name,
+//              alias: data.data.alias
+            };
+            this.$store.commit('get_music_info',info);
+          }
+        }).catch(err=>{
+          console.log('err',err)
+        });
       },
       tabClick(data){
         this.tab_tabel_active = data.id;
@@ -241,6 +267,8 @@
         display: flex;
         align-items: center;
         justify-content: center;
+        transform: rotate(45deg);
+        cursor: pointer;
       }
     }
 

@@ -33,12 +33,15 @@
           </div>
         </div>
         <div class="play_loop_box">
+          <transition name="fade">
+            <div v-if="play_type_tip" class="play_type_tip">{{playTypeActive.title}}</div>
+          </transition>
           <i v-for="(item, index) in playType" :key="index"
-             :class="['iconfont', item.icon]" v-if="playTypeActive == index"
-             @click="playTypeChange(index)"></i>
+             :class="['iconfont', item.icon]" v-if="playTypeActive.index == index"
+             @click="playTypeChange(item, index)" :title="item.title"></i>
         </div>
         <div class="play_lrc_box">词</div>
-        <div class="play_list_box" @click="songlistHandler">
+        <div class="play_list_box" @click.stop="songlistHandler">
           <span class="icon_music_list">
             <i class="iconfont icon-music_list2"></i>
           </span>
@@ -58,19 +61,27 @@
       return {
         loading: false,
         volume: this.$localStorage.getStore('volume') || 50,
-        playTypeActive: '0',
+        playTypeActive: {
+          index: '0',
+          title: ''
+        },
+        play_type_tip: false,
         playType: [
           {
             icon: 'icon-list_play',
+            title: '顺序播放'
           },
           {
             icon: 'icon-loop_play',
+            title: '循环播放'
           },
           {
             icon: 'icon-single_play',
+            title: '单曲循环'
           },
           {
             icon: 'icon-random_play',
+            title: '随机播放'
           }
         ],
         play_precent: '0',
@@ -86,7 +97,7 @@
       }
     },
     computed: {
-      ...mapState(['music_info', 'play_music_list'])
+      ...mapState(['music_info', 'play_music_list','history_music_list'])
     },
     components: {},
     created() {
@@ -139,13 +150,23 @@
       mv_end(){
         let vue = this;
         $('#jplayerEl').bind($.jPlayer.event.ended, (e) => {
-          // vue.$store.state.music_info.id = vue.play_music_list[];
           let index = vue.play_music_list.indexOf(Number(vue.music_info.id));
-          let id = '';
-          if(index >= vue.play_music_list.length-1){
-            id = vue.play_music_list[0]
-          }else{
-            id = vue.play_music_list[index+1]
+          let id = vue.music_info.id || '';
+          if(vue.playTypeActive.index == 0){
+            if(index < vue.play_music_list.length-1){
+              id = vue.play_music_list[index+1]
+            }
+          }else if(vue.playTypeActive.index == 1){
+            if(index >= vue.play_music_list.length-1){
+              id = vue.play_music_list[0]
+            }else{
+              id = vue.play_music_list[index+1]
+            }
+          }else if(vue.playTypeActive.index == 2){
+            this.againPlay();
+          }else if(vue.playTypeActive.index == 3){
+            let radom_index = Math.floor(Math.random()*vue.play_music_list.length);
+            id = vue.play_music_list[radom_index]
           }
           this.$store.commit('get_music_info',{id: id});
         });
@@ -200,22 +221,27 @@
             break;
         }
       },
-      playTypeChange(index){
+      playTypeChange(item, index){
         let i = index+1;
         if(index == this.playType.length-1){
           i = 0
         }
-        this.playTypeActive = i;
+        this.playTypeActive.index = i;
+        this.playTypeActive.title = this.playType[i].title;
+        this.play_type_tip = true;
+        let vue = this;
+        setTimeout(function () {
+          vue.play_type_tip = false;
+        },500);
       },
-      get_song_detail(){
+      async get_song_detail(id){
         let ids = this.music_info.id;
         let get_data = {
-          ids: ids
+          ids: id?id:ids
         };
         this.$commonApi.getSongDetail(get_data).then(res=>{
           let data = res.songs[0];
           let info = {
-            id: data.data.id,
             picUrl: data.al.picUrl,
             song_name: data.name,
             artists: data.ar,
@@ -227,15 +253,17 @@
           console.log('err',err)
         })
       },
-      get_song_url(){
-        let id = this.music_info.id;
+      async get_song_url(id){
+        let m_id = this.music_info.id;
         let get_data = {
-          id: id
+          id: id?id:m_id
         };
-        this.$commonApi.getSongDetail(get_data).then(res=>{
+        this.$commonApi.getSongUrl(get_data).then(res=>{
           let url = res.data[0].url;
+          let res_id = res.data[0].id;
           let info = {
             url: url,
+            id: res_id,
             playStatus: 'play',
           };
           this.$store.commit('get_music_info',info);
@@ -243,7 +271,9 @@
           console.log('err',err)
         })
       },
-      againPlay(){
+      async againPlay(){
+        await this.get_song_detail(this.music_info.id);
+        await this.get_song_url(this.music_info.id);
         $('#jplayerEl').jPlayer('setMedia',{
           mp3: this.music_info.url
         }).jPlayer('play');
@@ -251,6 +281,18 @@
       },
       songlistHandler(){
         this.$emit('songlistClick')
+      },
+      play_history_list(id){
+        // 播放历史
+        if(this.history_music_list.indexOf(id) == -1){
+          if(this.history_music_list.length >= 100){
+            this.$store.state.history_music_list.pop();
+          }
+          this.$store.state.history_music_list.unshift(id);
+        }else{
+          this.history_music_list.remove(id);
+          this.$store.state.history_music_list.unshift(id);
+        }
       }
     },
     watch: {
@@ -263,6 +305,7 @@
         if(this.music_info.playStatus == 'play'){
           this.againPlay();
         }
+        this.play_history_list(new_val);
         this.$localStorage.setStore('music_info', this.music_info);
       }
     }
@@ -444,6 +487,25 @@
       }
       .play_loop_box{
         padding-left: 6px;
+        position: relative;
+        .fade-enter-active, .fade-leave-active {
+          transition: opacity .5s;
+        }
+        .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+          opacity: 0;
+        }
+        .play_type_tip{
+          width: 80px;
+          padding: 2px 0;
+          text-align: center;
+          font-size:14px;
+          background: #444;
+          color: #fefefe;
+          position: absolute;
+          top: -40px;
+          left: -20px;
+        }
+
         i{
           font-weight: bolder;
           cursor: pointer;
