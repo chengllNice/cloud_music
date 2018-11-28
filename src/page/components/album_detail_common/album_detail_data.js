@@ -113,7 +113,17 @@ export const album_song_data = {
         jpath: 'pop',
         width: 150,
         table_slot: 'pop'
-      }
+      },
+      {
+        title: '播放来源',
+        key: 'source_path',
+        noshow: true,
+      },
+      {
+        title: '播放状态',
+        key: 'playStatus',
+        noshow: true,
+      },
     ],
     t_body: [],
     t_page: {}

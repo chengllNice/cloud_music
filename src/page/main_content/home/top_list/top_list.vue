@@ -359,7 +359,7 @@
               tracks_sub_8.forEach((item, index)=>{
                 item.trackIds = (trackIds[index].lr === 0) ? '0' : (trackIds[index].lr || '');
               });
-              this.$tableListInit(tracks_sub_8, this.new_music_list.data);
+              this.$tableListInit(tracks_sub_8, this.new_music_list.data,this);
               break;
             case '1':
               this.hot_music_list.trackUpdateTime = trackUpdateTime;
@@ -367,7 +367,7 @@
               tracks_sub_8.forEach((item, index)=>{
                 item.trackIds = (trackIds[index].lr === 0) ? '0' : (trackIds[index].lr || '');
               });
-              this.$tableListInit(tracks_sub_8, this.hot_music_list.data);
+              this.$tableListInit(tracks_sub_8, this.hot_music_list.data,this);
               break;
             case '2':
               this.origin_music_list.trackUpdateTime = trackUpdateTime;
@@ -375,7 +375,7 @@
               tracks_sub_8.forEach((item, index)=>{
                 item.trackIds = (trackIds[index].lr === 0) ? '0' : (trackIds[index].lr || '');
               });
-              this.$tableListInit(tracks_sub_8, this.origin_music_list.data);
+              this.$tableListInit(tracks_sub_8, this.origin_music_list.data,this);
               break;
             case '3':
               this.up_music_list.trackUpdateTime = trackUpdateTime;
@@ -383,7 +383,7 @@
               tracks_sub_8.forEach((item, index)=>{
                 item.trackIds = trackIds[index].ratio;
               });
-              this.$tableListInit(tracks_sub_8, this.up_music_list.data);
+              this.$tableListInit(tracks_sub_8, this.up_music_list.data,this);
               break;
           }
 
@@ -400,7 +400,7 @@
           let data = res.list.artists.slice(0,8);
           this.singer_list.trackUpdateTime = this.$timeFormat(res.list.updateTime, 'mm月dd日') + '更新';
 
-          this.$tableListInit(data, this.singer_list.data)
+          this.$tableListInit(data, this.singer_list.data,this)
         }).catch(err => {
           console.log('err', err)
         })
@@ -420,7 +420,8 @@
               song_name: data.data.song_name,
               artists: data.data.artists,
               album: data.data.album_name,
-              alias: data.data.alias
+              alias: data.data.alias,
+              source_path: data.data.source_path
             };
             this.$store.commit('get_music_info',info);
           }

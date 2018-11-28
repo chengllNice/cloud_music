@@ -370,6 +370,16 @@ export const new_song_data = {
           table_slot: 'content',
           jpath: ''
         },
+        {
+          title: '播放来源',
+          key: 'source_path',
+          noshow: true,
+        },
+        {
+          title: '播放状态',
+          key: 'playStatus',
+          noshow: true,
+        },
         /*{
           title: '操作',
           key: 'operate',
@@ -442,6 +452,16 @@ export const new_song_data = {
           tooltip: true,
           table_slot: 'content',
           jpath: ''
+        },
+        {
+          title: '播放来源',
+          key: 'source_path',
+          noshow: true,
+        },
+        {
+          title: '播放状态',
+          key: 'playStatus',
+          noshow: true,
         },
         /*{
           title: '操作',

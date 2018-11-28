@@ -123,8 +123,9 @@
     },
     data() {
       return {
+        current_data: {},
         ids_list: [],
-        oldRowData: [],
+        // oldRowData: [],
         config_default: {
           colsNum: '1',
           size: "small",
@@ -191,10 +192,11 @@
                   }
                   body_item.sort_num = sort_num;
                 }
-                this.ids_list.push(body_item.id || '');
                 body_item.playStatus = !body_item.playStatus ? '' : body_item.playStatus;
+                this.ids_list.push(body_item.id || '');
               });
             }
+
           })
         }
         return result;
@@ -235,19 +237,34 @@
             this.$store.state.play_music_list = this.ids_list;
             this.$localStorage.setStore('play_music_list', this.ids_list);
           }
-          this.oldRowData.push({data: data, index: index});
-          if (this.oldRowData.length >= 3) {
-            this.oldRowData.splice(0, 1)
-          }
+          // this.oldRowData.push({data: data, index: index});
+          // if (this.oldRowData.length >= 3) {
+          //   this.oldRowData.splice(0, 1)
+          // }
           this.playStatusChange(data, index, 'play');
         }
         this.$emit('dbclick', {data: data, index: index});
       },
       playStatusChange(data, index, status) {
         data.playStatus = status;
+        this.current_data = {data:data, index:index};
         if (this.config_data.colsNum == '1') {
+          this.tableData.t_body.forEach((t_item, t_index)=>{
+            if(t_item.playStatus){
+              t_item.playStatus = '';
+              this.tableData.t_body.splice(t_index, 1, t_item);
+            }
+          });
           this.tableData.t_body.splice(index, 1, data);
         } else if (this.config_data.colsNum == '2') {
+          this.tableData.t_body.forEach((t_item, t_index)=>{
+            t_item.forEach((item, index)=>{
+              if(item.playStatus){
+                item.playStatus = '';
+                this.tableData.t_body.splice(t_index, 1, item);
+              }
+            })
+          });
           if (this.tableData.t_body[0].length < (data.sort_num - 0)) {
             this.tableData.t_body[1].splice(index, 1, data);
           } else {
@@ -284,9 +301,9 @@
         }
       },
       'music_info.playStatus': function (new_val, old_val) {
-        if (this.oldRowData.length) {
-          let data = this.oldRowData[this.oldRowData.length - 1];
+        if (this.current_data.data) {
           let status = new_val == 'play' ? 'play' : 'pause';
+          let data = this.$deepClone(this.current_data);
           this.playStatusChange(data.data, data.index, status);
         }
       }

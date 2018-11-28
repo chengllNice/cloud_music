@@ -195,7 +195,7 @@ export const uiconfigFormat = (data, uiconfig) => {
 /*
 * table数据取值
 * */
-export const tableListInit = (result, table_list) => {
+export const tableListInit = (result, table_list, vue) => {
   let result_len = result.length;
   let header = table_list.t_head;
   let table_len = header.length;
@@ -208,8 +208,22 @@ export const tableListInit = (result, table_list) => {
         for(let index_01 = 0; index_01 < header[index].length; index_01++){
           if (header[index][index_01].key != "operate") {
             obj[header[index][index_01].key] = getObjectValue(result[num], header[index][index_01].jpath);
+            if(header[index][index_01].key=='source_path'){
+              obj[header[index][index_01].key] = {
+                path: vue.$route.path,
+                id: vue.$route.query.id || ''
+              }
+            }
+            if(header[index][index_01].key=='playStatus'){
+              // if(current_music_source_path.path == vue.$route.path && current_music_source_path.id == query_id && current_music_id == result[num].id){
+              //   obj[header[index][index_01].key] = vue.$store.state.music_info.playStatus
+              // }else{
+              //   obj[header[index][index_01].key] = ''
+              // }
+            }
           }
         }
+        isCurrentMusic(obj, vue);
         table_list.t_body[index].push(obj);
       }
     }
@@ -222,15 +236,42 @@ export const tableListInit = (result, table_list) => {
             result[num],
             header[index].jpath
           );
+          if(header[index].key=='source_path'){
+            obj[header[index].key] = {
+              path: vue.$route.path,
+              id: vue.$route.query.id || ''
+            }
+          }
+          if(header[index].key=='playStatus'){
+
+            // if(current_music_source_path.path == vue.$route.path && current_music_source_path.id == query_id && current_music_id == result[num].id){
+            //   obj[header[index].key] = vue.$store.state.music_info.playStatus
+            // }else{
+            //   obj[header[index].key] = ''
+            // }
+          }
           if(header[index].key == 'duration'){
             obj[header[index].key] = timeFormat(obj[header[index].key])
           }
         }
       }
+      isCurrentMusic(obj, vue);
       table_list.t_body.push(obj)
     }
   }
   return table_list;
+};
+
+// 检验当前播放歌曲
+export const isCurrentMusic = (data, vue) => {
+  let query_id = vue.$route.query.id || '';
+  let current_music_id = vue.$store.state.music_info.id;
+  let current_music_source_path = vue.$store.state.music_info.source_path;
+  if(current_music_source_path.path == vue.$route.path && current_music_source_path.id == query_id && current_music_id == data.id){
+    data.playStatus = vue.$store.state.music_info.playStatus
+  }else{
+    data.playStatus = ''
+  }
 };
 
 /*

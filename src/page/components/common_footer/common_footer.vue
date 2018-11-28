@@ -187,7 +187,7 @@
           data.forEach((item, index)=>{
             item.privilege = privileges[index];
           });
-          this.$tableListInit(data, this.playlist_data.data);
+          this.$tableListInit(data, this.playlist_data.data,this);
         }).catch(err=>{
           console.log('err',err)
         })
@@ -207,7 +207,7 @@
           data.forEach((item, index)=>{
             item.privilege = privileges[index];
           });
-          this.$tableListInit(data, this.history_data.data);
+          this.$tableListInit(data, this.history_data.data,this);
         }).catch(err=>{
           console.log('err',err)
         })

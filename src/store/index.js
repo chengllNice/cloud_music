@@ -33,6 +33,7 @@ const state = {
     duration: '',//音乐总时长
     volume: '',//音量
     loop: '',//循环方式
+    source_path: {path: '',id: ''},//path音乐播放来源地址路由  音乐来源id--->专辑id或者歌单id
   },
   // 播放列表id
   play_music_list: [],

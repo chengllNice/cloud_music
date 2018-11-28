@@ -176,7 +176,8 @@
         })
       },
       songListInit(data, table_data){
-        this.$tableListInit(data,table_data);
+        this.$tableListInit(data,table_data,this);
+        console.log(table_data)
       },
       get_search_suggest(){
         let get_data = {

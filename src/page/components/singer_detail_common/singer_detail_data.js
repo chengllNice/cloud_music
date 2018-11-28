@@ -200,6 +200,16 @@ export const singer_album_theme_list_data = {
         key: 'duration',
         jpath: 'dt'
       },
+      {
+        title: '播放来源',
+        key: 'source_path',
+        noshow: true,
+      },
+      {
+        title: '播放状态',
+        key: 'playStatus',
+        noshow: true,
+      },
     ],
     t_body: [],
     t_page: {}

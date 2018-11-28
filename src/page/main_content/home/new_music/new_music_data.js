@@ -157,6 +157,16 @@ export const new_music_data = {
         noshow: true,
         jpath: 'privilege.maxbr'
       },
+      {
+        title: '播放来源',
+        key: 'source_path',
+        noshow: true,
+      },
+      {
+        title: '播放状态',
+        key: 'playStatus',
+        noshow: true,
+      },
     ],
     t_body: [],
     /*t_body: [

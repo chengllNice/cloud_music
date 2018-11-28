@@ -221,7 +221,7 @@
         }
 
         // let format_data = this.$uiconfigFormat(this.songlist.data.tracks,this.songlist.uiconfig);
-        this.$tableListInit(this.songlist.data.tracks, this.songlist.data.table_data);
+        this.$tableListInit(this.songlist.data.tracks, this.songlist.data.table_data,this);
         let time = this.$timeFormat(this.songlist.data.createTime, 'yy-mm-dd');
         this.$setObjectValue(this.songlist.data, 'createTime', time);
         this.$unitFormat(this.songlist.data, 'playCount');//播放量的单位转换
@@ -245,7 +245,8 @@
               song_name: data.data.song_name,
               artists: data.data.artists,
               album: data.data.album_name,
-              alias: data.data.alias
+              alias: data.data.alias,
+              source_path: data.data.source_path
             };
             this.$store.commit('get_music_info',info);
           }

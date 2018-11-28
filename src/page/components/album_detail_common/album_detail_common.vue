@@ -133,7 +133,7 @@
         let table_data = this.$deepClone(album_song_data);
         get_album(get_data).then(res=>{
           let songlists = res.songs;
-          this.$tableListInit(songlists,table_data.data);
+          this.$tableListInit(songlists,table_data.data,this);
           this.album_song_data = table_data;
 
           let album = res.album;

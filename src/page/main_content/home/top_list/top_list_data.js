@@ -73,6 +73,16 @@ export const up_music_list_data = {
         jpath: 'ar',
         table_slot: 'artists'
       },
+      {
+        title: '播放来源',
+        key: 'source_path',
+        noshow: true,
+      },
+      {
+        title: '播放状态',
+        key: 'playStatus',
+        noshow: true,
+      },
     ],
     t_body: [],
     t_page: {}
@@ -151,6 +161,16 @@ export const music_list_data = {
         width: 80,
         jpath: 'ar',
         table_slot: 'artists'
+      },
+      {
+        title: '播放来源',
+        key: 'source_path',
+        noshow: true,
+      },
+      {
+        title: '播放状态',
+        key: 'playStatus',
+        noshow: true,
       },
     ],
     t_body: [],

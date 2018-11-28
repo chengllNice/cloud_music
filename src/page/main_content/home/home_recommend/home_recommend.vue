@@ -197,7 +197,7 @@
       async get_newsong_data(){
         return new Promise((resolve, reject)=>{
           get_newsong().then(res=>{
-            this.$tableListInit(res.result, this.new_song_data.data);
+            this.$tableListInit(res.result, this.new_song_data.data, this);
             resolve()
             // this.all_data.push(this.new_song_data);
           }).catch(err=>{
@@ -254,6 +254,7 @@
               artists: data.data.artists,
               album: data.data.album,
               alias: data.data.alias,
+              source_path: data.data.source_path
             };
             this.$store.commit('get_music_info',info);
           }

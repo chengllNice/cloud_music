@@ -105,7 +105,17 @@ export const songlist_data = {
           key: 'duration',
           jpath: 'dt',
           width: 80
-        }
+        },
+        {
+          title: '播放来源',
+          key: 'source_path',
+          noshow: true,
+        },
+        {
+          title: '播放状态',
+          key: 'playStatus',
+          noshow: true,
+        },
       ],
       t_body: [
 

@@ -106,7 +106,7 @@
         let table_data = this.$deepClone(new_music_data);
         this.table_data = this.$deepClone(new_music_data);
         get_top_song(get_data).then(res=>{
-          this.$tableListInit(res.data,table_data.data);
+          this.$tableListInit(res.data,table_data.data,this);
           this.table_data = table_data;
         }).catch(err=>{
           console.log('err',err)
@@ -130,7 +130,8 @@
               song_name: data.data.song_name,
               artists: data.data.artists,
               album: data.data.album_name,
-              alias: data.data.alias
+              alias: data.data.alias,
+              source_path: data.data.source_path
             };
             this.$store.commit('get_music_info',info);
           }

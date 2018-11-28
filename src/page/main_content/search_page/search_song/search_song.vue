@@ -89,7 +89,8 @@
               song_name: data.data.song_name,
               artists: data.data.artists,
               album: data.data.album_name,
-              alias: data.data.alias
+              alias: data.data.alias,
+              source_path: data.data.source_path
             };
             this.$store.commit('get_music_info',info);
           }
