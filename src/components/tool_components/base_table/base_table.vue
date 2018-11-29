@@ -125,7 +125,6 @@
       return {
         current_data: {},
         ids_list: [],
-        // oldRowData: [],
         config_default: {
           colsNum: '1',
           size: "small",
@@ -237,10 +236,6 @@
             this.$store.state.play_music_list = this.ids_list;
             this.$localStorage.setStore('play_music_list', this.ids_list);
           }
-          // this.oldRowData.push({data: data, index: index});
-          // if (this.oldRowData.length >= 3) {
-          //   this.oldRowData.splice(0, 1)
-          // }
           this.playStatusChange(data, index, 'play');
         }
         this.$emit('dbclick', {data: data, index: index});
@@ -280,26 +275,6 @@
 
     },
     watch: {
-      'oldRowData': function (new_val, old_val) {
-        if (new_val.length >= 2) {
-          let a = new_val[0];
-          let a1 = new_val[1];
-          if ((a.data.id == a1.data.id) && (a.index == a1.index)) {
-            return;
-          }
-          a.data.playStatus = '';
-          let index = a.index;
-          if (this.config_data.colsNum == '1') {
-            this.tableData.t_body.splice(index, 1, a.data);
-          } else if (this.config_data.colsNum == '2') {
-            if (this.tableData.t_body[0].length < (a.data.sort_num - 0)) {
-              this.tableData.t_body[1].splice(index, 1, a.data);
-            } else {
-              this.tableData.t_body[0].splice(index, 1, a.data);
-            }
-          }
-        }
-      },
       'music_info.playStatus': function (new_val, old_val) {
         if (this.current_data.data) {
           let status = new_val == 'play' ? 'play' : 'pause';
