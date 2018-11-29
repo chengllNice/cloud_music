@@ -52,6 +52,13 @@ export const playlist_data = {
         table_slot: 'artists'
       },
       {
+        title: '来源',
+        key: 'source',
+        noshow: true,
+        width: 40,
+        table_slot: 'source'
+      },
+      {
         title: '时长',
         key: 'duration',
         noshow: false,

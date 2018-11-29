@@ -45,7 +45,7 @@
           <span class="icon_music_list">
             <i class="iconfont icon-music_list2"></i>
           </span>
-          <span class="music_list_total">{{play_music_list.length}}</span>
+          <span class="music_list_total">{{play_music_list.length || 0}}</span>
         </div>
       </div>
     </div>

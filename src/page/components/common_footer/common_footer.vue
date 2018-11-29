@@ -23,7 +23,7 @@
           </div>
         </div>
         <div class="header_box" v-if="tab_tabel_active == 'history'">
-          <div class="left">总{{history_music_list.length}}首</div>
+          <div class="left">总{{history_music_list.length || 0}}首</div>
           <div class="right">
             <div class="del">
               <i class="iconfont icon-del"></i>
@@ -47,8 +47,10 @@
                 <div class="alias" v-if="data.data.alias.length">
                   <span class="ellipsis_1" v-for="(alias_item, alias_index) in data.data.alias" :key="alias_index">({{alias_item}})</span>
                 </div>
-                <base-tool-button v-if="data.data.mvid" type="icon" cl-type="play_video_icon_button" icon-class="icon-music_play"></base-tool-button>
-                <base-tool-button v-if="data.data.maxbr && data.data.maxbr == '999000'" type="" cl-type="sq_button">SQ</base-tool-button>
+                <base-tool-button v-if="data.data.mvid" type="icon" cl-type="play_video_icon_button"
+                                  icon-class="icon-music_play"></base-tool-button>
+                <base-tool-button v-if="data.data.maxbr && data.data.maxbr == '999000'" type="" cl-type="sq_button">SQ
+                </base-tool-button>
               </div>
             </div>
           </template>
@@ -61,6 +63,11 @@
           </span>
             </div>
           </template>
+          <!--<template slot="source" slot-scope="data">-->
+            <!--<div class="">-->
+              <!--{{data.data}}-->
+            <!--</div>-->
+          <!--</template>-->
         </base-table>
 
         <base-table v-if="tab_tabel_active == 'history'"
@@ -76,8 +83,10 @@
                 <div class="alias" v-if="data.data.alias.length">
                   <span class="ellipsis_1" v-for="(alias_item, alias_index) in data.data.alias" :key="alias_index">({{alias_item}})</span>
                 </div>
-                <base-tool-button v-if="data.data.mvid" type="icon" cl-type="play_video_icon_button" icon-class="icon-music_play"></base-tool-button>
-                <base-tool-button v-if="data.data.maxbr && data.data.maxbr == '999000'" type="" cl-type="sq_button">SQ</base-tool-button>
+                <base-tool-button v-if="data.data.mvid" type="icon" cl-type="play_video_icon_button"
+                                  icon-class="icon-music_play"></base-tool-button>
+                <base-tool-button v-if="data.data.maxbr && data.data.maxbr == '999000'" type="" cl-type="sq_button">SQ
+                </base-tool-button>
               </div>
             </div>
           </template>
@@ -99,8 +108,8 @@
 
 <script>
   import player from '../player/player'
-  import { playlist_data} from "./playlist";
-  import { mapState} from 'vuex'
+  import {playlist_data} from "./playlist";
+  import {mapState} from 'vuex'
 
   export default {
     name: "common_footer",
@@ -125,7 +134,7 @@
       }
     },
     computed: {
-      ...mapState(['play_music_list','history_music_list'])
+      ...mapState(['play_music_list', 'history_music_list'])
     },
     components: {
       player
@@ -143,15 +152,15 @@
       })
     },
     methods: {
-      songlistClick(){
+      songlistClick() {
         this.playlist_show = !this.playlist_show;
       },
-      tableClick(data){
+      tableClick(data) {
         let get_data = {
           id: data.data.id
         };
-        this.$commonApi.getSongUrl(get_data).then(res=>{
-          if(res.data && res.data.length){
+        this.$commonApi.getSongUrl(get_data).then(res => {
+          if (res.data && res.data.length) {
             let url = res.data[0].url;
             let info = {
               id: data.data.id,
@@ -163,17 +172,17 @@
 //              album: data.data.album_name,
 //              alias: data.data.alias
             };
-            this.$store.commit('get_music_info',info);
+            this.$store.commit('get_music_info', info);
           }
-        }).catch(err=>{
-          console.log('err',err)
+        }).catch(err => {
+          console.log('err', err)
         });
       },
-      tabClick(data){
+      tabClick(data) {
         this.tab_tabel_active = data.id;
       },
-      get_play_music_list(){
-        if(!this.play_music_list.length){
+      get_play_music_list() {
+        if (!this.play_music_list.length) {
           return
         }
         let ids = this.play_music_list.join(',');
@@ -181,19 +190,19 @@
           ids: ids
         };
         this.playlist_data = this.$deepClone(playlist_data);
-        this.$commonApi.getSongDetail(get_data).then(res=>{
+        this.$commonApi.getSongDetail(get_data).then(res => {
           let data = res.songs;
           let privileges = res.privileges;
-          data.forEach((item, index)=>{
+          data.forEach((item, index) => {
             item.privilege = privileges[index];
           });
-          this.$tableListInit(data, this.playlist_data.data,this);
-        }).catch(err=>{
-          console.log('err',err)
+          this.$tableListInit(data, this.playlist_data.data, this);
+        }).catch(err => {
+          console.log('err', err)
         })
       },
-      get_history_music_list(){
-        if(!this.history_music_list.length){
+      get_history_music_list() {
+        if (!this.history_music_list.length) {
           return
         }
         let ids = this.history_music_list.join(',');
@@ -201,15 +210,15 @@
           ids: ids
         };
         this.history_data = this.$deepClone(playlist_data);
-        this.$commonApi.getSongDetail(get_data).then(res=>{
+        this.$commonApi.getSongDetail(get_data).then(res => {
           let data = res.songs;
           let privileges = res.privileges;
-          data.forEach((item, index)=>{
+          data.forEach((item, index) => {
             item.privilege = privileges[index];
           });
-          this.$tableListInit(data, this.history_data.data,this);
-        }).catch(err=>{
-          console.log('err',err)
+          this.$tableListInit(data, this.history_data.data, this);
+        }).catch(err => {
+          console.log('err', err)
         })
       }
     },
@@ -225,158 +234,158 @@
 </script>
 
 <style lang="less" scoped>
-.common_footer{
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  height: 50px;
-  z-index: 1200;
-  border-top: 1px solid #e2e2e3;
-  background: #ffffff;
-  .songlist_box{
+  .common_footer {
     position: absolute;
-    bottom: 48px;
-    right: 0;
-    width: 578px;
-    height: 478px;
-    background: #f4f4f6;
-    box-shadow: -2px -2px 8px rgba(153,153,153,0.5);
-    border-top-left-radius: 3px;
-    border-top: 1px solid #c2c2c4;
-    border-left: 1px solid #c2c2c4;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-
-    .songlist_tab{
+    bottom: 0;
+    width: 100%;
+    height: 50px;
+    z-index: 1200;
+    border-top: 1px solid #e2e2e3;
+    background: #ffffff;
+    .songlist_box {
+      position: absolute;
+      bottom: 48px;
+      right: 0;
+      width: 578px;
+      height: 478px;
+      background: #f4f4f6;
+      box-shadow: -2px -2px 8px rgba(153, 153, 153, 0.5);
+      border-top-left-radius: 3px;
+      border-top: 1px solid #c2c2c4;
+      border-left: 1px solid #c2c2c4;
       display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 45px;
-      position: relative;
-      .sub_header_nav{
-        width: auto;
-        height: auto;
-      }
-      .close_list{
-        position: absolute;
-        right: 10px;
-        top: 0;
-        bottom: 0;
-        margin: auto;
+      flex-direction: column;
+      overflow: hidden;
+
+      .songlist_tab {
         display: flex;
         align-items: center;
         justify-content: center;
-        transform: rotate(45deg);
-        cursor: pointer;
-      }
-    }
-
-    .new_song_content{
-      display: flex;
-      align-items: center;
-      padding: 10px 0;
-      .left_img{
+        height: 45px;
         position: relative;
-        width: 40px;
-        height: 40px;
-        img{
-          width: 100%;
-          height: 100%;
+        .sub_header_nav {
+          width: auto;
+          height: auto;
         }
-        .img_cover{
+        .close_list {
           position: absolute;
+          right: 10px;
           top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
+          bottom: 0;
+          margin: auto;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transform: rotate(45deg);
           cursor: pointer;
         }
       }
-      .right_info{
-        flex: 1;
-        height: 100%;
+
+      .new_song_content {
         display: flex;
-        flex-direction: row;
-        justify-content: left;
         align-items: center;
-        margin-left: 10px;
-        color: #333333;
-        .song_name{
-          max-width: 100%;
-          flex: none;
-          display: flex;
-          span{
-            flex: 1;
+        padding: 10px 0;
+        .left_img {
+          position: relative;
+          width: 40px;
+          height: 40px;
+          img {
+            width: 100%;
+            height: 100%;
+          }
+          .img_cover {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
           }
         }
-        .tool_button{
-          flex: none;
-        }
-        &>*{
-          margin-right: 5px;
-        }
-        .alias{
-          color: #888888;
+        .right_info {
+          flex: 1;
+          height: 100%;
           display: flex;
-          span{
-            flex: 1;
+          flex-direction: row;
+          justify-content: left;
+          align-items: center;
+          margin-left: 10px;
+          color: #333333;
+          .song_name {
+            max-width: 100%;
+            flex: none;
+            display: flex;
+            span {
+              flex: 1;
+            }
+          }
+          .tool_button {
+            flex: none;
+          }
+          & > * {
+            margin-right: 5px;
+          }
+          .alias {
+            color: #888888;
+            display: flex;
+            span {
+              flex: 1;
+            }
           }
         }
       }
-    }
-    .play_list_info{
-      .header_box{
-        height: 30px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 0 10px;
-        font-size: 12px;
-        color: #666;
-        background: #f9f9f9;
-        border-top: 1px solid #eee;
-        border-bottom: 1px solid #eee;
-        .left{
-
-        }
-        .right{
+      .play_list_info {
+        .header_box {
+          height: 30px;
           display: flex;
           align-items: center;
-          .collection{
+          justify-content: space-between;
+          padding: 0 10px;
+          font-size: 12px;
+          color: #666;
+          background: #f9f9f9;
+          border-top: 1px solid #eee;
+          border-bottom: 1px solid #eee;
+          .left {
+
+          }
+          .right {
             display: flex;
             align-items: center;
-            padding: 0 6px;
-            i{
-              font-size: 18px;
-              margin-right: 3px;
+            .collection {
+              display: flex;
+              align-items: center;
+              padding: 0 6px;
+              i {
+                font-size: 18px;
+                margin-right: 3px;
+              }
             }
-          }
-          .line{
-            height: 12px;
-            width: 0;
-            border-left: 1px solid #e1e1e2;
-          }
-          .del{
-            display: flex;
-            align-items: center;
-            padding: 0 6px;
-            i{
-              margin-right: 3px;
+            .line {
+              height: 12px;
+              width: 0;
+              border-left: 1px solid #e1e1e2;
+            }
+            .del {
+              display: flex;
+              align-items: center;
+              padding: 0 6px;
+              i {
+                margin-right: 3px;
+              }
             }
           }
         }
       }
+
+      .table_main {
+        flex: 1;
+        overflow-y: scroll;
+        overflow-x: hidden;
+      }
     }
 
-    .table_main{
-      flex: 1;
-      overflow-y: scroll;
-      overflow-x: hidden;
-    }
   }
-
-}
 </style>
 <style lang="less">
 
