@@ -19,6 +19,13 @@ export const playlist_data = {
   data: {
     t_head: [
       {
+        title: '播放状态',
+        key: 'playStatus',
+        noshow: false,
+        width: 20,
+        table_slot: 'playStatus'
+      },
+      {
         title: 'id',
         key: 'id',
         noshow: true,
@@ -53,17 +60,16 @@ export const playlist_data = {
       },
       {
         title: '来源',
-        key: 'source',
-        noshow: true,
-        width: 40,
-        table_slot: 'source'
+        key: 'source_path',
+        noshow: false,
+        width: 30,
+        table_slot: 'source_path'
       },
       {
         title: '时长',
         key: 'duration',
         noshow: false,
-        minWidth: 60,
-        maxWidth: 80,
+        width: 55,
         jpath: 'dt'
       },
       {

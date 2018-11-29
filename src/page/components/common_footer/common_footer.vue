@@ -1,5 +1,5 @@
 <template>
-  <div class="common_footer">
+  <div class="common_footer" @click.stop="playlist_show = true">
     <player @songlistClick="songlistClick"></player>
     <div @click.stop="playlist_show = true" class="songlist_box" v-if="playlist_show">
       <div class="songlist_tab">
@@ -9,7 +9,7 @@
 
       <div class="play_list_info">
         <div class="header_box" v-if="tab_tabel_active == 'playlist'">
-          <div class="left">总{{play_music_list.length}}首</div>
+          <div class="left">总{{play_music_list.ids.length}}首</div>
           <div class="right">
             <div class="collection">
               <i class="iconfont icon-add_file"></i>
@@ -40,6 +40,12 @@
                     type="music"
                     @dbclick="tableClick"
                     stripe="stripe">
+          <template slot="playStatus" slot-scope="data">
+            <div class="playStatus">
+              <i class="iconfont icon-music_play" v-if="data.data.playStatus == 'pause'"></i>
+              <i class="iconfont icon-music_pause" v-if="data.data.playStatus == 'play'"></i>
+            </div>
+          </template>
           <template slot="song_name" slot-scope="data">
             <div class="new_song_content">
               <div class="right_info">
@@ -63,11 +69,11 @@
           </span>
             </div>
           </template>
-          <!--<template slot="source" slot-scope="data">-->
-            <!--<div class="">-->
-              <!--{{data.data}}-->
-            <!--</div>-->
-          <!--</template>-->
+          <template slot="source_path" slot-scope="data">
+            <div class="source_path">
+              <i class="iconfont icon-source" title="来源" @click="source_handler(data.data.source_path)"></i>
+            </div>
+          </template>
         </base-table>
 
         <base-table v-if="tab_tabel_active == 'history'"
@@ -181,25 +187,34 @@
       tabClick(data) {
         this.tab_tabel_active = data.id;
       },
+      source_handler(data){
+        let path = data.path || '';
+        let id = data.id || '';
+        this.$router.push({
+          path: path,
+          query: {id:id}
+        });
+      },
       get_play_music_list() {
-        if (!this.play_music_list.length) {
+        if (!this.play_music_list.ids.length) {
           return
         }
-        let ids = this.play_music_list.join(',');
-        let get_data = {
-          ids: ids
-        };
-        this.playlist_data = this.$deepClone(playlist_data);
-        this.$commonApi.getSongDetail(get_data).then(res => {
-          let data = res.songs;
-          let privileges = res.privileges;
-          data.forEach((item, index) => {
-            item.privilege = privileges[index];
-          });
-          this.$tableListInit(data, this.playlist_data.data, this);
-        }).catch(err => {
-          console.log('err', err)
-        })
+        this.playlist_data.data.t_body = this.play_music_list.data;
+//        let ids = this.play_music_list.ids.join(',');
+//        let get_data = {
+//          ids: ids
+//        };
+//        this.playlist_data = this.$deepClone(playlist_data);
+//        this.$commonApi.getSongDetail(get_data).then(res => {
+//          let data = res.songs;
+//          let privileges = res.privileges;
+//          data.forEach((item, index) => {
+//            item.privilege = privileges[index];
+//          });
+//          this.$tableListInit(data, this.playlist_data.data, this);
+//        }).catch(err => {
+//          console.log('err', err)
+//        })
       },
       get_history_music_list() {
         if (!this.history_music_list.length) {
@@ -223,7 +238,7 @@
       }
     },
     watch: {
-      'play_music_list': function (new_val, old_val) {
+      'play_music_list.ids': function (new_val, old_val) {
         this.get_play_music_list()
       },
       'history_music_list': function (new_val, old_val) {
@@ -284,7 +299,7 @@
       .new_song_content {
         display: flex;
         align-items: center;
-        padding: 10px 0;
+        /*padding: 10px 0;*/
         .left_img {
           position: relative;
           width: 40px;
@@ -309,7 +324,6 @@
           flex-direction: row;
           justify-content: left;
           align-items: center;
-          margin-left: 10px;
           color: #333333;
           .song_name {
             max-width: 100%;
@@ -382,6 +396,22 @@
         flex: 1;
         overflow-y: scroll;
         overflow-x: hidden;
+        .playStatus{
+          height: 18px;
+          padding-left:2px;
+          i{
+            font-size: 12px;
+            color: #c62f2f;
+          }
+        }
+        .source_path{
+          height: 18px;
+          i{
+            color: #666;
+            font-size:14px;
+            cursor: pointer;
+          }
+        }
       }
     }
 

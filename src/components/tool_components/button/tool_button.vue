@@ -185,15 +185,16 @@
     }
   }
   .play_video_icon_button{
-    border: 1.5px solid #c73333!important;
+    border: 1.4px solid #c73333!important;
     border-radius: 3px;
     padding: 0 1px;
-    height: 13px;
+    height: 12px;
     cursor: pointer;
     i{
+      margin-left:2px;
       color: #c73333;
-      font-size: 12px!important;
-      transform: scale(0.7);
+      font-size: 13px!important;
+      transform: scale(0.8);
       /*line-height: 0.8;*/
     }
     &:hover{

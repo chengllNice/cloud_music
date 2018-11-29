@@ -160,6 +160,7 @@
           t_head.forEach((head_item, head_index) => {
             head_item.forEach((item, index) => {
               if (item.key == 'sort_num' && item.table_slot == 'sort_num') {
+                console.log(t_body,'--------------==========')
                 t_body[head_index].forEach((body_item_01, body_index_01) => {
                   if (this.$typeOf(body_item_01) == 'object' && !body_item_01.sort_num) {
                     let sort_num = (head_index * t_body[head_index].length) + (body_index_01 + 1);
@@ -233,8 +234,18 @@
         if(this.type == 'music'){
           // 播放列表
           if(JSON.stringify(this.play_music_list) != JSON.stringify(this.ids_list)){
-            this.$store.state.play_music_list = this.ids_list;
-            this.$localStorage.setStore('play_music_list', this.ids_list);
+            let music_list = {
+              ids: this.ids_list,
+              data: []
+            };
+            if(this.config_data.colsNum == '2'){
+              music_list.data.push(...this.tableData.t_body[0],...this.tableData.t_body[1]);
+            }else{
+              music_list.data = this.tableData.t_body;
+            }
+            this.$store.state.play_music_list.ids = music_list.ids;
+            this.$store.state.play_music_list.data = music_list.data;
+            this.$localStorage.setStore('play_music_list', music_list);
           }
           this.playStatusChange(data, index, 'play');
         }
@@ -252,11 +263,11 @@
           });
           this.tableData.t_body.splice(index, 1, data);
         } else if (this.config_data.colsNum == '2') {
-          this.tableData.t_body.forEach((t_item, t_index)=>{
-            t_item.forEach((item, index)=>{
-              if(item.playStatus){
-                item.playStatus = '';
-                this.tableData.t_body.splice(t_index, 1, item);
+          this.tableData.t_body.forEach((b_item, b_index)=>{
+            b_item.forEach((t_item, t_index)=>{
+              if(t_item.playStatus){
+                t_item.playStatus = '';
+                this.tableData.t_body[b_index].splice(t_index, 1, t_item);
               }
             })
           });

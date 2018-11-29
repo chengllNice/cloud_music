@@ -36,7 +36,10 @@ const state = {
     source_path: {path: '',id: ''},//path音乐播放来源地址路由  音乐来源id--->专辑id或者歌单id
   },
   // 播放列表id
-  play_music_list: [],
+  play_music_list: {
+    ids: [],
+    data: []
+  },
   // 播放历史
   history_music_list: [],
 

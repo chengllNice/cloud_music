@@ -116,6 +116,18 @@ export const songlist_data = {
           key: 'playStatus',
           noshow: true,
         },
+        {
+          title: 'mvid',
+          key: 'mvid',
+          noshow: true,
+          jpath: 'mv'
+        },
+        {
+          title: '最大码率',
+          key: 'maxbr',
+          noshow: true,
+          jpath: 'privilege.maxbr'
+        },
       ],
       t_body: [
 

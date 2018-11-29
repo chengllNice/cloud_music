@@ -188,7 +188,11 @@
         };
         this.$commonApi.getSonglistDetail(get_data).then(res=>{
           // let format_data = this.$uiconfigFormat(res.result,this.songlist.uiconfig);
-          this.songlist_format(res.playlist);
+          let data = res.playlist;
+          data.tracks.forEach((item,index)=>{
+            item.privilege = res.privileges[index];
+          });
+          this.songlist_format(data);
         }).catch(err=>{
           console.log('err', err);
         })
@@ -225,7 +229,6 @@
         let time = this.$timeFormat(this.songlist.data.createTime, 'yy-mm-dd');
         this.$setObjectValue(this.songlist.data, 'createTime', time);
         this.$unitFormat(this.songlist.data, 'playCount');//播放量的单位转换
-        console.log(this.songlist.data)
       },
       tabClick(data){
         this.tab_active = data.id;

@@ -45,7 +45,7 @@
           <span class="icon_music_list">
             <i class="iconfont icon-music_list2"></i>
           </span>
-          <span class="music_list_total">{{play_music_list.length || 0}}</span>
+          <span class="music_list_total">{{play_music_list.ids.length || 0}}</span>
         </div>
       </div>
     </div>
@@ -150,23 +150,23 @@
       mv_end(){
         let vue = this;
         $('#jplayerEl').bind($.jPlayer.event.ended, (e) => {
-          let index = vue.play_music_list.indexOf(Number(vue.music_info.id));
+          let index = vue.play_music_list.ids.indexOf(Number(vue.music_info.id));
           let id = vue.music_info.id || '';
           if(vue.playTypeActive.index == 0){
-            if(index < vue.play_music_list.length-1){
-              id = vue.play_music_list[index+1]
+            if(index < vue.play_music_list.ids.length-1){
+              id = vue.play_music_list.ids[index+1]
             }
           }else if(vue.playTypeActive.index == 1){
-            if(index >= vue.play_music_list.length-1){
-              id = vue.play_music_list[0]
+            if(index >= vue.play_music_list.ids.length-1){
+              id = vue.play_music_list.ids[0]
             }else{
-              id = vue.play_music_list[index+1]
+              id = vue.play_music_list.ids[index+1]
             }
           }else if(vue.playTypeActive.index == 2){
             this.againPlay();
           }else if(vue.playTypeActive.index == 3){
-            let radom_index = Math.floor(Math.random()*vue.play_music_list.length);
-            id = vue.play_music_list[radom_index]
+            let radom_index = Math.floor(Math.random()*vue.play_music_list.ids.length);
+            id = vue.play_music_list.ids[radom_index]
           }
           this.$store.commit('get_music_info',{id: id});
         });
