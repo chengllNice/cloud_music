@@ -364,6 +364,18 @@ export const new_song_data = {
           jpath: 'song.album'
         },
         {
+          title: 'mvid',
+          key: 'mvid',
+          noshow: true,
+          jpath: 'song.mvid'
+        },
+        {
+          title: '时长',
+          key: 'duration',
+          noshow: true,
+          jpath: 'song.duration'
+        },
+        {
           title: '',
           key: 'content',
           tooltip: true,
@@ -442,9 +454,21 @@ export const new_song_data = {
         },
         {
           title: '专辑',
-          key: 'album',
+          key: 'album_name',
           noshow: true,
           jpath: 'song.album'
+        },
+        {
+          title: 'mvid',
+          key: 'mvid',
+          noshow: true,
+          jpath: 'song.mvid'
+        },
+        {
+          title: '时长',
+          key: 'duration',
+          noshow: true,
+          jpath: 'song.duration'
         },
         {
           title: '',

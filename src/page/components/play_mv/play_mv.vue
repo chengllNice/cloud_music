@@ -5,9 +5,9 @@
         <div class="mv_box">
           <div class="mv_title_info">
             <div class="back_icon" @click="go_back"><i class="iconfont icon-arrow_drop_left"></i></div>
-            <div class="mv_icon" v-if="!type">MV</div>
+            <div class="mv_icon" v-if="!type || type == '0'">MV</div>
             <div class="mv_name">{{mv_data.name}}</div>
-            <div class="mv_singer" v-if="!type" v-for="(item, index) in mv_data.artists" :key="index">
+            <div class="mv_singer" v-if="!type || type == '0'" v-for="(item, index) in mv_data.artists" :key="index">
               <span v-if="index != 0">/</span>
               <span>{{item.name}}</span>
             </div>
@@ -321,7 +321,7 @@
 
       change_play_mv(data){
         this.$router.push({
-          path: 'play_mv',
+          path: '/play_mv',
           query: {
             id: data.id,
             type: data.type || ''

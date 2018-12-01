@@ -4,7 +4,7 @@
       <div class="title">官方榜</div>
       <div class=content>
         <div class="up_music_list">
-          <base-table type="music" :data="up_music_list.data"
+          <base-table type="up" :data="up_music_list.data"
                       :config="up_music_list.config"
                       @dbclick="tableClick"
                       stripe="stripe">
@@ -57,8 +57,7 @@
           </base-table>
         </div>
         <div class="new_music_list">
-          <base-table :data="new_music_list.data"
-                      type="music"
+          <base-table type="new" :data="new_music_list.data"
                       :config="new_music_list.config"
                       @dbclick="tableClick"
                       stripe="stripe">
@@ -114,8 +113,7 @@
           </base-table>
         </div>
         <div class="origin_music_list">
-          <base-table :data="origin_music_list.data"
-                      type="music"
+          <base-table type="origin" :data="origin_music_list.data"
                       :config="origin_music_list.config"
                       @dbclick="tableClick"
                       stripe="stripe">
@@ -171,9 +169,8 @@
           </base-table>
         </div>
         <div class="hot_music_list">
-          <base-table :data="hot_music_list.data"
+          <base-table type="hot" :data="hot_music_list.data"
                       :config="hot_music_list.config"
-                      type="music"
                       @dbclick="tableClick"
                       stripe="stripe">
             <template slot="header" slot-scope="data">
@@ -295,11 +292,12 @@
         origin_music_list: {},
         hot_music_list: {},
         singer_list: {},
-        whole_world_list_data: {}
+        whole_world_list_data: {},
+        current_play_type: '',//当前音乐播放对应的type
       }
     },
     computed: {
-      ...mapState(['device_info'])
+      ...mapState(['device_info','music_info','play_music_list','history_music_list'])
     },
     components: {},
     created() {
@@ -358,6 +356,9 @@
               this.new_music_list.songlist_id = songlist_id;
               tracks_sub_8.forEach((item, index)=>{
                 item.trackIds = (trackIds[index].lr === 0) ? '0' : (trackIds[index].lr || '');
+                if(this.music_info.id == item.id){
+                  this.current_play_type = 'new';
+                }
               });
               this.$tableListInit(tracks_sub_8, this.new_music_list.data,this);
               break;
@@ -366,6 +367,9 @@
               this.hot_music_list.songlist_id = songlist_id;
               tracks_sub_8.forEach((item, index)=>{
                 item.trackIds = (trackIds[index].lr === 0) ? '0' : (trackIds[index].lr || '');
+                if(this.music_info.id == item.id){
+                  this.current_play_type = 'hot';
+                }
               });
               this.$tableListInit(tracks_sub_8, this.hot_music_list.data,this);
               break;
@@ -374,6 +378,9 @@
               this.origin_music_list.songlist_id = songlist_id;
               tracks_sub_8.forEach((item, index)=>{
                 item.trackIds = (trackIds[index].lr === 0) ? '0' : (trackIds[index].lr || '');
+                if(this.music_info.id == item.id){
+                  this.current_play_type = 'origin';
+                }
               });
               this.$tableListInit(tracks_sub_8, this.origin_music_list.data,this);
               break;
@@ -382,6 +389,9 @@
               this.up_music_list.songlist_id = songlist_id;
               tracks_sub_8.forEach((item, index)=>{
                 item.trackIds = trackIds[index].ratio;
+                if(this.music_info.id == item.id){
+                  this.current_play_type = 'up';
+                }
               });
               this.$tableListInit(tracks_sub_8, this.up_music_list.data,this);
               break;
@@ -406,6 +416,7 @@
         })
       },
       tableClick(data){
+        this.current_play_type = data.type;
         let get_data = {
           id: data.data.id
         };
@@ -421,14 +432,50 @@
               artists: data.data.artists,
               album: data.data.album_name,
               alias: data.data.alias,
-              source_path: data.data.source_path
+              source_path: data.data.source_path,
+              data: data.data
             };
             this.$store.commit('get_music_info',info);
           }
         }).catch(err=>{
           console.log('err',err)
         });
-        console.log(data,'===')
+        this.playStatusChange(data, 'play');
+      },
+      playStatusChange(data, type){
+        let _data = {};
+        if(this.current_play_type){
+          if(data.type === 'up'){
+            _data = this.up_music_list;
+          }else if(this.current_play_type === 'new'){
+            _data = this.new_music_list;
+          }else if(this.current_play_type === 'origin'){
+            _data = this.origin_music_list;
+          }else if(this.current_play_type === 'hot'){
+            _data = this.hot_music_list;
+          }else{
+            return
+          }
+        }
+        let _index = -1;
+        _data.data.t_body.forEach((item,index)=>{
+          if(item.id == data.id){
+            _index = index;
+          }
+          if(item.playStatus){
+            item.playStatus = '';
+          }
+        });
+        if(data.data){
+          data.data.playStatus = type;
+          _data.data.t_body.splice(data.index,1,data.data);
+        }else{
+          data.playStatus = type;
+          _data.data.t_body.splice(_index,1,data);
+        }
+        this.$store.state.play_music_list = {
+          data: _data.data.t_body
+        };
       },
       // 查看全部
       songlist_all(id, type){
@@ -455,6 +502,12 @@
     watch: {
       'device_info.clientWidth': function (new_val, old_val) {
         this.whole_world_list_format();
+      },
+      'music_info.playStatus': function (new_val, old_val) {
+        this.playStatusChange(this.music_info.data, new_val);
+      },
+      'music_info.id': function (new_val, old_val) {
+        this.playStatusChange(this.music_info.data, 'play');
       }
     }
   }

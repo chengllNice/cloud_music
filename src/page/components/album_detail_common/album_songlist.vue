@@ -1,6 +1,6 @@
 <template>
   <div class="album_songlist">
-    <base-table type="music" @dbclick="tableClick" :data="data.data" :config="data.config">
+    <base-table @dbclick="tableClick" :data="data.data" :config="data.config">
       <template slot="song_name" slot-scope="data">
         <div class="song_name ellipsis_1">
           <div class="ellipsis_1">{{data.data.song_name}}</div>
@@ -40,7 +40,9 @@
     data() {
       return {}
     },
-    computed: {},
+    computed: {
+
+    },
     components: {},
     created() {
     },
@@ -63,16 +65,17 @@
               artists: data.data.artists,
               album: data.data.album_name,
               alias: data.data.alias,
-              source_path: data.data.source_path
+              source_path: data.data.source_path,
+              data: data.data
             };
             this.$store.commit('get_music_info',info);
           }
         }).catch(err=>{
           console.log('err',err)
         });
-        console.log(data,'===')
+        this.$emit('tableClick',data);
       },
-    }
+    },
   }
 </script>
 

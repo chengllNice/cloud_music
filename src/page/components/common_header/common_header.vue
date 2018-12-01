@@ -90,7 +90,7 @@
         this.$store.commit('set_lrc_panal_show', false);//关闭歌词展示
         this.$router.push({
           path: '/search_page/search_song',
-          query: { value: value}
+          query: { id: value}
         })
       }
     },

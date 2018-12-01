@@ -77,6 +77,7 @@
     express_header_tab_data,
     new_music_data} from "./new_music_data";
   import { get_top_song} from "../../../../server/home";
+  import {mapState} from 'vuex'
 
   export default {
     name: "new_music_express",
@@ -86,7 +87,9 @@
         header_tab_data: [],
       }
     },
-    computed: {},
+    computed: {
+      ...mapState(['music_info','play_music_list','history_music_list']),
+    },
     components: {},
     created() {
       this.header_tab_data = this.$deepClone(express_header_tab_data);
@@ -102,12 +105,10 @@
         let get_data = {
           type: id ? id : '0'
         };
-        // this.table_data = null;
-        let table_data = this.$deepClone(new_music_data);
+        // let table_data = this.$deepClone(new_music_data);
         this.table_data = this.$deepClone(new_music_data);
         get_top_song(get_data).then(res=>{
-          this.$tableListInit(res.data,table_data.data,this);
-          this.table_data = table_data;
+          this.$tableListInit(res.data,this.table_data.data,this);
         }).catch(err=>{
           console.log('err',err)
         })
@@ -131,17 +132,44 @@
               artists: data.data.artists,
               album: data.data.album_name,
               alias: data.data.alias,
-              source_path: data.data.source_path
+              source_path: data.data.source_path,
+              data: data.data
             };
             this.$store.commit('get_music_info',info);
           }
         }).catch(err=>{
           console.log('err',err)
         });
-        console.log(data,'===')
+        this.playStatusChange(data, 'play');
       },
-      playStatusChange(data){
-
+      playStatusChange(data, type){
+        let _index = -1;
+        this.table_data.data.t_body.forEach((item,index)=>{
+          if(item.id == data.id){
+            _index = index;
+          }
+          if(item.playStatus){
+            item.playStatus = '';
+          }
+        });
+        if(data.data){
+          data.data.playStatus = type;
+          this.table_data.data.t_body.splice(data.index,1,data.data);
+        }else{
+          data.playStatus = type;
+          this.table_data.data.t_body.splice(_index,1,data);
+        }
+        this.$store.state.play_music_list = {
+          data: this.table_data.data.t_body
+        };
+      },
+    },
+    watch: {
+      'music_info.playStatus': function (new_val, old_val) {
+        this.playStatusChange(this.music_info.data, new_val);
+      },
+      'music_info.id': function (new_val, old_val) {
+        this.playStatusChange(this.music_info.data, 'play');
       }
     }
   }

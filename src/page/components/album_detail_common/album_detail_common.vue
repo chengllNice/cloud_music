@@ -58,7 +58,7 @@
         <header-tab class="home_header_tab" tab-type="iview_tab_song" :data="header_tab_data" @tabClick="tabClick"></header-tab>
       </div>
       <div class="album_main">
-        <album-songlist :data="album_song_data" v-if="tab_active == '0'"></album-songlist>
+        <album-songlist :data="album_song_data" @tableClick="tableClick" v-if="tab_active == '0'"></album-songlist>
         <tool-comment v-if="tab_active == '1'" :comment-all-data="commentData.comment" :comment-hot-data="commentData.hot" :pageData="pageData" @pageChange="pageChange" @submitComment="submitComment" :totalComment="pageData.total"></tool-comment>
         <album-info v-if="tab_active == '2'" :data="album_data.data.description"></album-info>
       </div>
@@ -71,6 +71,7 @@
   import { album_data, album_song_data} from "./album_detail_data";
   import albumSonglist from './album_songlist'
   import albumInfo from './album_info'
+  import {mapState} from 'vuex'
 
   export default {
     name: "album_detail_common",
@@ -109,7 +110,9 @@
         collectionItemCols: 5
       }
     },
-    computed: {},
+    computed: {
+      ...mapState(['music_info','play_music_list','history_music_list']),
+    },
     components: {
       albumSonglist,
       albumInfo
@@ -130,11 +133,10 @@
         let get_data = {
           id: this.album_id,
         };
-        let table_data = this.$deepClone(album_song_data);
+        this.album_song_data = this.$deepClone(album_song_data);
         get_album(get_data).then(res=>{
           let songlists = res.songs;
-          this.$tableListInit(songlists,table_data.data,this);
-          this.album_song_data = table_data;
+          this.$tableListInit(songlists,this.album_song_data.data,this);
 
           let album = res.album;
           album.publishTime = this.$timeFormat(album.publishTime,'yy-mm-dd');
@@ -190,7 +192,39 @@
       tabClick(data){
         this.tab_active = data.id;
       },
+      tableClick(data){
+        this.playStatusChange(data, 'play');
+      },
+      playStatusChange(data, type){
+        let _index = -1;
+        this.album_song_data.data.t_body.forEach((item,index)=>{
+          if(item.id == data.id){
+            _index = index;
+          }
+          if(item.playStatus){
+            item.playStatus = '';
+          }
+        });
+        if(data.data){
+          data.data.playStatus = type;
+          this.album_song_data.data.t_body.splice(data.index,1,data.data);
+        }else{
+          data.playStatus = type;
+          this.album_song_data.data.t_body.splice(_index,1,data);
+        }
+        this.$store.state.play_music_list = {
+          data: this.album_song_data.data.t_body
+        };
+      },
     },
+    watch: {
+      'music_info.playStatus': function (new_val, old_val) {
+        this.playStatusChange(this.music_info.data, new_val);
+      },
+      'music_info.id': function (new_val, old_val) {
+        this.playStatusChange(this.music_info.data, 'play');
+      }
+    }
   }
 </script>
 

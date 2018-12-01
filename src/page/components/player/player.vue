@@ -45,7 +45,7 @@
           <span class="icon_music_list">
             <i class="iconfont icon-music_list2"></i>
           </span>
-          <span class="music_list_total">{{play_music_list.ids.length || 0}}</span>
+          <span class="music_list_total">{{play_music_list.data.length || 0}}</span>
         </div>
       </div>
     </div>
@@ -110,11 +110,12 @@
     methods: {
       init(){
         this.jplayer_init();
-        this.get_song_url();
+        // this.get_song_url();
       },
       jplayer_init(){
         let vue = this;
         let volume = vue.volume/100;
+        this.$store.commit('get_music_info',{playStatus: 'pause'});
         $('#jplayerEl').jPlayer({
           ready: function (e) {
             $(this).jPlayer("setMedia", {
@@ -150,25 +151,30 @@
       mv_end(){
         let vue = this;
         $('#jplayerEl').bind($.jPlayer.event.ended, (e) => {
-          let index = vue.play_music_list.ids.indexOf(Number(vue.music_info.id));
+          let index = vue.play_music_list.data.indexOf(vue.music_info.data);
           let id = vue.music_info.id || '';
+          let data = vue.music_info.data;
           if(vue.playTypeActive.index == 0){
-            if(index < vue.play_music_list.ids.length-1){
-              id = vue.play_music_list.ids[index+1]
+            if(index < vue.play_music_list.data.length-1){
+              id = vue.play_music_list.data[index+1].id;
+              data = vue.play_music_list.data[index+1];
             }
           }else if(vue.playTypeActive.index == 1){
-            if(index >= vue.play_music_list.ids.length-1){
-              id = vue.play_music_list.ids[0]
+            if(index >= vue.play_music_list.data.length-1){
+              id = vue.play_music_list.data[0].id;
+              data = vue.play_music_list.data[0];
             }else{
-              id = vue.play_music_list.ids[index+1]
+              id = vue.play_music_list.data[index+1].id;
+              data = vue.play_music_list.data[index+1];
             }
           }else if(vue.playTypeActive.index == 2){
             this.againPlay();
           }else if(vue.playTypeActive.index == 3){
-            let radom_index = Math.floor(Math.random()*vue.play_music_list.ids.length);
-            id = vue.play_music_list.ids[radom_index]
+            let radom_index = Math.floor(Math.random()*vue.play_music_list.data.length);
+            id = vue.play_music_list.data[radom_index].id;
+            data = vue.play_music_list.data[radom_index];
           }
-          this.$store.commit('get_music_info',{id: id});
+          this.$store.commit('get_music_info',{id: id, data: data});
         });
       },
       progress_control(e){
@@ -267,13 +273,17 @@
             playStatus: 'play',
           };
           this.$store.commit('get_music_info',info);
+          this.againPlay();
         }).catch(err=>{
           console.log('err',err)
         })
       },
-      async againPlay(){
-        await this.get_song_detail(this.music_info.id);
+      async get_music_info(){
         await this.get_song_url(this.music_info.id);
+        await this.get_song_detail(this.music_info.id);
+        // await this.againPlay();
+      },
+      async againPlay(){
         $('#jplayerEl').jPlayer('setMedia',{
           mp3: this.music_info.url
         }).jPlayer('play');
@@ -282,18 +292,7 @@
       songlistHandler(){
         this.$emit('songlistClick')
       },
-      play_history_list(id){
-        // 播放历史
-        if(this.history_music_list.indexOf(id) == -1){
-          if(this.history_music_list.length >= 100){
-            this.$store.state.history_music_list.pop();
-          }
-          this.$store.state.history_music_list.unshift(id);
-        }else{
-          this.history_music_list.remove(id);
-          this.$store.state.history_music_list.unshift(id);
-        }
-      }
+
     },
     watch: {
       'volume': function (new_val, old_val) {
@@ -303,11 +302,10 @@
       },
       'music_info.id': function (new_val, old_val) {
         if(this.music_info.playStatus == 'play'){
-          this.againPlay();
+          this.get_music_info();
         }
-        this.play_history_list(new_val);
         this.$localStorage.setStore('music_info', this.music_info);
-      }
+      },
     }
   }
 </script>

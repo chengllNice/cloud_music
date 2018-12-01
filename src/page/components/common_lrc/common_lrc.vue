@@ -5,7 +5,7 @@
 
       <div class="lrc_main">
         <div class="bg_blur_box" :style="{'background-image': 'url('+music_info.picUrl+')'}"></div>
-        <!--<div class="bg_opacity_blur_box"></div>-->
+        <div class="bg_opacity_blur_box"></div>
         <div class="lrc_main_left">
           <div class="album_cover_box">
             <div class="album_cover_wrap" :class="{'album_rotate': music_info.playStatus == 'play'}">
@@ -44,7 +44,7 @@
               </div>
               <div class="alias_info ellipsis_1" v-if="music_info.alias.length">
                 <span class="label">来源： </span>
-                <span class="name ellipsis_1">{{music_info.alias[0]}}</span>
+                <span class="name ellipsis_1">{{// music_info.source_path}</span>
               </div>
             </div>
           </div>
@@ -54,7 +54,7 @@
                   <ul id="lyric">
                     <li v-if="lrc_loading"><img class="loading" src="../../../../static/img/loading.svg"/>歌词加载中...</li>
                     <li v-else-if="lrc_data.toString() == '{}'">歌词加载失败...</li>
-                    <li v-else v-for="(val, key, index) in lrc_data" :key="index" :data_index="key" :class="{'on': lrc_row_active.index == index}">{{val.text}}</li>
+                    <li v-else v-for="(val, key, index) in lrc_data" :key="index" :data_index="key" :class="{'on': lrc_row_active.index == val.index}">{{val.text}}</li>
                   </ul>
               </vue-scroll>
             </div>
@@ -94,13 +94,15 @@
               },
               rail: {
                 gutterOfSide: '0px',//滚动轨道距离侧边的距离
+                gutterOfEnds: '0px',
+                opacity: 0,
               },
               bar: {
-                background: '#8a8a8a',
+                background: '#b6b6bc',
                 keepShow: true,
                 opacity: 0.5,
                 hoverStyle: {
-                  background: '#b6b6bc'
+                  background: '#8a8a8a'
                 }
               }
             }
@@ -141,8 +143,9 @@
             for(var k = 0,h = timeRegExpArr.length;k < h;k++) {
               var t = timeRegExpArr[k];
               var min = Number(String(t.match(/\[\d*/i)).slice(1)),
-                sec = Number(String(t.match(/\:\d*/i)).slice(1));
-              var time = min * 60 + sec;
+                sec = Number(String(t.match(/\:\d*/i)).slice(1)),
+                msec = Number(String(t.match(/\.\d*/i)).slice(1));
+              var time = min * 60 * 1000 + sec*1000 + msec;
               lrcObj[time] = {
                 index: i,
                 text: clause
@@ -154,13 +157,15 @@
         // 歌词滚动
         updateLyric(){
           let vue = this;
-          let currentTime = Math.round(this.music_info.currentTime);//当前时间点
+          let currentTime = Math.round(this.music_info.currentTime)*1000;//当前时间点
           if(!currentTime){
             return
           }
           let lrc_show = {};
+
           let len = this.lrc_arr.length;
-          for(let i = 0; i <= len; i++){
+          let _i = lrc_show.index || 0;
+          for(let i = _i; i <= len; i++){
             if(currentTime < this.lrc_arr[i]){
               let index = (i-1) || 0;
               lrc_show = this.lrc_data[this.lrc_arr[index]];
@@ -168,13 +173,13 @@
             }
           }
           // 判断如果一致的时候滚动
-          if(lrc_show && this.lrc_row_active.index == lrc_show.index){
+          if(lrc_show.index && this.lrc_row_active.index == lrc_show.index){
             return;
           }
           this.lrc_row_active = lrc_show;
           // 滚动
-
-          let dy = (this.lrc_row_active.index-3) <= 0 ? 0 : (this.lrc_row_active.index-3) * 34;
+          let li_h = $('.lyric_wrap').find('li').eq(this.lrc_row_active.index).height();
+          let dy = (this.lrc_row_active.index-4) <= 0 ? 0 : (this.lrc_row_active.index-4) * li_h;
           $('.lyric_wrap .__panel').animate({scrollTop: dy + 'px' }, 300);
           // $('.__panel').scrollTop(dy);
           // vue.$refs.vs.scrollTo({
@@ -242,14 +247,30 @@
       /*border-radius: 50%;*/
       background-image: url("../../../../static/img/test/music_cover.jpg");
       background-repeat: no-repeat;
-      background-size: 90% 100%;
-      background-position: -100px -80px;
+      background-size: 70% 100%;
+      background-position: center;
+      /*<!--background-position: -100px -80px;-->*/
+      filter: blur(60px);
+    }
+    .bg_opacity_blur_box{
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      z-index: 2;
+      top: 0;
+      left: 0;
+      right: 0;
+      margin: auto;
+      /*border-radius: 50%;*/
+      background-image: url("../../../../static/img/lrc_bg1.png");
+      background-repeat: no-repeat;
+      background-size: 100% 100%;
       filter: blur(75px);
     }
 
     .lrc_main_left{
       position: relative;
-      z-index: 2;
+      z-index: 3;
       padding-top: 53px;
       display: flex;
       flex-direction: column;
@@ -319,7 +340,7 @@
       width: 510px;
       padding-left: 120px;
       position: relative;
-      z-index: 1;
+      z-index: 3;
 
       .song_info{
         padding-top: 30px;
@@ -399,7 +420,7 @@
 
       .panel.lyric{
         color: #2d2a28;
-        border-right: 1px solid rgba(138,139,143,0.4);
+        border-right: 1px solid rgba(207,207,209,0.8);
         #lyric{
           transition: all 0.3s ease;
         }
@@ -436,13 +457,19 @@
   .lrc_main_right{
     li{
       /*height: 35px;*/
-      /*line-height: 35px;*/
-      padding-bottom: 12px;
-      font-size: 15px;
+      line-height: 35px;
+      /*padding-bottom: 12px;*/
+      min-height: 35px;
+      font-size: 14px;
       font-family: Arial;
     }
     .on{
       color: #ffffff!important;
+    }
+    .lyric_wrap{
+      .__vuescroll .__panel{
+        margin-right: -9px!important;
+      }
     }
   }
 

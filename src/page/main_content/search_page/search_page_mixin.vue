@@ -38,10 +38,12 @@
         }
       }
     },
-    computed: {},
+    computed: {
+
+    },
     components: {},
     created() {
-      this.search_word = this.$route.query.value || '';
+      this.search_word = this.$route.query.id || '';
     },
     mounted() {
       this.init();
@@ -191,10 +193,10 @@
         }).catch(err => {
           console.log('err', err)
         })
-      }
+      },
     },
     watch: {
-      '$route.query.value': function (new_val, old_val) {
+      '$route.query.id': function (new_val, old_val) {
         if(new_val){
           this.search_word = new_val;
           this.init();

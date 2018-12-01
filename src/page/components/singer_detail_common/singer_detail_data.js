@@ -150,7 +150,7 @@ export const singer_album_theme_list_data = {
       },
       {
         title: 'name',
-        key: 'name',
+        key: 'song_name',
         noshow: true,
         jpath: 'name',
       },
@@ -186,7 +186,7 @@ export const singer_album_theme_list_data = {
       },
       {
         title: 'mv',
-        key: 'mv',
+        key: 'mvid',
         noshow: true,
         jpath: 'mv'
       },

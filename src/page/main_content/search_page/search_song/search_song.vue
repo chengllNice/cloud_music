@@ -55,6 +55,7 @@
 
 <script>
   import searchPageMixin from '../search_page_mixin.vue'
+  import {mapState} from 'vuex'
 
   export default {
     name: "search_song",
@@ -65,7 +66,7 @@
     },
     mixins: [searchPageMixin],
     computed: {
-
+      ...mapState(['music_info','play_music_list','history_music_list']),
     },
     created(){
       this.search_type = '1';
@@ -90,18 +91,61 @@
               artists: data.data.artists,
               album: data.data.album_name,
               alias: data.data.alias,
-              source_path: data.data.source_path
+              source_path: data.data.source_path,
+              data: data.data
             };
             this.$store.commit('get_music_info',info);
           }
         }).catch(err=>{
           console.log('err',err)
         });
+        // this.playStatusChange(data, 'play');
       },
       pageChange(page){
         this.search_song_data.data.t_body = [];
         this.pageData.page = this.search_song_data.data.t_page.page = page;
         this.get_search();
+      },
+      // 播放状态改变
+      playStatusChange(data, type){
+        let _index = data.data?data.index:-1;
+        let _id = data.data?data.data.id:data.id;
+        let _data = data.data?data.data:data;
+        this.search_song_data.data.t_body.forEach((item,index)=>{
+          if(item.id == _id){
+            _index = index;
+          }
+          if(item.playStatus){
+            item.playStatus = '';
+          }
+        });
+        _data.playStatus = type;
+        this.search_song_data.data.t_body.splice(_index,1,_data);
+
+        let play_index = -1;
+        if(this.play_music_list.data.length){
+          this.play_music_list.data.forEach((item, index)=>{
+            if(item.playStatus){
+              item.playStatus = '';
+              play_index = index;
+            }
+            if(item.id == _id){
+              item.playStatus = type;
+            }else if(index == this.play_music_list.data.length-1){
+              this.$store.state.play_music_list.data.splice(play_index+1,0,_data)
+            }
+          });
+        }else{
+          this.$store.state.play_music_list.data.push(_data)
+        }
+      },
+    },
+    watch: {
+      'music_info.playStatus': function (new_val, old_val) {
+        this.playStatusChange(this.music_info.data, new_val);
+      },
+      'music_info.id': function (new_val, old_val) {
+        this.playStatusChange(this.music_info.data, 'play');
       }
     }
   }

@@ -214,12 +214,8 @@ export const tableListInit = (result, table_list, vue) => {
                 id: vue.$route.query.id || ''
               }
             }
-            if(header[index][index_01].key=='playStatus'){
-              // if(current_music_source_path.path == vue.$route.path && current_music_source_path.id == query_id && current_music_id == result[num].id){
-              //   obj[header[index][index_01].key] = vue.$store.state.music_info.playStatus
-              // }else{
-              //   obj[header[index][index_01].key] = ''
-              // }
+            if(header[index][index_01].key == 'duration'){
+              obj[header[index][index_01].key] = timeFormat(obj[header[index][index_01].key])
             }
           }
         }
@@ -241,14 +237,6 @@ export const tableListInit = (result, table_list, vue) => {
               path: vue.$route.path,
               id: vue.$route.query.id || ''
             }
-          }
-          if(header[index].key=='playStatus'){
-
-            // if(current_music_source_path.path == vue.$route.path && current_music_source_path.id == query_id && current_music_id == result[num].id){
-            //   obj[header[index].key] = vue.$store.state.music_info.playStatus
-            // }else{
-            //   obj[header[index].key] = ''
-            // }
           }
           if(header[index].key == 'duration'){
             obj[header[index].key] = timeFormat(obj[header[index].key])

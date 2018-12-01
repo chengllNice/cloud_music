@@ -102,7 +102,7 @@
             </div>
           </template>
           <template slot="album" slot-scope="data">
-            <div class="album_name ellipsis_1">
+            <div class="album_name ellipsis_1" v-if="data.data.album_name && data.data.album_name.name">
               {{data.data.album_name.name}}
             </div>
           </template>
@@ -125,7 +125,7 @@
 
 <script>
   import { songlist_data} from "./songlist_detail_data";
-
+  import {mapState} from 'vuex'
   export default {
     name: "songlistDetail",
     props: {
@@ -169,7 +169,7 @@
     components: {
     },
     computed: {
-
+      ...mapState(['music_info','play_music_list','history_music_list']),
     },
     created(){
       this.songlist_id = this.$route.query.id || '';
@@ -187,7 +187,6 @@
           s: 100
         };
         this.$commonApi.getSonglistDetail(get_data).then(res=>{
-          // let format_data = this.$uiconfigFormat(res.result,this.songlist.uiconfig);
           let data = res.playlist;
           data.tracks.forEach((item,index)=>{
             item.privilege = res.privileges[index];
@@ -249,14 +248,37 @@
               artists: data.data.artists,
               album: data.data.album_name,
               alias: data.data.alias,
-              source_path: data.data.source_path
+              source_path: data.data.source_path,
+              data: data.data
             };
             this.$store.commit('get_music_info',info);
           }
         }).catch(err=>{
           console.log('err',err)
         });
-        console.log(data,'===')
+        this.playStatusChange(data, 'play');
+      },
+      playStatusChange(data, type){
+        let _index = -1;
+        this.songlist.data.table_data.t_body.forEach((item,index)=>{
+          if(item.id == data.id){
+            _index = index;
+          }
+          if(item.playStatus){
+            item.playStatus = '';
+          }
+        });
+        if(data.data){
+          data.data.playStatus = type;
+          this.songlist.data.table_data.t_body.splice(data.index,1,data.data);
+        }else{
+          data.playStatus = type;
+          this.songlist.data.table_data.t_body.splice(_index,1,data);
+        }
+
+        this.$store.state.play_music_list = {
+          data: this.songlist.data.table_data.t_body
+        };
       },
       getSonglistComment(){
         let get_data = {
@@ -313,6 +335,12 @@
         this.pageData.page = 1;
         this.get_songlist_detail_data();
         this.getSonglistComment();
+      },
+      'music_info.playStatus': function (new_val, old_val) {
+        this.playStatusChange(this.music_info.data, new_val);
+      },
+      'music_info.id': function (new_val, old_val) {
+        this.playStatusChange(this.music_info.data, 'play');
       }
     }
   }

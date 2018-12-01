@@ -1,7 +1,7 @@
 <template>
-  <div class="common_footer" @click.stop="playlist_show = true">
+  <div class="common_footer" @click.stop="playlist_show = playlist_show">
     <player @songlistClick="songlistClick"></player>
-    <div @click.stop="playlist_show = true" class="songlist_box" v-if="playlist_show">
+    <div @click.stop="playlist_show = true" class="songlist_box" v-show="playlist_show">
       <div class="songlist_tab">
         <header-tab :data="tab_data" tab-type="iview_tab" @tabClick="tabClick"></header-tab>
         <div class="close_list" @click.stop="playlist_show = false"><i class="iconfont icon-add1"></i></div>
@@ -9,7 +9,7 @@
 
       <div class="play_list_info">
         <div class="header_box" v-if="tab_tabel_active == 'playlist'">
-          <div class="left">总{{play_music_list.ids.length}}首</div>
+          <div class="left">总{{play_music_list.data.length || 0}}首</div>
           <div class="right">
             <div class="collection">
               <i class="iconfont icon-add_file"></i>
@@ -23,7 +23,7 @@
           </div>
         </div>
         <div class="header_box" v-if="tab_tabel_active == 'history'">
-          <div class="left">总{{history_music_list.length || 0}}首</div>
+          <div class="left">总{{history_music_list.data.length || 0}}首</div>
           <div class="right">
             <div class="del">
               <i class="iconfont icon-del"></i>
@@ -54,19 +54,18 @@
                   <span class="ellipsis_1" v-for="(alias_item, alias_index) in data.data.alias" :key="alias_index">({{alias_item}})</span>
                 </div>
                 <base-tool-button v-if="data.data.mvid" type="icon" cl-type="play_video_icon_button"
-                                  icon-class="icon-music_play"></base-tool-button>
-                <base-tool-button v-if="data.data.maxbr && data.data.maxbr == '999000'" type="" cl-type="sq_button">SQ
-                </base-tool-button>
+                                  icon-class="icon-music_play" @click="goToVideo(data.data.mvid)"></base-tool-button>
+                <base-tool-button v-if="data.data.maxbr && data.data.maxbr == '999000'" type="" cl-type="sq_button">SQ</base-tool-button>
               </div>
             </div>
           </template>
           <template slot="artists" slot-scope="data">
-            <div class="ellipsis_1">
-          <span v-if="data.data.artists.length">
-            <span class="cursor" v-for="(singer_item, singer_index) in data.data.artists" :key="singer_index">
-              <span v-if="singer_index != 0">/ </span> {{singer_item.name}}
-            </span>
-          </span>
+            <div class="artists ellipsis_1">
+              <span v-if="data.data.artists.length">
+                <span class="cursor" v-for="(singer_item, singer_index) in data.data.artists" :key="singer_index">
+                  <span v-if="singer_index != 0">/ </span> {{singer_item.name}}
+                </span>
+              </span>
             </div>
           </template>
           <template slot="source_path" slot-scope="data">
@@ -79,7 +78,6 @@
         <base-table v-if="tab_tabel_active == 'history'"
                     :data="history_data.data"
                     :config="history_data.config"
-                    type="music"
                     @dbclick="tableClick"
                     stripe="stripe">
           <template slot="song_name" slot-scope="data">
@@ -90,19 +88,23 @@
                   <span class="ellipsis_1" v-for="(alias_item, alias_index) in data.data.alias" :key="alias_index">({{alias_item}})</span>
                 </div>
                 <base-tool-button v-if="data.data.mvid" type="icon" cl-type="play_video_icon_button"
-                                  icon-class="icon-music_play"></base-tool-button>
-                <base-tool-button v-if="data.data.maxbr && data.data.maxbr == '999000'" type="" cl-type="sq_button">SQ
-                </base-tool-button>
+                                  icon-class="icon-music_play" @click="goToVideo(data.data.mvid)"></base-tool-button>
+                <base-tool-button v-if="data.data.maxbr && data.data.maxbr == '999000'" type="" cl-type="sq_button">SQ</base-tool-button>
               </div>
             </div>
           </template>
           <template slot="artists" slot-scope="data">
-            <div class="ellipsis_1">
-          <span v-if="data.data.artists.length">
-            <span class="cursor" v-for="(singer_item, singer_index) in data.data.artists" :key="singer_index">
-              <span v-if="singer_index != 0">/ </span> {{singer_item.name}}
-            </span>
-          </span>
+            <div class="artists ellipsis_1">
+              <span v-if="data.data.artists.length">
+                <span class="cursor" v-for="(singer_item, singer_index) in data.data.artists" :key="singer_index">
+                  <span v-if="singer_index != 0">/ </span> {{singer_item.name}}
+                </span>
+              </span>
+            </div>
+          </template>
+          <template slot="source_path" slot-scope="data">
+            <div class="source_path">
+              <i class="iconfont icon-source" title="来源" @click="source_handler(data.data.source_path)"></i>
             </div>
           </template>
         </base-table>
@@ -140,7 +142,7 @@
       }
     },
     computed: {
-      ...mapState(['play_music_list', 'history_music_list'])
+      ...mapState(['music_info','play_music_list', 'history_music_list'])
     },
     components: {
       player
@@ -172,11 +174,8 @@
               id: data.data.id,
               url: url,
               playStatus: 'play',
-//              picUrl: data.data.picUrl,
-//              song_name: data.data.song_name,
-//              artists: data.data.artists,
-//              album: data.data.album_name,
-//              alias: data.data.alias
+              source_path: data.data.source_path,
+              data: data.data
             };
             this.$store.commit('get_music_info', info);
           }
@@ -187,6 +186,12 @@
       tabClick(data) {
         this.tab_tabel_active = data.id;
       },
+      goToVideo(mv_id){
+        this.$router.push({
+          path: '/play_mv',
+          query: { id: mv_id, type: '0'}
+        })
+      },
       source_handler(data){
         let path = data.path || '';
         let id = data.id || '';
@@ -196,54 +201,39 @@
         });
       },
       get_play_music_list() {
-        if (!this.play_music_list.ids.length) {
-          return
-        }
         this.playlist_data.data.t_body = this.play_music_list.data;
-//        let ids = this.play_music_list.ids.join(',');
-//        let get_data = {
-//          ids: ids
-//        };
-//        this.playlist_data = this.$deepClone(playlist_data);
-//        this.$commonApi.getSongDetail(get_data).then(res => {
-//          let data = res.songs;
-//          let privileges = res.privileges;
-//          data.forEach((item, index) => {
-//            item.privilege = privileges[index];
-//          });
-//          this.$tableListInit(data, this.playlist_data.data, this);
-//        }).catch(err => {
-//          console.log('err', err)
-//        })
       },
-      get_history_music_list() {
-        if (!this.history_music_list.length) {
-          return
+      get_history_music_list(){
+        this.history_data.data.t_body = this.history_music_list.data;
+      },
+      play_history_list(id){
+        let data = this.$deepClone(this.music_info.data);
+        let _index = -1;
+        this.history_music_list.data.forEach((item, index)=>{
+          if(item.id == data.id){
+            _index = index;
+            return
+          }
+        });
+        // 播放历史
+        if(_index == -1){
+          if(this.history_music_list.data.length >= 100){
+            this.$store.state.history_music_list.data.pop();
+          }
+          this.$store.state.history_music_list.data.unshift(data);
+        }else{
+          this.$store.state.history_music_list.data.splice(_index,1);
+          this.$store.state.history_music_list.data.unshift(data);
         }
-        let ids = this.history_music_list.join(',');
-        let get_data = {
-          ids: ids
-        };
-        this.history_data = this.$deepClone(playlist_data);
-        this.$commonApi.getSongDetail(get_data).then(res => {
-          let data = res.songs;
-          let privileges = res.privileges;
-          data.forEach((item, index) => {
-            item.privilege = privileges[index];
-          });
-          this.$tableListInit(data, this.history_data.data, this);
-        }).catch(err => {
-          console.log('err', err)
-        })
+        this.history_data.data.t_body = this.history_music_list.data;
+        this.$localStorage.setStore('history_music_list', this.history_music_list);
       }
     },
     watch: {
-      'play_music_list.ids': function (new_val, old_val) {
-        this.get_play_music_list()
+      'music_info.id': function (new_val, old_val) {
+        this.play_history_list(new_val);
+        this.get_play_music_list();
       },
-      'history_music_list': function (new_val, old_val) {
-        this.get_history_music_list();
-      }
     }
   }
 </script>
@@ -299,7 +289,7 @@
       .new_song_content {
         display: flex;
         align-items: center;
-        /*padding: 10px 0;*/
+        
         .left_img {
           position: relative;
           width: 40px;
@@ -396,6 +386,12 @@
         flex: 1;
         overflow-y: scroll;
         overflow-x: hidden;
+        .artists{
+          color: #888;
+          &:hover{
+            color: #111;
+          }
+        }
         .playStatus{
           height: 18px;
           padding-left:2px;
@@ -407,9 +403,12 @@
         .source_path{
           height: 18px;
           i{
-            color: #666;
+            color: #888;
             font-size:14px;
             cursor: pointer;
+            &:hover{
+              color: #111;
+            }
           }
         }
       }

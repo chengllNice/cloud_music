@@ -34,14 +34,16 @@ const state = {
     volume: '',//音量
     loop: '',//循环方式
     source_path: {path: '',id: ''},//path音乐播放来源地址路由  音乐来源id--->专辑id或者歌单id
+    data: {},//原始数据
   },
   // 播放列表id
   play_music_list: {
-    ids: [],
-    data: []
+    data: [],
   },
   // 播放历史
-  history_music_list: [],
+  history_music_list: {
+    data: []
+  },
 
   device_info: {},
   scroll_info: {},//滚动条相关信息,

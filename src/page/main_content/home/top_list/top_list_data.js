@@ -2,7 +2,7 @@
 
 //飙升榜
 export const up_music_list_data = {
-  id: '',
+  id: 'up',
   name: '',
   type: 'table',
   weight: '1',//权值，排序优先度

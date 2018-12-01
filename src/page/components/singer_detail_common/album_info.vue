@@ -34,9 +34,8 @@
           <div class="publishTime">{{album_item.album_info.publishTime}}</div>
         </div>
         <div class="album_table">
-          <base-table :data="album_item.data"
+          <base-table :type="album_item.album_info.id.toString()" :data="album_item.data"
                       :config="album_item.config"
-                      type="music"
                       stripe="stripe"
                       @dbclick="tableClick">
             <template slot="header" slot-scope="data">
@@ -52,7 +51,7 @@
             </template>
             <template slot="name_content" slot-scope="data">
               <div class="album_name ellipsis_1">
-                <span class="ellipsis_1">{{data.data.name}}</span>
+                <span class="ellipsis_1">{{data.data.song_name}}</span>
                 <!--<span class="alias_name ellipsis_1" v-for="(item, index) in data.data.alias" :key="index">({{item}})</span>-->
               </div>
             </template>
@@ -93,6 +92,7 @@
         singer_album_theme_list_data_arr: [],
         pageChange: true,
         is_more: true,
+        current_play_type: '',//当前播放音乐的专辑type
         theme_page: {
           page: 1,
           total: 0,
@@ -111,7 +111,7 @@
       }
     },
     computed: {
-      ...mapState(['device_info', 'scroll_info'])
+      ...mapState(['device_info', 'scroll_info','music_info','play_music_list','history_music_list'])
     },
     components: {
     },
@@ -224,6 +224,11 @@
               publishTime: this.$timeFormat(res.album.publishTime, 'yy-mm-dd'),
               songs_len: res.songs.length
             };
+            table_data.data.t_body.forEach(item=>{
+              if(item.id === this.music_info.id){
+                this.current_play_type = res.album.id;
+              }
+            });
             this.singer_album_theme_list_data_arr.push(table_data);
             resolve()
           }).catch(err=>{
@@ -238,10 +243,11 @@
         this.pageChange = true;
       },
       tableClick(data){
-        this.singer_album_theme_list_data_arr.forEach(item=>{
+        this.current_play_type = data.type;
+        this.singer_album_theme_list_data_arr.forEach((item,index)=>{
           item.data.t_body.forEach(item1=>{
             if(data.data.id!=item1.id){
-              item1.playStatus = ''
+              item1.playStatus = '';
             }
           })
         });
@@ -260,13 +266,46 @@
               artists: data.data.artists,
               album: data.data.album_name,
               alias: data.data.alias,
-              source_path: data.data.source_path
+              source_path: data.data.source_path,
+              data: data.data
             };
             this.$store.commit('get_music_info',info);
           }
         }).catch(err=>{
           console.log('err',err)
         });
+        this.playStatusChange(data, 'play');
+      },
+      playStatusChange(data, type){
+        let _index = -1;
+        let _data = {};
+        if(this.current_play_type){
+          this.singer_album_theme_list_data_arr.forEach(item=>{
+            if(item.album_info.id == this.current_play_type){
+              _data = item
+            }
+          });
+        }else{
+          return
+        }
+        _data.data.t_body.forEach((item,index)=>{
+          if(item.id == data.id){
+            _index = index;
+          }
+          if(item.playStatus){
+            item.playStatus = '';
+          }
+        });
+        if(data.data){
+          data.data.playStatus = type;
+          _data.data.t_body.splice(data.index,1,data.data);
+        }else{
+          data.playStatus = type;
+          _data.data.t_body.splice(_index,1,data);
+        }
+        this.$store.state.play_music_list = {
+          data: _data.data.t_body
+        };
       },
       go_album_detail(data){
         console.log(data)
@@ -314,6 +353,12 @@
       },
       'album_icon_active': function (new_val, old_val) {
         this.albumListChange()
+      },
+      'music_info.playStatus': function (new_val, old_val) {
+        this.playStatusChange(this.music_info.data, new_val);
+      },
+      'music_info.id': function (new_val, old_val) {
+        this.playStatusChange(this.music_info.data, 'play');
       }
     }
   }

@@ -123,6 +123,8 @@
     },
     data() {
       return {
+        current_data: {},
+        ids_list: [],
         config_default: {
           colsNum: '1',
           size: "small",
@@ -153,6 +155,7 @@
         let t_head = result.t_head;
         let t_body = result.t_body;
         let t_page = result.t_page || {};
+        this.ids_list = [];
         if (t_head.length && this.config.colsNum == '2') {
           t_head.forEach((head_item, head_index) => {
             t_body[head_index].forEach((body_item_01, body_index_01) => {
@@ -166,7 +169,11 @@
                 }
                 body_item_01.sort_num = sort_num;
               }
-              // body_item_01.playStatus = !body_item_01.playStatus ? '' : body_item_01.playStatus;
+              this.ids_list.push(body_item_01.id || '');
+              body_item_01.playStatus = !body_item_01.playStatus ? '' : body_item_01.playStatus;
+              if(body_item_01.playStatus){
+                this.current_data = {data:body_item_01,index:body_index_01};
+              }
             })
           });
         } else if (t_head.length) {
@@ -181,7 +188,11 @@
               }
               body_item.sort_num = sort_num;
             }
-            // body_item.playStatus = !body_item.playStatus ? '' : body_item.playStatus;
+            body_item.playStatus = !body_item.playStatus ? '' : body_item.playStatus;
+            if(body_item.playStatus){
+              this.current_data = {data:body_item,index:body_index};
+            }
+            this.ids_list.push(body_item.id || '');
           });
         }
         return result;
@@ -216,58 +227,58 @@
         this.$emit('clickRow', { data: data, index: index})
       },
       dbClickRow(data, index) {
-        // if(this.type == 'music'){
-          // this.play_list_change(data, index);
+        if(this.type == 'music'){
+          this.play_list_change(data, index);
           // this.playStatusChange(data, index, 'play');
-        // }
-        this.$emit('dbclick', {data: data, index: index, type: this.type});
+        }
+        this.$emit('dbclick', {data: data, index: index});
       },
-      // play_list_change(data, index){
-      //   // 播放列表
-      //   if(JSON.stringify(this.play_music_list.ids) != JSON.stringify(this.ids_list)){
-      //     let music_list = {
-      //       ids: this.ids_list,
-      //       data: []
-      //     };
-      //     if(this.config_data.colsNum == '2'){
-      //       music_list.data.push(...this.tableData.t_body[0],...this.tableData.t_body[1]);
-      //     }else{
-      //       music_list.data = this.tableData.t_body;
-      //     }
-      //     this.$store.state.play_music_list.ids = music_list.ids;
-      //     this.$store.state.play_music_list.data = this.$deepClone(music_list.data);
-      //     this.$localStorage.setStore('play_music_list', music_list);
-      //   }
-      // },
-      // playStatusChange(data, index, status) {
-      //   if(this.type != 'music'){
-      //     return
-      //   }
-      //   data = this.$deepClone(data);
-      //   data.playStatus = status;
-      //   let pre_data = this.$deepClone(this.current_data);
-      //   if (this.config_data.colsNum == '1') {
-      //     if(pre_data.data){
-      //       pre_data.data.playStatus = '';
-      //       this.tableData.t_body.splice(pre_data.index,1,pre_data.data);
-      //     }
-      //     this.tableData.t_body.splice(index, 1, data);
-      //   } else if (this.config_data.colsNum == '2') {
-      //     if(pre_data.data && pre_data.data.sort_num != data.sort_num){
-      //       pre_data.data.playStatus = '';
-      //       if(this.tableData.t_body[0].length < (pre_data.data.sort_num-0)){
-      //         this.tableData.t_body[1].splice(pre_data.index,1,pre_data.data);
-      //       }else{
-      //         this.tableData.t_body[0].splice(pre_data.index,1,pre_data.data);
-      //       }
-      //     }
-      //     if (this.tableData.t_body[0].length < (data.sort_num - 0)) {
-      //       this.tableData.t_body[1].splice(index, 1, data);
-      //     } else {
-      //       this.tableData.t_body[0].splice(index, 1, data);
-      //     }
-      //   }
-      // },
+      play_list_change(data, index){
+        // 播放列表
+        if(JSON.stringify(this.play_music_list.ids) != JSON.stringify(this.ids_list)){
+          let music_list = {
+            ids: this.ids_list,
+            data: []
+          };
+          if(this.config_data.colsNum == '2'){
+            music_list.data.push(...this.tableData.t_body[0],...this.tableData.t_body[1]);
+          }else{
+            music_list.data = this.tableData.t_body;
+          }
+          this.$store.state.play_music_list.ids = music_list.ids;
+          this.$store.state.play_music_list.data = this.$deepClone(music_list.data);
+          this.$localStorage.setStore('play_music_list', music_list);
+        }
+      },
+      playStatusChange(data, index, status) {
+        if(this.type != 'music'){
+          return
+        }
+        data = this.$deepClone(data);
+        data.playStatus = status;
+        let pre_data = this.$deepClone(this.current_data);
+        if (this.config_data.colsNum == '1') {
+          if(pre_data.data){
+            pre_data.data.playStatus = '';
+            this.tableData.t_body.splice(pre_data.index,1,pre_data.data);
+          }
+          this.tableData.t_body.splice(index, 1, data);
+        } else if (this.config_data.colsNum == '2') {
+          if(pre_data.data && pre_data.data.sort_num != data.sort_num){
+            pre_data.data.playStatus = '';
+            if(this.tableData.t_body[0].length < (pre_data.data.sort_num-0)){
+              this.tableData.t_body[1].splice(pre_data.index,1,pre_data.data);
+            }else{
+              this.tableData.t_body[0].splice(pre_data.index,1,pre_data.data);
+            }
+          }
+          if (this.tableData.t_body[0].length < (data.sort_num - 0)) {
+            this.tableData.t_body[1].splice(index, 1, data);
+          } else {
+            this.tableData.t_body[0].splice(index, 1, data);
+          }
+        }
+      },
       pageChange(page){
         this.$emit('pageChange',page)
       }
@@ -276,27 +287,27 @@
 
     },
     watch: {
-      // 'music_info.playStatus': function (new_val, old_val) {
-      //   if (this.current_data.data) {
-      //     let status = new_val == 'play' ? 'play' : 'pause';
-      //     let data = this.$deepClone(this.current_data);
-      //     this.playStatusChange(data.data, data.index, status);
-      //   }
-      // },
-      // 'music_info.id': function (new_val, old_val) {
-      //   let path_id = this.$route.query.id || '';
-      //   if(this.music_info.source_path.path == this.$route.path && this.music_info.source_path.id == path_id && this.ids_list.indexOf(new_val) != -1){
-      //     let index = this.play_music_list.ids.indexOf(new_val);
-      //     let data = {
-      //       data: this.play_music_list.data[index],
-      //       index: index,
-      //     };
-      //     if(this.config_data.colsNum == '2'){
-      //       data.index = data.index - this.tableData.t_body[0].length;
-      //     }
-      //     this.playStatusChange(data.data, data.index, 'play');
-      //   }
-      // },
+      'music_info.playStatus': function (new_val, old_val) {
+        if (this.current_data.data) {
+          let status = new_val == 'play' ? 'play' : 'pause';
+          let data = this.$deepClone(this.current_data);
+          this.playStatusChange(data.data, data.index, status);
+        }
+      },
+      'music_info.id': function (new_val, old_val) {
+        let path_id = this.$route.query.id || '';
+        if(this.music_info.source_path.path == this.$route.path && this.music_info.source_path.id == path_id && this.ids_list.indexOf(new_val) != -1){
+          let index = this.play_music_list.ids.indexOf(new_val);
+          let data = {
+            data: this.play_music_list.data[index],
+            index: index,
+          };
+          if(this.config_data.colsNum == '2'){
+            data.index = data.index - this.tableData.t_body[0].length;
+          }
+          this.playStatusChange(data.data, data.index, 'play');
+        }
+      },
     }
   }
 </script>

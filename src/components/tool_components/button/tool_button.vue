@@ -188,14 +188,13 @@
     border: 1.4px solid #c73333!important;
     border-radius: 3px;
     padding: 0 1px;
-    height: 12px;
+    height: 13px;
     cursor: pointer;
     i{
-      margin-left:2px;
+      margin-left:1px;
       color: #c73333;
       font-size: 13px!important;
       transform: scale(0.8);
-      /*line-height: 0.8;*/
     }
     &:hover{
       border-color: rgba(214,85,85,1);

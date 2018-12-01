@@ -29,25 +29,25 @@ export const playlist_data = {
         title: 'id',
         key: 'id',
         noshow: true,
-        jpath: 'id'
+        // jpath: 'id'
       },
       {
         title: 'mvid',
         key: 'mvid',
         noshow: true,
-        jpath: 'mv'
+        // jpath: 'mv'
       },
       {
         title: '别名',
         key: 'alias',
         noshow: true,
-        jpath: 'alia'
+        // jpath: 'alia'
       },
       {
         title: '歌名',
         key: 'song_name',
         noshow: false,
-        jpath: 'name',
+        // jpath: 'name',
         table_slot: 'song_name'
       },
       {
@@ -55,7 +55,7 @@ export const playlist_data = {
         key: 'artists',
         noshow: false,
         width: 120,
-        jpath: 'ar',
+        // jpath: 'ar',
         table_slot: 'artists'
       },
       {
@@ -70,13 +70,13 @@ export const playlist_data = {
         key: 'duration',
         noshow: false,
         width: 55,
-        jpath: 'dt'
+        // jpath: 'dt'
       },
       {
         title: '最大码率',
         key: 'maxbr',
         noshow: true,
-        jpath: 'privilege.maxbr'
+        // jpath: 'privilege.maxbr'
       },
     ],
     t_body: [],
