@@ -34,10 +34,10 @@
       </div>
 
       <div class="table_main">
-        <base-table v-if="tab_tabel_active == 'playlist'"
+        <base-table v-show="tab_tabel_active == 'playlist'"
                     :data="playlist_data.data"
                     :config="playlist_data.config"
-                    type="music"
+                    type="playlist"
                     @dbclick="tableClick"
                     stripe="stripe">
           <template slot="playStatus" slot-scope="data">
@@ -75,7 +75,7 @@
           </template>
         </base-table>
 
-        <base-table v-if="tab_tabel_active == 'history'"
+        <base-table v-show="tab_tabel_active == 'history'"
                     :data="history_data.data"
                     :config="history_data.config"
                     @dbclick="tableClick"
@@ -182,6 +182,9 @@
         }).catch(err => {
           console.log('err', err)
         });
+        if(data.type == 'playlist'){
+          this.playStatusChange(data, 'play');
+        }
       },
       tabClick(data) {
         this.tab_tabel_active = data.id;
@@ -202,6 +205,7 @@
       },
       get_play_music_list() {
         this.playlist_data.data.t_body = this.play_music_list.data;
+        this.$localStorage.setStore('play_music_list',this.play_music_list)
       },
       get_history_music_list(){
         this.history_data.data.t_body = this.history_music_list.data;
@@ -227,12 +231,35 @@
         }
         this.history_data.data.t_body = this.history_music_list.data;
         this.$localStorage.setStore('history_music_list', this.history_music_list);
-      }
+      },
+      // 播放列表状态改变
+      playStatusChange(data, type){
+        let _index = -1;
+        this.playlist_data.data.t_body.forEach((item,index)=>{
+          if(item.id == data.id){
+            _index = index;
+          }
+          if(item.playStatus){
+            item.playStatus = '';
+          }
+        });
+        if(data.data){
+          data.data.playStatus = type;
+          this.playlist_data.data.t_body.splice(data.index,1,data.data);
+        }else{
+          data.playStatus = type;
+          this.playlist_data.data.t_body.splice(_index,1,data);
+        }
+      },
     },
     watch: {
       'music_info.id': function (new_val, old_val) {
         this.play_history_list(new_val);
         this.get_play_music_list();
+        this.playStatusChange(this.music_info.data, 'play');
+      },
+      'music_info.playStatus': function (new_val, old_val) {
+        this.playStatusChange(this.music_info.data, new_val);
       },
     }
   }

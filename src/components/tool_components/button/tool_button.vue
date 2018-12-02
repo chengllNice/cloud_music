@@ -220,10 +220,14 @@
     color: #333333!important;
     padding: 12px 10px;
     border-radius: 3px;
-    font-size: 14px!important;
-    background: rgba(252,252,252,0.4)!important;
+    font-size: 13px!important;
+    background: rgba(252,252,252,0.5)!important;
     cursor: pointer;
     font-weight: 100;
+    &:hover{
+      background: rgba(252,252,252,0.8)!important;
+      color: #333333;
+    }
     /*line-height: 1;*/
     i{
       margin-right: 5px;

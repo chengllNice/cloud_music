@@ -62,7 +62,75 @@
           </div>
         </div>
       </div>
-      <div class="song_comment"></div>
+      <div class="song_comment">
+        <div class="left">
+          <div class="title">
+            <span class="text">听友评论</span>
+            <span class="total">(已有{{pageData.total}}条评论)</span>
+          </div>
+          <tool-comment :comment-all-data="commentData.comment" :comment-hot-data="commentData.hot" :pageData="pageData" @pageChange="pageChange" @submitComment="submitComment" :totalComment="pageData.total"></tool-comment>
+        </div>
+        <div class="right">
+          <div class="simi_playlist">
+            <div class="title">
+              <span class="text">包含这首歌的歌单</span>
+            </div>
+            <div class="simi_playlist_item" v-for="(item, index) in simi_playlist_data" :key="index">
+              <div class="play_img">
+                <img :src="item.coverImgUrl+'?param=180y180'" alt="">
+              </div>
+              <div class="play_info">
+                <div class="play_name ellipsis_1">{{item.name}}</div>
+                <div class="play_count">播放：{{item.playCount}}</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="simi_songs">
+            <div class="title">
+              <span class="text">相似歌曲</span>
+            </div>
+            <div class="simi_song_item" v-for="(item, index) in simi_song_data" :key="index">
+              <div class="mv_cover_img">
+                <img :src="item.album.picUrl+'?param=180y180'" alt="">
+                <div class="cover">
+                  <i class="iconfont icon-music_play1"></i>
+                </div>
+              </div>
+              <div class="simi_song_info">
+                <div class="song_name">
+                  <span class="ellipsis_1">{{item.name}}</span>
+                  <span class="alias ellipsis_1" v-for="(alias_item, alias_index) in item.alias" :key="alias_index">({{alias_item}})</span>
+                </div>
+                <div class="song_singer ellipsis_1">
+                  <span v-for="(artists_item, artists_index) in item.artists" :key="artists_index">
+                    <span v-if="artists_index != '0'">/</span><span v-if="type == '1'">by </span><span>{{artists_item.name}}</span>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="like_song_user">
+            <div class="title">
+              <span class="text">喜欢这首歌的人</span>
+            </div>
+            <div class="like_song_user_item" v-for="(item, index) in like_song_user" :key="index">
+              <div class="user_item_left">
+                <div class="avatar_img">
+                  <img :src="item.avatarUrl" alt="">
+                </div>
+                <div class="user_name ellipsis_1">{{item.nickname}}</div>
+                <div class="user_sex">
+                  <i v-if="item.gender" class="iconfont icon-sex_men"></i>
+                  <i v-else class="iconfont icon-sex_women"></i>
+                </div>
+              </div>
+              <div class="user_item_right ellipsis_1">{{item.recommendReason}}</div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 </template>
 
@@ -70,6 +138,7 @@
   import { mapState } from 'vuex'
   import { lrc} from "./lrc";
   import commonFooter from '../common_footer/common_footer'
+  import { get_song_comment, get_simi_song, get_song_user, get_simi_playlist} from "../../../server/common_api";
 
   export default {
       name: "commonLrc",
@@ -105,16 +174,35 @@
                   background: '#8a8a8a'
                 }
               }
-            }
+            },
+            pageData: {
+              total: 0,
+              page: 1,
+              pageSize: 50
+            },
+            commentData: {
+              hot: [],
+              comment: []
+            },
+            simi_playlist_data: [],//相似歌单
+            simi_song_data: [],//相似音乐
+            like_song_user: [],//喜欢这首歌的人
           }
       },
       computed: {
         ...mapState(['music_info', 'lrc_panal_show'])
       },
       mounted(){
-        this.get_song_lrc_handler();
+        this.init();
       },
       methods: {
+        init(){
+          this.get_song_lrc_handler();
+          this.getSongComment();
+          this.getSimiSonglist();
+          this.getSimiSong();
+          this.getSongUser();
+        },
         // 获取歌曲url
         get_song_lrc_handler(){
           this.lrc_loading = true;
@@ -189,6 +277,104 @@
         },
         lrc_panal_close(){
           this.$store.commit('set_lrc_panal_show', false)
+        },
+
+        // 获取歌曲评论信息
+        getSongComment(){
+          if(!this.music_info.id){
+            return
+          }
+          let get_data = {
+            id: this.music_info.id,
+            limit: this.pageData.pageSize,
+            offset: (this.pageData.page-1)*this.pageData.pageSize
+          };
+          this.commentData.comment = [];
+          this.commentData.hot = [];
+          get_song_comment(get_data).then(res=>{
+            this.commentData.comment = res.comments;
+            if(res.hotComments){
+              this.commentData.hot = res.hotComments;
+            }
+            this.pageData.total = res.total;
+            // this.header_tab_data[1].value = res.total
+          }).catch(err=>{
+            console.log('err',err)
+          })
+        },
+        pageChange(page){
+          this.pageData.page = page;
+          this.getSongComment();
+        },
+        submitComment(value){
+          let post_data = {
+            t: 1,
+            type: 0,
+            id: this.$route.query.id,
+            content: value
+          };
+          this.$commonApi.postSonglistComment(post_data).then(res=>{
+            if(res.code == 200){
+              this.$Message.success(res.msg);
+              this.pageData.page = 1;
+              this.getSongComment();
+            }else{
+              this.$Message.warning(res.msg)
+            }
+            console.log(res)
+          }).catch(err=>{
+            console.log(err)
+            this.$Message.warning('需要登录')
+            console.log('err',err)
+          })
+        },
+
+        // 获取歌单
+        getSimiSonglist(){
+          if(!this.music_info.id){
+            return
+          }
+          let get_data = {
+            id: this.music_info.id
+          };
+          get_simi_playlist(get_data).then(res=>{
+            let result = res.playlists;
+            this.$unitFormat(result, 'playCount');
+            this.simi_playlist_data = result;
+          }).catch(err=>{
+            console.log('err',err)
+          })
+        },
+        // 获取相似歌曲
+        getSimiSong(){
+          if(!this.music_info.id){
+            return
+          }
+          let get_data = {
+            id: this.music_info.id
+          };
+          get_simi_song(get_data).then(res=>{
+            let result = res.songs;
+            this.simi_song_data = result;
+          }).catch(err=>{
+            console.log('err',err)
+          })
+        },
+
+        // 喜欢这首歌的人
+        getSongUser(){
+          if(!this.music_info.id){
+            return
+          }
+          let get_data = {
+            id: this.music_info.id
+          };
+          get_song_user(get_data).then(res=>{
+            let result = res.userprofiles;
+            this.like_song_user = result;
+          }).catch(err=>{
+            console.log('err',err)
+          })
         }
       },
       watch: {
@@ -205,7 +391,7 @@
 <style lang="less" scoped>
 .common_lrc{
   width: 100%;
-  background: #f2f2f2;
+  background: #fafafa;
   position: relative;
 
   .lrc_close{
@@ -248,7 +434,7 @@
       background-image: url("../../../../static/img/test/music_cover.jpg");
       background-repeat: no-repeat;
       background-size: 70% 100%;
-      background-position: center;
+      background-position: center -60px;
       /*<!--background-position: -100px -80px;-->*/
       filter: blur(60px);
     }
@@ -451,10 +637,198 @@
       }
     }
   }
+
+  .song_comment{
+    display: flex;
+    justify-content: center;
+    margin-top: 60px;
+    .left{
+      width: 545px;
+      margin-right: 70px;
+
+    }
+    .right{
+      width: 246px;
+      .simi_playlist{
+        margin-bottom: 50px;
+        .simi_playlist_item{
+          display: flex;
+          align-items: center;
+          font-size: 12px;
+          color: #333333;
+          padding: 5px 0;
+          *{
+            cursor: pointer;
+          }
+          &:hover{
+            background: #ecedee;
+          }
+          .play_img{
+            width: 40px;
+            img{
+              width: 100%;
+            }
+          }
+          .play_info{
+            flex: 1;
+            padding-left: 5px;
+            .play_name{
+
+            }
+            .play_count{
+              color: #888;
+            }
+          }
+        }
+      }
+      .simi_songs{
+        margin-bottom: 50px;
+        .simi_song_item{
+          display: flex;
+          padding: 4px 0;
+          &:hover{
+            background: #ecedee;
+          }
+          .mv_cover_img{
+            position: relative;
+            cursor: pointer;
+            img{
+              width: 40px;
+            }
+            .cover{
+              position: absolute;
+              top: 0;
+              left: 0;
+              width: 100%;
+              height: 100%;
+              color: #ffffff;
+              background: linear-gradient(left, rgba(232,234,236,0.1), rgba(0,0,0,0.3));
+              font-size: 12px;
+              text-align: right !important;
+              padding: 2px 5px;
+              cursor: pointer;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              i{
+                font-size: 12px;
+                margin-right: 1px;
+              }
+              .icon-music_play1{
+                font-size: 20px;
+              }
+            }
+          }
+          .simi_song_info{
+            font-size: 12px;
+            padding-left: 15px;
+            line-height: 16px;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            .song_name{
+              display: flex;
+              align-items: center;
+              span:nth-of-type(1){
+                flex: none;
+              }
+              .alias{
+                color: #888;
+              }
+            }
+            .song_duration,.song_singer{
+              color: #888;
+            }
+          }
+        }
+      }
+      .like_song_user{
+        margin-bottom: 50px;
+        .like_song_user_item{
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          font-size: 12px;
+          padding: 5px 0;
+          &:hover{
+            background: #ecedee;
+          }
+          *{
+            cursor: pointer;
+          }
+          .user_item_left{
+            display: flex;
+            align-items: center;
+            flex: 1;
+            .avatar_img{
+              width: 30px;
+              border-radius: 50%;
+              overflow: hidden;
+              margin-right: 5px;
+              img{
+                width: 100%;
+              }
+            }
+            .user_name{
+              color: #333333;
+              margin-right: 5px;
+              flex: none;
+            }
+            .user_sex{
+              .icon-sex_men{
+                color: #1379ab;
+                font-size: 10px;
+              }
+              .icon-sex_women{
+                color: #e494d2;
+                font-size: 12px;
+              }
+            }
+          }
+          .user_item_right{
+            text-align: right;
+          }
+        }
+      }
+    }
+    .title{
+      display: flex;
+      align-items: flex-end;
+      border-bottom: 1px solid #e1e1e2;
+      padding: 3px 0;
+      margin-bottom: 3px;
+      .text{
+        font-size: 18px;
+        color: #333333;
+      }
+      .total{
+        font-size: 12px;
+        color: #666666;
+        margin-left: 10px;
+      }
+    }
+  }
 }
 </style>
 <style lang="less">
+  .common_lrc{
+    .tool_button{
+      .icon-add_file{
+        font-size: 16px!important;
+      }
+      .icon-shape{
+        font-size: 12px!important;
+      }
+    }
+    .comment{
+      padding-left: 0!important;
+      padding-right: 0!important;
+    }
+  }
   .lrc_main_right{
+
+
     li{
       /*height: 35px;*/
       line-height: 35px;
@@ -472,5 +846,4 @@
       }
     }
   }
-
 </style>

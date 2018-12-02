@@ -8,6 +8,14 @@ export const get_song_url = (data) => ajax_get('/song/url',data);
 export const get_song_lrc = (data) => ajax_get('/lyric',data);
 // 获取歌曲详情
 export const get_song_detail = (data) => ajax_get('/song/detail',data);
+// 获取歌曲评论
+export const get_song_comment = (data) => ajax_get('/comment/music',data);
+// 获取相似歌曲
+export const get_simi_song = (data) => ajax_get('/simi/song',data);
+// 获取存在这首歌的歌单
+export const get_simi_playlist = (data) => ajax_get('/simi/playlist',data);
+// 获取最近听了这首歌的人（喜欢这首歌的人）
+export const get_song_user = (data) => ajax_get('/simi/user',data);
 // 获取歌单详情
 export const get_songlist_detail = (data) => ajax_get('/playlist/detail',data);
 // 获取歌单评论
