@@ -80,7 +80,10 @@
           <template slot="song_name" slot-scope="data">
             <div class="song_name ellipsis_1">
               <div class="ellipsis_1">{{data.data.song_name}}</div>
-              <span class="ellipsis_1" v-if="data.data.alia && data.data.alia.length" v-for="(item, index) in data.data.alia">({{item}})</span>
+              <span class="ellipsis_1" v-if="data.data.alias && data.data.alias.length" v-for="(item, index) in data.data.alias">({{item}})</span>
+              <base-tool-button v-if="data.data.mvid" type="icon" cl-type="play_video_icon_button"
+                                icon-class="icon-music_play" @click="goToVideo(data.data.mvid)"></base-tool-button>
+              <base-tool-button v-if="data.data.maxbr && data.data.maxbr == '999000'" type="" cl-type="sq_button">SQ</base-tool-button>
             </div>
           </template>
           <template slot="lastRank" slot-scope="data">
@@ -233,6 +236,9 @@
         this.tab_active = data.id;
       },
       tableClick(data){
+        if(data.data.privilege.fee == '1' || data.data.privilege.fee == '4'){
+          // this.$toolModalFee
+        }
         let get_data = {
           id: data.data.id
         };
@@ -625,6 +631,12 @@
       }
       span{
         color: #888888;
+      }
+      .tool_button {
+        flex: none;
+      }
+      & > * {
+        margin-right: 5px;
       }
     }
     .lastRank{

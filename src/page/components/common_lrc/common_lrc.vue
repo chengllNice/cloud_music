@@ -104,7 +104,7 @@
                 </div>
                 <div class="song_singer ellipsis_1">
                   <span v-for="(artists_item, artists_index) in item.artists" :key="artists_index">
-                    <span v-if="artists_index != '0'">/</span><span v-if="type == '1'">by </span><span>{{artists_item.name}}</span>
+                    <span v-if="artists_index != '0'">/</span><span>{{artists_item.name}}</span>
                   </span>
                 </div>
               </div>
@@ -178,7 +178,7 @@
             pageData: {
               total: 0,
               page: 1,
-              pageSize: 50
+              pageSize: 20
             },
             commentData: {
               hot: [],
@@ -391,6 +391,7 @@
 <style lang="less" scoped>
 .common_lrc{
   width: 100%;
+  padding-bottom: 30px;
   background: #fafafa;
   position: relative;
 

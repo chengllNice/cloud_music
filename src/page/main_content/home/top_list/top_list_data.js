@@ -2,22 +2,22 @@
 // 歌手榜tab
 export const singer_list_tab_data = [
   {
-    id: '7',
+    id: '1',
     name: '华语',
     path: '',
   },
   {
-    id: '96',
+    id: '2',
     name: '欧美',
     path: '',
   },
   {
-    id: '16',
+    id: '3',
     name: '韩国',
     path: '',
   },
   {
-    id: '8',
+    id: '4',
     name: '日本',
     path: '',
   },

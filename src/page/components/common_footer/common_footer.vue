@@ -190,12 +190,14 @@
         this.tab_tabel_active = data.id;
       },
       goToVideo(mv_id){
+        this.$store.commit('set_lrc_panal_show',false);
         this.$router.push({
           path: '/play_mv',
           query: { id: mv_id, type: '0'}
         })
       },
       source_handler(data){
+        this.$store.commit('set_lrc_panal_show',false);
         let path = data.path || '';
         let id = data.id || '';
         this.$router.push({

@@ -8,7 +8,7 @@
                 type="left"
                 tab-type="three_tab">
       <template>
-        <div class="update_time">更新时间：{{singer_list_data.trackUpdateTime}}</div>
+        <div class="update_time">更新时间：{{updateTime}}</div>
       </template>
     </header-tab>
     <div class="singer_list">
@@ -50,7 +50,9 @@
     data() {
       return {
         header_tab_data: [],
-        singer_list_data: {}
+        singer_list_data: {},
+        updateTime: '',
+        filter_tab_id: '1'
       }
     },
     computed: {},
@@ -68,12 +70,14 @@
       },
       get_toplist_artist(idx) {
         let get_data = {
-          limit: 10,
+          type: this.filter_tab_id,
+          limit: 100,
           offset: 0
         };
+        this.singer_list_data.data.t_body = [];
         get_toplist_artist(get_data).then(res => {
           let data = res.list.artists;
-          this.singer_list_data.trackUpdateTime = this.$timeFormat(res.updateTime, 'mm月dd日');
+          this.updateTime = this.$timeFormat(res.list.updateTime, 'mm月dd日');
           this.$tableListInit(data, this.singer_list_data.data,this)
         }).catch(err => {
           console.log('err', err)
@@ -82,8 +86,9 @@
       clickRow(){
 
       },
-      threeTabClick(){
-
+      threeTabClick(data){
+        this.filter_tab_id = data.id;
+        this.get_toplist_artist();
       }
     },
     watch: {}

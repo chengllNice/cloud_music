@@ -1,4 +1,5 @@
 import toolModal from './tool_modal.vue'
+import toolModalFee from './tool_modal_fee/tool_modal_fee.js'
 
 toolModal.install = function (Vue) {
   Vue.component(toolModal.name, toolModal)
@@ -7,4 +8,5 @@ toolModal.install = function (Vue) {
 
 export {
   toolModal,
+  toolModalFee
 }

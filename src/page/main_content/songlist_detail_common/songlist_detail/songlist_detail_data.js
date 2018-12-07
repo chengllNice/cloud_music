@@ -128,6 +128,12 @@ export const songlist_data = {
           noshow: true,
           jpath: 'privilege.maxbr'
         },
+        {
+          title: '',
+          key: 'privilege',
+          noshow: true,
+          jpath: 'privilege'
+        },
       ],
       t_body: [
 
