@@ -227,7 +227,6 @@
         <div class="singer_list">
           <base-table :data="singer_list.data"
                       :config="singer_list.config"
-                      type="music"
                       @clickRow="clickRow"
                       stripe="stripe">
             <template slot="header" slot-scope="data">

@@ -254,6 +254,71 @@ export const singer_list_data = {
   },
 };
 
+// 歌手榜
+export const singer_top_list_data = {
+  id: '',
+  name: '',
+  type: 'table',
+  weight: '1',//权值，排序优先度
+  colsNum: 1,//列数
+  slot: 'song_body',
+  title: {
+    name: '最新歌单',
+    noshow: false,
+    more_btn: '更多'
+  },
+  config: {
+    colsNum: '1',
+    showheader: false
+  },
+  data: {
+    t_head: [
+      {
+        title: '歌曲排序',
+        key: 'sort_num_custom',
+        width: 30,
+        // jpath:'sort_num_custom',
+        table_slot: 'sort_num_custom'
+      },
+      {
+        title: 'id',
+        key: 'id',
+        noshow: true,
+        jpath: 'id'
+      },
+      {
+        title: 'lastRank',
+        key: 'lastRank',
+        noshow: false,
+        width: 38,
+        jpath: 'lastRank',
+        table_slot: 'lastRank'
+      },
+      {
+        title: '图片',
+        key: 'picUrl',
+        noshow: true,
+        jpath: 'picUrl',
+      },
+      {
+        title: '图片',
+        key: 'trans_name',
+        noshow: true,
+        jpath: 'trans',
+      },
+      {
+        title: '歌手',
+        key: 'singer_name',
+        noshow: false,
+        jpath: 'name',
+        table_slot: 'singer_name'
+      },
+    ],
+    t_body: [],
+    t_page: {}
+  },
+};
+
 //全球榜
 export const whole_world_list_data = {
   id: '',
