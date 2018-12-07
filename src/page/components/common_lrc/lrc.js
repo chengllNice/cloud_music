@@ -43,3 +43,8 @@ export const lrc = {
     '[03:39.73]我们要藕断丝连\n' +
     '[03:51.48]'
 };
+
+// 相似歌曲
+export const simi_song_data = {
+
+};
