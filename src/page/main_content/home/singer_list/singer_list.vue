@@ -58,6 +58,7 @@
     methods: {
       init() {
         this.get_top_artists();
+        this.singer_list_format();
         // this.get_artists_list();
       },
       get_top_artists() {
@@ -120,7 +121,15 @@
           path: '/singer_detail_common',
           query: { id: data.id}
         })
-      }
+      },
+      singer_list_format(){
+        let device_info = this.device_info;
+        if(device_info.clientWidth >= 1068){
+          this.songer_data.colsNum = 6;
+        }else{
+          this.songer_data.colsNum = 5;
+        }
+      },
     },
     watch: {
       'scroll_info.process': function (new_val, old_val) {
@@ -129,6 +138,9 @@
           // this.page.page++;
           // this.get_artists_list();
         }
+      },
+      'device_info.clientWidth': function (new_val, old_val) {
+        this.singer_list_format();
       }
     }
   }

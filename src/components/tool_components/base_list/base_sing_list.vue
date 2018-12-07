@@ -16,7 +16,7 @@
             :class="{'itemFirst': index%colsNum == 0}">
           <div class="item_img" :class="{'coverall': item.picUrl && base_data.type == 'album'}" @click="itemClick(item)">
             <!--<div class="coverall" v-if=""></div>-->
-            <img :src="item.picUrl+'?param='+(item.width || '500')+'y'+(item.height || '500')" :alt="item.name">
+            <img :src="item.picUrl+'?param='+(item.width || '300')+'y'+(item.height || '300')" :alt="item.name">
             <div class="item_img_cover" v-if="base_data.expand && !base_data.expand.nocover">
               <!--顶部覆盖-->
               <div class="cover_top" v-if="base_data.expand && base_data.expand.cover_top">

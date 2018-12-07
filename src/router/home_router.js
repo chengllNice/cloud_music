@@ -20,6 +20,8 @@ const songlist_detail_common = r => require.ensure([], () => r(require('../page/
 const album_detail_common = r => require.ensure([], () => r(require('../page/components/album_detail_common/album_detail_common')), 'album_detail_common');
 // 歌手详情
 const singer_detail_common = r => require.ensure([], () => r(require('../page/components/singer_detail_common/singer_detail_common')), 'singer_detail_common');
+// 歌手榜
+const singer_top_list = r => require.ensure([], () => r(require('../page/main_content/home/top_list/singer_top_list')), 'singer_top_list');
 
 export default {
   path: '/',
@@ -55,6 +57,11 @@ export default {
               path: '/home/top_list',
               name: 'top_list',
               component: top_list,
+            },
+            {
+              path: '/home/singer_top_list',
+              name: 'singer_top_list',
+              component: singer_top_list,
             },
             {
               path: '/home/singer_list',

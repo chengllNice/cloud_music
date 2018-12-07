@@ -261,7 +261,7 @@
             </template>
             <template slot="footer" slot-scope="data">
               <div class="seen_all">
-                <span>查看全部></span>
+                <span @click="songlist_all('singer_list')">查看全部></span>
               </div>
             </template>
           </base-table>
@@ -479,10 +479,16 @@
       },
       // 查看全部
       songlist_all(id, type){
-        this.$router.push({
-          path: '/songlist_detail_common',
-          query: { id: id, type: type}
-        })
+        if(id == 'singer_list'){
+          this.$router.push({
+            path: '/home/singer_top_list'
+          })
+        }else{
+          this.$router.push({
+            path: '/songlist_detail_common',
+            query: { id: id, type: type}
+          })
+        }
       },
       // 歌手榜点击
       clickRow(data){

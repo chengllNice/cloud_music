@@ -35,7 +35,7 @@
       <template slot="content" slot-scope="data">
         <div class="new_song_content">
           <div class="left_img" v-if="data.data.picUrl">
-            <img :src="data.data.picUrl" alt="">
+            <img :src="data.data.picUrl+'?param=180y180'" alt="">
             <div class="img_cover">
               <div class="abs_center play_icon">
                 <i class="iconfont icon-music_play"></i>

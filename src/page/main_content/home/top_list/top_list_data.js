@@ -1,4 +1,27 @@
 
+// 歌手榜tab
+export const singer_list_tab_data = [
+  {
+    id: '7',
+    name: '华语',
+    path: '',
+  },
+  {
+    id: '96',
+    name: '欧美',
+    path: '',
+  },
+  {
+    id: '16',
+    name: '韩国',
+    path: '',
+  },
+  {
+    id: '8',
+    name: '日本',
+    path: '',
+  },
+];
 
 //飙升榜
 export const up_music_list_data = {
