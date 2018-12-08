@@ -1,16 +1,19 @@
 <template>
   <div class="singer_top_list">
-    <div class="title">云音乐歌手榜</div>
+    <div class="title">
+      <div class="title_left_img">
+        <div class="recommend_wrap">
+          <div>星期六</div>
+          <div>8</div>
+        </div>
+      </div>
+      <div class="title_right_info">
+        <div class="text">每日歌曲推荐</div>
+        <div class="des">根据你的音乐口味生成，每天6:00更新</div>
+      </div>
 
-    <header-tab class="bottom_tab"
-                @tabClick="threeTabClick"
-                :data="header_tab_data"
-                type="left"
-                tab-type="three_tab">
-      <template>
-        <div class="update_time">更新时间：{{updateTime}}</div>
-      </template>
-    </header-tab>
+    </div>
+
     <div class="singer_list">
       <base-table :data="singer_list_data.data"
                   :config="singer_list_data.config"
@@ -105,6 +108,36 @@
     font-size: 22px;
     color: #333333;
     margin-bottom: 20px;
+    .title_left_img{
+      width: 100px;
+      height: 100px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      .recommend_wrap{
+        &>div:nth-of-type(1){
+          color: #666;
+          font-size: 14px;
+          line-height: 1;
+          text-align: center;
+        }
+        &>div:nth-of-type(2){
+          color: #c62f2f;
+          font-size: 80px;
+          line-height: 1;
+          text-align: center;
+        }
+      }
+    }
+    .title_right_info{
+      .text{
+        font-size: 22px;
+      }
+      .des{
+
+      }
+    }
   }
   .bottom_tab{
     height: 28px;

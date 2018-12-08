@@ -17,9 +17,10 @@
           <div class="item_img" :class="{'coverall': item.picUrl && base_data.type == 'album'}" @click="itemClick(item)">
             <!--<div class="coverall" v-if=""></div>-->
             <img :src="item.picUrl+'?param='+(item.width || '300')+'y'+(item.height || '300')" :alt="item.name">
+            <div class="item_img_slot" v-if="item.expand && item.expand.slot"><slot></slot></div>
             <div class="item_img_cover" v-if="base_data.expand && !base_data.expand.nocover">
               <!--顶部覆盖-->
-              <div class="cover_top" v-if="base_data.expand && base_data.expand.cover_top">
+              <div class="cover_top" v-if="base_data.expand && base_data.expand.cover_top && (!item.expand || !item.expand.slot)">
                 <i class="iconfont"
                    :class="{'icon-left_video': item.type == 'mv',
                     'icon-headphone': item.type == 'sing_list'}"></i>
@@ -141,7 +142,7 @@
       moreClick(data){
         if(data.title && data.title.path){
           this.$router.push({
-            path: path
+            path: data.title.path
           })
         }
         this.$emit('moreClick', data)
@@ -201,7 +202,15 @@
           position: relative;
           cursor: pointer;
           overflow: hidden;
-
+          border: 1px solid #e5e5e5;
+          .item_img_slot{
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #FFFFFF;
+          }
           img{
             width: 100%;
             height: 100%;

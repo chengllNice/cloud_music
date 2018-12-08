@@ -203,7 +203,7 @@
           this.getSimiSong();
           this.getSongUser();
         },
-        // 获取歌曲url
+        // 获取歌曲lrc
         get_song_lrc_handler(){
           this.lrc_loading = true;
           let get_data = {

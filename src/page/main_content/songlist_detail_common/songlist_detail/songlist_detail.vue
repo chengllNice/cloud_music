@@ -331,6 +331,12 @@
           console.log('err',err)
         })
       },
+      goToVideo(mv_id){
+        this.$router.push({
+          path: '/play_mv',
+          query: { id: mv_id, type: '0'}
+        })
+      },
       subscribersInfoHandler(uid){
 
       }

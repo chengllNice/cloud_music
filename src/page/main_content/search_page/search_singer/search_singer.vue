@@ -3,6 +3,7 @@
     <base-table :data="search_singer_data.data"
                 :config="search_singer_data.config"
                 @dbclick="tableClick"
+                @clickRow="clickRow"
                 @pageChange="pageChange"
                 stripe="stripe">
       <template slot="name" slot-scope="data">
@@ -44,6 +45,12 @@
     methods: {
       tableClick(data){
 
+      },
+      clickRow(data){
+        this.$router.push({
+          path: '/singer_detail_common',
+          query: { id: data.data.id}
+        })
       },
       pageChange(page){
         this.search_singer_data.data.t_body = [];

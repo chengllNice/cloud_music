@@ -23,7 +23,7 @@
             <div class="alias" v-if="data.data.alias.length">
               <span class="ellipsis_1" v-for="(alias_item, alias_index) in data.data.alias" :key="alias_index">({{alias_item}})</span>
             </div>
-            <base-tool-button v-if="data.data.mvid" type="icon" cl-type="play_video_icon_button" icon-class="icon-music_play"></base-tool-button>
+            <base-tool-button v-if="data.data.mvid" type="icon" cl-type="play_video_icon_button" icon-class="icon-music_play" @click="goToVideo(data.data.mvid)"></base-tool-button>
             <base-tool-button v-if="data.data.maxbr && data.data.maxbr == '999000'" type="" cl-type="sq_button">SQ</base-tool-button>
             <!--<span v-if="data.data.singer">{{data.data.singer}}</span>-->
           </div>
@@ -138,6 +138,12 @@
         }else{
           this.$store.state.play_music_list.data.push(_data)
         }
+      },
+      goToVideo(mv_id){
+        this.$router.push({
+          path: '/play_mv',
+          query: { id: mv_id, type: '0'}
+        })
       },
     },
     watch: {

@@ -26,7 +26,7 @@
                     </div>
                   </div>
                   <div class="singer">
-                    <base-tool-button v-if="data.data.mvid" type="icon" cl-type="play_video_icon_button" icon-class="icon-music_play"></base-tool-button>
+                    <base-tool-button v-if="data.data.mvid" type="icon" cl-type="play_video_icon_button" icon-class="icon-music_play" @click="goToVideo(data.data.mvid)"></base-tool-button>
                     <base-tool-button v-if="data.data.maxbr && data.data.maxbr == '999000'" type="" cl-type="sq_button">SQ</base-tool-button>
                     <span v-if="data.data.artists && data.data.artists.length">
                       <span v-for="(singer_item, singer_index) in data.data.artists" :key="singer_index">
@@ -38,6 +38,14 @@
               </div>
             </template>
           </base-table>
+        </template>
+        <template>
+          <div class="recommend_box">
+            <div class="recommend_wrap">
+              <div>星期六</div>
+              <div>8</div>
+            </div>
+          </div>
         </template>
       </base-sing-list>
     </div>
@@ -64,6 +72,7 @@
   import {
     get_banner,
     get_personalized,
+    get_recommend_songs,
     get_privatecontent,
     get_newsong,
     get_mv,
@@ -95,7 +104,6 @@
       this.new_song_data = this.$deepClone(new_song_data);
       this.recommend_mv_data = this.$deepClone(recommend_mv_data);
       this.radio_station_data = this.$deepClone(radio_station_data);
-
     },
     mounted() {
       this.init();
@@ -112,6 +120,8 @@
         this.get_mv_data();//获取推荐MV
         await this.get_dj_recommend_data();//获取推荐电台
         this.all_data_format();
+      },
+      get_now_date(){
 
       },
       all_data_format(){
@@ -134,7 +144,7 @@
           recommend_mv_data.colsNum = this.recommend_mv_data.colsNum;
         }
 
-        let recommend_colsNum = recommend_data.colsNum || 10;
+        let recommend_colsNum = recommend_data.colsNum || 5;
         let exclusive_colsNum = exclusive_data.colsNum || 5;
         let recommend_mv_colsNum = recommend_mv_data.colsNum || 3;
         let radio_station_colsNum = radio_station_data.colsNum || 5;
@@ -163,11 +173,12 @@
           console.log('err',err);
         })
       },
+      // 推荐歌单
       async get_personalized_data(){
         return new Promise((resolve, reject)=>{
           get_personalized().then(res=>{
             let format_data = this.$uiconfigFormat(res.result,this.recommend_data.uiconfig);
-            this.recommend_data.data = format_data;
+            this.recommend_data.data.push(...format_data);
             this.$unitFormat(this.recommend_data.data, 'playCount');
             // this.all_data.push(this.recommend_data);
             resolve();
@@ -177,6 +188,7 @@
           })
         });
       },
+      // 独家放送
       async get_privatecontent_data(){
         return new Promise((resolve, reject)=>{
           get_privatecontent().then(res=>{
@@ -194,6 +206,7 @@
           })
         });
       },
+      // 最新音乐
       async get_newsong_data(){
         return new Promise((resolve, reject)=>{
           get_newsong().then(res=>{
@@ -206,6 +219,7 @@
           })
         });
       },
+      // 推荐MV
       async get_mv_data(){
         return new Promise((resolve, reject)=>{
           get_mv().then(res=>{
@@ -224,6 +238,7 @@
           })
         })
       },
+      // 电台
       async get_dj_recommend_data(){
         return new Promise((resolve, reject)=>{
           get_djprogram().then(res=>{
@@ -263,9 +278,19 @@
         });
       },
       songlistClickHandler(data){
+        if(data.id == '-1'){
+
+        }else{
+          this.$router.push({
+            path: '/songlist_detail_common',
+            query: { id: data.id}
+          })
+        }
+      },
+      goToVideo(mv_id){
         this.$router.push({
-          path: '/songlist_detail_common',
-          query: { id: data.id}
+          path: '/play_mv',
+          query: { id: mv_id, type: '0'}
         })
       },
       moreClick(data){
@@ -286,6 +311,27 @@
     margin-bottom: 30px;
     .base_table{
       padding-left: 20px;
+    }
+  }
+  .recommend_box{
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    .recommend_wrap{
+      &>div:nth-of-type(1){
+        color: #666;
+        font-size: 14px;
+        line-height: 1;
+        text-align: center;
+      }
+      &>div:nth-of-type(2){
+        color: #c62f2f;
+        font-size: 80px;
+        line-height: 1;
+        text-align: center;
+      }
     }
   }
   .new_song_content{

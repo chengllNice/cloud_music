@@ -30,7 +30,7 @@
           <span class="value">{{singer_detail.albumSize}}</span>
         </div>
         <div class="singer_detail_item">
-          <base-tool-button class="icon" type="icon" cl-type="play_video_icon_button" icon-class="icon-music_play"></base-tool-button>
+          <base-tool-button class="icon singer_info_video_icon" type="icon" cl-type="play_video_icon_button" icon-class="icon-music_play"></base-tool-button>
           <span class="label">MV数：</span>
           <span class="value">{{singer_detail.mvSize}}</span>
         </div>
@@ -304,6 +304,8 @@
   .singer_detail_common{
     .tool_button{
       padding-left: 2px;
+    }
+    .singer_info_video_icon{
       .play_video_icon_button{
         border-color: #666!important;
         padding: 0!important;

@@ -44,6 +44,7 @@
     methods: {
       init(){
         this.get_mv_data();
+        this.device_change();
       },
       get_mv_data(){
         let get_data = {
@@ -73,14 +74,26 @@
           query: { id: data.id}
         })
       },
+      device_change(){
+        if(this.device_info.clientWidth >= 1608){
+          this.mv_data.colsNum = 7;
+        }else if(this.device_info.clientWidth >= 1408){
+          this.mv_data.colsNum = 6;
+        }else if(this.device_info.clientWidth >= 1211){
+          this.mv_data.colsNum = 5;
+        }else{
+          this.mv_data.colsNum = 4;
+        }
+      }
     },
     watch: {
-      watch: {
-        '$route.query.id': function (new_val, old_val) {
-          if(new_val){
-            this.init();
-          }
+      '$route.query.id': function (new_val, old_val) {
+        if(new_val){
+          this.init();
         }
+      },
+      'device_info.clientWidth': function (new_val, old_val) {
+        this.device_change()
       },
       'scroll_info.process': function (new_val, old_val) {
         if(new_val >= 0.98 && this.pageChange && this.is_more && this.tab_active == '1'){

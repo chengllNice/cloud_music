@@ -86,6 +86,7 @@
         align-items: center;
         .gender{
           margin-left: 5px;
+
           .icon-sex_men{
             color: #1379ab;
             font-size: 10px;

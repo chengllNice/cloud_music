@@ -5,6 +5,7 @@ import home from './home_router'
 import video from './video_router'
 import search_page from './search_page_router'
 import common from './common_router'
+import privateFM from './private_FM_router'
 Vue.use(Router)
 
 export default new Router({
@@ -13,5 +14,6 @@ export default new Router({
     video,
     search_page,
     common,
+    privateFM,
   ]
 })

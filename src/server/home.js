@@ -4,6 +4,8 @@ import {ajax_get} from "./index";
 export const get_banner = data => ajax_get('/banner',data);
 // 获取推荐歌单
 export const get_personalized = data => ajax_get('/personalized',data);
+// 每日推荐歌曲
+export const get_recommend_songs = data => ajax_get('/recommend/songs',data);
 // 独家放送
 export const get_privatecontent = data => ajax_get('/personalized/privatecontent',data);
 // 新歌推荐（最新音乐）

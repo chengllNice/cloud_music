@@ -1,6 +1,7 @@
 <template>
   <div class="detail_info">
-    <div class="info" v-for="(item, index) in data" :key="index">
+    <div class="no_detail" v-if="no_detail">暂无介绍</div>
+    <div class="info" v-if="data.length" v-for="(item, index) in data" :key="index">
       <div class="title">{{item.ti}}</div>
       <div class="text" v-html="item.txt"></div>
     </div>
@@ -17,7 +18,8 @@
     },
     data() {
       return {
-        data: []
+        data: [],
+        no_detail: false
       }
     },
     computed: {},
@@ -41,6 +43,11 @@
             item.txt = item.txt.replace(/\n/g, '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;');
           });
           this.data = result;
+          if(!result.length){
+            this.no_detail = true;
+          }else{
+            this.no_detail = false;
+          }
         }).catch(err=>{
           console.log('err', err)
         })
@@ -59,6 +66,9 @@
 <style lang="less" scoped>
 .detail_info{
   padding: 0 30px;
+  .no_detail{
+    text-align: center;
+  }
   .info{
     margin-bottom: 30px;
     .title{

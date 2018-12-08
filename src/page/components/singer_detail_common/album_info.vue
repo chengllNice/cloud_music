@@ -13,7 +13,7 @@
                   @clickRow="go_album_detail">
         <template slot="picUrl_content" slot-scope="data">
           <div class="album_picUrl">
-            <img :src="data.data.picUrl" alt="">
+            <img :src="data.data.picUrl + '?param=300y300'" alt="">
           </div>
         </template>
         <template slot="name_content" slot-scope="data">
@@ -29,7 +29,7 @@
       <div class="album_theme_list_box" v-for="(album_item, album_index) in singer_album_theme_list_data_arr" :key="album_index">
         <div class="album_coverimg">
           <div class="pic" @click="go_album_detail(album_item)">
-            <img :src="album_item.album_info.picUrl" alt="">
+            <img :src="album_item.album_info.picUrl + '?param=300y300'" alt="">
           </div>
           <div class="publishTime">{{album_item.album_info.publishTime}}</div>
         </div>
@@ -52,6 +52,8 @@
             <template slot="name_content" slot-scope="data">
               <div class="album_name ellipsis_1">
                 <span class="ellipsis_1">{{data.data.song_name}}</span>
+                <base-tool-button v-if="data.data.mvid" type="icon" cl-type="play_video_icon_button" icon-class="icon-music_play" @click="goToVideo(data.data.mvid)"></base-tool-button>
+                <base-tool-button v-if="data.data.maxbr && data.data.maxbr == '999000'" type="" cl-type="sq_button">SQ</base-tool-button>
                 <!--<span class="alias_name ellipsis_1" v-for="(item, index) in data.data.alias" :key="index">({{item}})</span>-->
               </div>
             </template>
@@ -315,6 +317,12 @@
           query: { id: id}
         })
       },
+      goToVideo(mv_id){
+        this.$router.push({
+          path: '/play_mv',
+          query: { id: mv_id, type: '0'}
+        })
+      },
       device_change(){
         if(this.device_info.clientWidth >= 1408){
           this.singer_album_theme_data.colsNum = 6;
@@ -425,6 +433,9 @@
       .album_name{
         display: flex;
         align-items: center;
+        &>*{
+          margin-right: 5px;
+        }
         .alias_name{
           color: #888;
         }

@@ -28,7 +28,7 @@ export const left_nav_data = [
           fontWeight: '400'
         },
         name: '私人FM',
-        path: '',
+        path: '/private_FM',
       },
       {
         id: 'video',

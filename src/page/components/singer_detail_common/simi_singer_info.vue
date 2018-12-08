@@ -2,7 +2,7 @@
   <div class="simi_singer_info">
     <div class="singer_info" v-for="(item, index) in data" :key="index" @click="singerInfoHandler(item)">
       <div class="avatar">
-        <img :src="item.picUrl+'?param=500y500'" alt="">
+        <img :src="item.picUrl+'?param=300y300'" alt="">
       </div>
       <div class="name">{{item.name}}</div>
     </div>

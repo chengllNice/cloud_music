@@ -198,7 +198,8 @@ export const singer_album_theme_list_data = {
       {
         title: 'duration',
         key: 'duration',
-        jpath: 'dt'
+        jpath: 'dt',
+        maxWidth: 150
       },
       {
         title: '播放来源',

@@ -4,12 +4,14 @@
       <div class="list_img_box">
         <transition v-for="(item, index) in banner_data" :key="index">
           <div class="item_img"
+               @click="bannerGo(item)"
                :class="{ 'item_active' : index == item_active,
                 'item_active_pre' : index == item_active_pre,
                 'item_active_next' : index == item_active_next }"
                 :style="{transform: 'translateX('+ (index == item_active_pre ? (-translate_x) + 'px' : (index == item_active_next ? (translate_x + 'px') : '0px')) +')'}">
             <img :src="item.imageUrl" :alt="item.typeTitle">
             <div class="item_cover" v-if="index != item_active"></div>
+            <div class="img_type" :style="{background: item.titleColor}">{{item.typeTitle}}</div>
           </div>
         </transition>
       </div>
@@ -108,6 +110,78 @@
           this.item_active = index+1;
         }
         this.init();
+      },
+      async bannerGo(data){
+        if(data.url){
+          window.open(data.url,'_blank')
+        }else if(data.targetType == 10){//专辑
+          this.$router.push({
+            path: '/album_detail_common',
+            query: { id: data.targetId}
+          })
+        }else if(data.targetType == 1004){//mv
+          this.$router.push({
+            path: '/play_mv',
+            query: { id: data.targetId, type: 0}
+          })
+        }else if(data.targetType == 1){//单曲
+          await this.get_music_detail(data.targetId);
+          await this.get_music_url(data.targetId);
+        }
+      },
+      async get_music_url(id){
+        let get_data = {
+          id: id
+        };
+        this.$commonApi.getSongUrl(get_data).then(res=>{
+          if(res.data && res.data.length){
+            let url = res.data[0].url;
+            let info = {
+              id: id,
+              url: url,
+              playStatus: 'play',
+            };
+            this.$store.commit('get_music_info',info);
+          }
+        }).catch(err=>{
+          console.log('err',err)
+        });
+      },
+      async get_music_detail(id){
+        let get_data = {
+          ids: id
+        };
+        let source_path = this.$route.path;
+        let data = {};
+        this.$commonApi.getSongDetail(get_data).then(res=>{
+          let data = res.songs[0];
+          let info = {
+            picUrl: data.al.picUrl,
+            song_name: data.name,
+            artists: data.ar,
+            album: data.al,
+            alias: data.alia,
+            source_path: { path: source_path, id: ''},
+            data: {
+              album_name: data.al,
+              alias: data.alia,
+              artists: data.ar,
+              duration: this.$timeFormat(data.dt),
+              id: id,
+              maxbr: res.privileges[0].maxbr,
+              mvid: data.mv,
+              picUrl: data.al.picUrl,
+              playStatus: "play",
+              privilege: res.privileges[0],
+              song_name: data.name,
+              sort_num: "01",
+              source_path: { path: source_path, id: ''},
+            }
+          };
+          this.$store.commit('get_music_info',info);
+        }).catch(err=>{
+          console.log('err',err)
+        })
       }
     },
     watch: {
@@ -132,6 +206,7 @@
       height: 200px;
       position: relative;
       .item_img{
+        cursor: pointer;
         width: 408px;
         height: 192px;
         position: absolute;
@@ -157,6 +232,20 @@
           left: 0;
           top: 0;
           transition: all 4.2s;
+        }
+        .img_type{
+          cursor: pointer;
+          position: absolute;
+          right: -2px;
+          bottom: 10px;
+          padding: 1px 8px;
+          border-top-left-radius: 10px;
+          border-bottom-left-radius: 10px;
+          color: #FFFFFF;
+          font-size: 12px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
         }
       }
       .item_active{
